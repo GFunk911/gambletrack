@@ -24,16 +24,10 @@ test:
   # username: root
   # password:
 
-production: development
-productiofn:
-  # Sqlite3 Settings
-  adapter: sqlite3
-  database: db/production.sqlite3
-  timeout: 5000
-  
-  # Mysql Settings
-  # adapter: mysql
-  # encoding: utf8
-  # database: test_development
-  # username: root
-  # password:
+production:
+  Mysql Settings
+  adapter: mysql
+  encoding: utf8
+  database: gamble_track_prod
+  username: root
+  password:
