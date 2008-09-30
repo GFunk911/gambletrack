@@ -31,6 +31,12 @@ module LineSingleBet
     single_bet.line_id = id
     single_bet.save!
   end
+  def has_bet?
+    wagered_amount > 0 or desired_amount > 0
+  end
+  def win_amount
+    single_bet.win_amount
+  end
 end
 
 class Line < ActiveRecord::Base
@@ -115,6 +121,13 @@ class Line < ActiveRecord::Base
   end
   def pretty_spread=(x)
     self.spread = (x ? x.to_f * -1 : x)
+  end
+  def possible_teams
+    if game
+      game.teams
+    else
+      games.map { |x| [x.home_team,x.away_team] }.flatten.map { |x| x.to_s }.uniq.sort
+    end
   end
 end
 

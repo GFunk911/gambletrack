@@ -1,5 +1,7 @@
 %tr.line
-  %td= f.select :team, line.game.teams
+  - if @games
+    %td= f.select :game_id, @games.map { |x| [x.desc,x.id] }
+  %td= f.select :team, line.possible_teams
   %td= f.select :site_id, Site.find(:all).map { |x| [x.name,x.id] }
   %td= f.text_field :pretty_spread, :size => 4
   %td= f.text_field :odds, :size => 4

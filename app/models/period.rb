@@ -22,6 +22,9 @@ end
 
 class Period < ActiveRecord::Base
   has_many :games
+  has_many :lines, :through => :games, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  Game
+  include BetSummary
   def self.current_period
     find(:first, :conditions => ["start_dt < ? and ? < end_dt",Time.now,Time.now])
   end
@@ -39,5 +42,8 @@ class Period < ActiveRecord::Base
   end
   def current?
     (start_dt..end_dt).include?(Time.now)
+  end
+  def week
+    name.split[-1].to_i
   end
 end

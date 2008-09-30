@@ -3,16 +3,24 @@ module BetSummary
     !respond_to?(:children)
   end
   def desired_amount
-    children.map { |x| x.desired_amount }.sum
+    bet_children.map { |x| x.desired_amount }.sum
   end
   def outstanding_amount
-    children.map { |x| x.outstanding_amount }.sum
+    bet_children.map { |x| x.outstanding_amount }.sum
   end
   def wagered_amount
-    children.map { |x| x.wagered_amount }.sum
+    bet_children.map { |x| x.wagered_amount }.sum
   end
   def win_amount
-    children.map { |x| x.win_amount }.sum
+    bet_children.map { |x| x.win_amount }.sum
+  end
+  def has_bet?
+    [desired_amount,wagered_amount].any? { |x| x > 0 }
+  end
+  def bet_children
+    return bets if respond_to?(:bets)
+    return games if respond_to?(:games)
+    raise 'foo'
   end
 end
 
@@ -25,10 +33,24 @@ class Game < ActiveRecord::Base
   has_many :bets, :through => :lines, :attributes => true, :discard_if => lambda { |x| x.blank? }
   belongs_to :period
   def self.load_nfl_games
+    ps = Period.find(:all)
     games.each do |g|
-      res = Game.new(:home_team => g.home_team.to_s, :away_team => g.away_team.to_s)
+      res = new
+      puts g.home_team
+      res.home_team = g.home_team.to_s
+      res.away_team = g.away_team.to_s
       res.event_dt = Time.local(2008,9,7,13) + (g.week - 1)*7.days
+      res.period = ps.select { |x| x.start_dt < res.event_dt and x.end_dt > res.event_dt }.first
       res.save!
+    end
+  end
+  def self.update_nfl_games
+    gs = find(:all).group_by { |x| [x.home_team,x.away_team,x.period.week] }
+    games.select { |x| x.played? }.each do |nfl|
+      g = gs[[nfl.home_team.to_s,nfl.away_team.to_s,nfl.week]].first
+      g.home_score = nfl.home_score
+      g.away_score = nfl.away_score
+      g.save!
     end
   end
   named_scope :week, lambda { |w| {:include => :lines, :conditions => ['event_dt >= ? and event_dt <= ?']+dates_for_week(w)}}
