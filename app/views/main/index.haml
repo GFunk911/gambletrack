@@ -1,0 +1,5 @@
+%div{:id => 'foodiv', :style => 'width:250px'}
+  - Period.new
+  = render :partial => 'tree/tree', :object => Periods.new
+%div{:id => 'right_div', :style => 'position:absolute;top:0px;left:200px;float:right'}
+  = render :partial => 'game/form', :object => Game.week(3).first

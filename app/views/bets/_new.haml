@@ -1,0 +1,10 @@
+- form_for([line,bet]) do |f|
+  %table
+    %tr
+      - ['Line','Desired Amount','Outstanding Amount','Wagered Amount'].each do |col|
+        %th= col
+    %tr
+      %td= line.desc
+      - %W(desired_amount outstanding_amount wagered_amount).each do |cell|
+        %td= f.text_field(cell, :size => 10)
+      %td= f.submit

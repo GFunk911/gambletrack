@@ -1,0 +1,9 @@
+%tr.bet
+  %td= f.select :line_id, @game.lines.select { |x| x.desc != 'line desc' }.map { |x| [x.desc,x.id] }
+  %td= f.text_field :desired_amount, :size => 4
+  %td= f.text_field :outstanding_amount, :size => 4
+  %td= f.text_field :wagered_amount, :size => 4
+  %td= bet.win_amount
+  - f.remove_link 'Remove'
+  
+  

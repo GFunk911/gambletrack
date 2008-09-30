@@ -1,6 +1,6 @@
 /* === FLASH MESSAGES === */
 div#flash-notice {
-	
+  color: Red	
 }
 
 div#flash-warning {

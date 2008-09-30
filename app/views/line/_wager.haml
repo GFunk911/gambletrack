@@ -1,0 +1,3 @@
+%tr
+  - %w(team_name actual_spread_obj bet_type cover push loss actual_odds correct_odds kelly_perc roi).each do |cell|
+    %td= wager.send(cell)

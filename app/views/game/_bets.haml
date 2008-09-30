@@ -1,0 +1,8 @@
+- remote_form_for(@game) do |f|
+  %div#bets
+    %table
+      %tr
+        - ['Line','Desired','Outstanding','Wagered'].each do |col|
+          %th= col
+      = f.render_associated_form(@game.bets, :new => 2, :partial => 'game/bet')
+    = f.submit 'Save Bets'

@@ -1,0 +1,1 @@
+page.replace_html 'right_div', :partial => 'form', :object => @game

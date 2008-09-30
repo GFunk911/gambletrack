@@ -1,0 +1,18 @@
+- @game = form
+%div= flash_messages
+= render :partial => 'game/wagers', :object => @game.wagers
+- remote_form_for(@game) do |f|
+  Away Score:
+  = f.text_field :away_score, :size => 4
+  Home Score:
+  = f.text_field :home_score, :size => 4
+  %table
+    %tr
+      - %w(Team Site Spread Odds Desired Outstanding Wagered Status).each do |col|
+        %th= col
+    %div#lines
+      = f.render_associated_form(@game.lines, :new => 3, :partial => 'game/line')
+      - f.add_associated_link('Add Line',@game.lines.build, :partial => 'game/line')
+  = f.submit 'Save'
+
+    

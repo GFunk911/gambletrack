@@ -24,7 +24,8 @@ test:
   # username: root
   # password:
 
-production:
+production: development
+productiofn:
   # Sqlite3 Settings
   adapter: sqlite3
   database: db/production.sqlite3

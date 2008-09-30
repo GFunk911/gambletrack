@@ -1,4 +1,6 @@
-ActionController::Routing::Routes.draw do |map| 
+ActionController::Routing::Routes.draw do |map|
+  map.resources :sites
+ 
   # Restful Authentication Rewrites
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login '/login', :controller => 'sessions', :action => 'new'
@@ -12,11 +14,19 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users
   map.resources :passwords
   map.resource :session
+  #map.resources :trees
+  map.resources :line do |l|
+    l.resources :bets
+  end
+  map.resources :main
+  map.resources :game
+  map.resources :periods, :controller => 'period'
   
   # Home Page
   map.root :controller => 'sessions', :action => 'new'
 
   # Install the default routes as the lowest priority.
+  map.connect ':controller/:action'
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

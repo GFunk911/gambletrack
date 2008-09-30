@@ -1,0 +1,6 @@
+%li{:class => leaf_class(leaf)}
+  = link_to_leaf(leaf)
+  - if has_children?(leaf)
+    %ul
+      - leaf.children.each do |child|
+        = render :partial => 'tree/leaf', :object => child

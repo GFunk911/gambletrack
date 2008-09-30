@@ -1,0 +1,12 @@
+- Game.week(3).each do |g|
+  = "#{g.away_team}@#{g.home_team}, Home should be favored by #{g.correct_spread}"
+  %table
+    %tr 
+      -['Team','Spread','Cover','Push','Loss','Actual Odds','Correct Odds','Kelly','ROI','Won/$ Lost'].each do |n|
+        %th= n
+    - g.wagers.select { |x| x.profitable? }.each do |w|
+      %tr
+        - %w(team_name spread_str cover push loss actual_odds correct_odds kelly_perc roi won_per_dollar_lost).each do |col|
+          %td= w.send(col)
+  %br
+
