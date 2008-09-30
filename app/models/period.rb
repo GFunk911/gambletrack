@@ -26,7 +26,9 @@ class Period < ActiveRecord::Base
   Game
   include BetSummary
   def self.current_period
-    find(:first, :conditions => ["start_dt < ? and ? < end_dt",Time.now,Time.now])
+    res = find(:first, :conditions => ["start_dt < ? and ? < end_dt",Time.now,Time.now])
+    res ||= find(:first, :conditions => ["start_dt > ?",Time.now], :order => "start_dt asc")
+    res
   end
   def self.prev_periods
     find(:all, :conditions => ["end_dt < ?",Time.now])
