@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080930235332) do
+ActiveRecord::Schema.define(:version => 20081002163437) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -20,9 +20,11 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
     t.datetime "updated_at"
   end
 
+  add_index "bets", ["line_id"], :name => "index_bets_on_line_id"
+
   create_table "games", :force => true do |t|
-    t.string   "home_team",  :default => "", :null => false
-    t.string   "away_team",  :default => "", :null => false
+    t.string   "home_team",  :null => false
+    t.string   "away_team",  :null => false
     t.datetime "event_dt"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -30,6 +32,9 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
     t.integer  "away_score"
     t.integer  "period_id"
   end
+
+  add_index "games", ["id"], :name => "index_games_on_id"
+  add_index "games", ["period_id"], :name => "index_games_on_period_id"
 
 # Could not dump table "line_sets" because of following StandardError
 #   Unknown type 'team' for column 'string'
@@ -46,7 +51,7 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
   end
 
   create_table "periods", :force => true do |t|
-    t.string   "name",       :default => "", :null => false
+    t.string   "name",       :null => false
     t.datetime "start_dt"
     t.datetime "end_dt"
     t.datetime "created_at"
@@ -63,20 +68,22 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :default => "", :null => false
+    t.string   "session_id", :null => false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
 
   create_table "sites", :force => true do |t|
-    t.string   "name",       :default => "", :null => false
+    t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "sites", ["id"], :name => "index_sites_on_id"
 
   create_table "users", :force => true do |t|
     t.string   "login",                     :limit => 40
