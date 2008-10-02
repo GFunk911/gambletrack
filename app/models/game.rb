@@ -98,3 +98,15 @@ class Game < ActiveRecord::Base
   end
 end
 
+class FlexMigration < ActiveRecord::Migration
+  class << self
+    attr_accessor :up_blk
+  end
+  def self.run!(&b)
+    self.up_blk = b
+    FlexMigration.migrate(:up)
+  end
+  def self.up
+    instance_eval(&up_blk)
+  end
+end
