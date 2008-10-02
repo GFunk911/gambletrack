@@ -1,0 +1,1245 @@
+<machine-response session-id="" request-id="">
+  <uri>machine://matchbook.com/operation/business/admin/linefeed/FeedDataMachine</uri>
+  <name>feed-data-machine</name>
+  <status>success</status>
+  <message />
+  <error-message />
+  <response>
+    <contests>
+      <event id="70814">
+        <name>AFC Championship 2008</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-02-03 09:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Jac</name>
+          <rotation />
+          <money>[Yes][920][No][-1700]</money>
+        </participant>
+        <participant>
+          <name>Nyj</name>
+          <rotation />
+          <money>[Yes][2200][No][-3800]</money>
+        </participant>
+        <participant>
+          <name>Cle</name>
+          <rotation />
+          <money>[Yes][][No][-20000]</money>
+        </participant>
+        <participant>
+          <name>Kan</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Ind</name>
+          <rotation />
+          <money>[Yes][460][No][-650]</money>
+        </participant>
+        <participant>
+          <name>Cin</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Hou</name>
+          <rotation />
+          <money>[Yes][10000][No][-50000]</money>
+        </participant>
+        <participant>
+          <name>Den</name>
+          <rotation />
+          <money>[Yes][800][No][]</money>
+        </participant>
+        <participant>
+          <name>Mia</name>
+          <rotation />
+          <money>[Yes][][No][-20000]</money>
+        </participant>
+        <participant>
+          <name>SD</name>
+          <rotation />
+          <money>[Yes][375][No][-540]</money>
+        </participant>
+        <participant>
+          <name>Bal</name>
+          <rotation />
+          <money>[Yes][1600][No][-3200]</money>
+        </participant>
+        <participant>
+          <name>Buf</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Ten</name>
+          <rotation />
+          <money>[Yes][600][No][]</money>
+        </participant>
+        <participant>
+          <name>NE</name>
+          <rotation />
+          <money>[Yes][850][No][-1100]</money>
+        </participant>
+        <participant>
+          <name>Pit</name>
+          <rotation />
+          <money>[Yes][700][No][-1400]</money>
+        </participant>
+        <participant>
+          <name>Oak</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+      </event>
+      <event id="70815">
+        <name>NFC Championship 2008</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-02-03 09:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Atl</name>
+          <rotation />
+          <money>[Yes][][No][-99999]</money>
+        </participant>
+        <participant>
+          <name>SF</name>
+          <rotation />
+          <money>[Yes][][No][-15000]</money>
+        </participant>
+        <participant>
+          <name>Det</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Nyg</name>
+          <rotation />
+          <money>[Yes][450][No][-700]</money>
+        </participant>
+        <participant>
+          <name>Min</name>
+          <rotation />
+          <money>[Yes][1600][No][-2800]</money>
+        </participant>
+        <participant>
+          <name>NO</name>
+          <rotation />
+          <money>[Yes][][No][-1700]</money>
+        </participant>
+        <participant>
+          <name>Chi</name>
+          <rotation />
+          <money>[Yes][][No][-2200]</money>
+        </participant>
+        <participant>
+          <name>Sea</name>
+          <rotation />
+          <money>[Yes][][No][-3800]</money>
+        </participant>
+        <participant>
+          <name>Dal</name>
+          <rotation />
+          <money>[Yes][210][No][-385]</money>
+        </participant>
+        <participant>
+          <name>TB</name>
+          <rotation />
+          <money>[Yes][1100][No][-1850]</money>
+        </participant>
+        <participant>
+          <name>Was</name>
+          <rotation />
+          <money>[Yes][][No][-2500]</money>
+        </participant>
+        <participant>
+          <name>StL</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Car</name>
+          <rotation />
+          <money>[Yes][][No][-2000]</money>
+        </participant>
+        <participant>
+          <name>GB</name>
+          <rotation />
+          <money>[Yes][][No][-2800]</money>
+        </participant>
+        <participant>
+          <name>Ari</name>
+          <rotation />
+          <money>[Yes][][No][-5000]</money>
+        </participant>
+        <participant>
+          <name>Phi</name>
+          <rotation />
+          <money>[Yes][][No][-1350]</money>
+        </participant>
+      </event>
+      <event id="70816">
+        <name>Super Bowl XLIII</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-02-03 09:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>StL</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Kan</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Car</name>
+          <rotation />
+          <money>[Yes][2000][No][-2900]</money>
+        </participant>
+        <participant>
+          <name>Was</name>
+          <rotation />
+          <money>[Yes][2000][No][-5000]</money>
+        </participant>
+        <participant>
+          <name>Atl</name>
+          <rotation />
+          <money>[Yes][][No][-99999]</money>
+        </participant>
+        <participant>
+          <name>NE</name>
+          <rotation />
+          <money>[Yes][][No][-2600]</money>
+        </participant>
+        <participant>
+          <name>Dal</name>
+          <rotation />
+          <money>[Yes][400][No][-510]</money>
+        </participant>
+        <participant>
+          <name>Cin</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Min</name>
+          <rotation />
+          <money>[Yes][][No][-7000]</money>
+        </participant>
+        <participant>
+          <name>NO</name>
+          <rotation />
+          <money>[Yes][2300][No][-3600]</money>
+        </participant>
+        <participant>
+          <name>Jac</name>
+          <rotation />
+          <money>[Yes][1800][No][-3400]</money>
+        </participant>
+        <participant>
+          <name>SF</name>
+          <rotation />
+          <money>[Yes][][No][-20000]</money>
+        </participant>
+        <participant>
+          <name>Bal</name>
+          <rotation />
+          <money>[Yes][][No][-5000]</money>
+        </participant>
+        <participant>
+          <name>SD</name>
+          <rotation />
+          <money>[Yes][650][No][-980]</money>
+        </participant>
+        <participant>
+          <name>Pit</name>
+          <rotation />
+          <money>[Yes][1550][No][-2500]</money>
+        </participant>
+        <participant>
+          <name>Nyj</name>
+          <rotation />
+          <money>[Yes][][No][-7000]</money>
+        </participant>
+        <participant>
+          <name>Sea</name>
+          <rotation />
+          <money>[Yes][][No][-5000]</money>
+        </participant>
+        <participant>
+          <name>Hou</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Det</name>
+          <rotation />
+          <money>[Yes][][No][-99999]</money>
+        </participant>
+        <participant>
+          <name>Oak</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Ind</name>
+          <rotation />
+          <money>[Yes][][No][-1750]</money>
+        </participant>
+        <participant>
+          <name>Chi</name>
+          <rotation />
+          <money>[Yes][][No][-4500]</money>
+        </participant>
+        <participant>
+          <name>Cle</name>
+          <rotation />
+          <money>[Yes][][No][-99999]</money>
+        </participant>
+        <participant>
+          <name>Nyg</name>
+          <rotation />
+          <money>[Yes][][No][-1650]</money>
+        </participant>
+        <participant>
+          <name>Mia</name>
+          <rotation />
+          <money>[Yes][][No][-50000]</money>
+        </participant>
+        <participant>
+          <name>Den</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>TB</name>
+          <rotation />
+          <money>[Yes][][No][-5000]</money>
+        </participant>
+        <participant>
+          <name>Ari</name>
+          <rotation />
+          <money>[Yes][][No][-9000]</money>
+        </participant>
+        <participant>
+          <name>Phi</name>
+          <rotation />
+          <money>[Yes][1100][No][-1600]</money>
+        </participant>
+        <participant>
+          <name>Ten</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Buf</name>
+          <rotation />
+          <money>[Yes][1250][No][]</money>
+        </participant>
+        <participant>
+          <name>GB</name>
+          <rotation />
+          <money>[Yes][][No][-5000]</money>
+        </participant>
+      </event>
+      <contest>
+        <name>Arizona Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71663</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (ARI)</home>
+        <away>Over 7.5 (ARI)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Baltimore Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71664</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.0 (BAL)</home>
+        <away>Over 6.0 (BAL)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Buffalo Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71665</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.0 (BUF)</home>
+        <away>Over 8.0 (BUF)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Carolina  Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71666</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (CAR)</home>
+        <away>Over 7.5 (CAR)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Chicago Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71667</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.0 (CHI)</home>
+        <away>Over 8.0 (CHI)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] [-298]</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Cincinnati Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71668</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (CIN)</home>
+        <away>Over 7.5 (CIN)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Cleveland Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71669</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.0 (CLE)</home>
+        <away>Over 8.0 (CLE)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Dallas Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71670</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 10.5 (DAL)</home>
+        <away>Over 10.5 (DAL)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] [160]</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Denver Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71671</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (DEN)</home>
+        <away>Over 7.5 (DEN)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Detroit Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71672</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.5 (DET)</home>
+        <away>Over 6.5 (DET)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [-145][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Green Bay Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71673</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.5 (GB)</home>
+        <away>Over 8.0 (GB)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Houston Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71674</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (HOU)</home>
+        <away>Over 7.5 (HOU)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Indianapolis Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71675</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 11.0 (IND)</home>
+        <away>Over 11.0 (IND)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Jacksonville Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71676</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 10.0 (JAC)</home>
+        <away>Over 10.0 (JAC)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Kansas City Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71677</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.0 (KAN)</home>
+        <away>Over 6.0 (KAN)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Miami Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71678</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 5.5 (MIA)</home>
+        <away>Over 5.5 (MIA)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Minnesota Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71679</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.5 (MIN)</home>
+        <away>Over 8.5 (MIN)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] [-1200]</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>New England Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71680</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 12.5 (NE)</home>
+        <away>Over 12.5 (NE)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] [-2300]</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>New Orleans Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71681</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.5 (NO)</home>
+        <away>Over 8.5 (NO)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>New York (A) Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71682</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.0 (NYJ)</home>
+        <away>Over 7.0 (NYJ)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>New York (N) Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71683</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 9.0 (NYG)</home>
+        <away>Over 9.0 (NYG)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Oakland Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71684</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.5 (OAK)</home>
+        <away>Over 6.5 (OAK)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Philadelphia Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71685</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.5 (PHI)</home>
+        <away>Over 8.5 (PHI)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Pittsburgh Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71686</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 9.0 (PIT)</home>
+        <away>Over 9.0 (PIT)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] [-125]</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>San Diego Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71687</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 10.5 (SD)</home>
+        <away>Over 10.5 (SD)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>San Francisco Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71688</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.5 (SF)</home>
+        <away>Over 6.5 (SF)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Seattle  Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71689</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.5 (SEA)</home>
+        <away>Over 8.5 (SEA)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>St Louis  Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71690</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 6.5 (STL)</home>
+        <away>Over 6.5 (STL)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Tampa Bay  Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71691</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.0 (TB)</home>
+        <away>Over 8.0 (TB)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Tennessee Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71692</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 8.0 (TEN)</home>
+        <away>Over 8.0 (TEN)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Washington Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71693</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 7.5 (WAS)</home>
+        <away>Over 7.5 (WAS)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [][0.0] []</total>
+          <money />
+        </overall>
+      </contest>
+      <contest>
+        <name>Atlanta Regular Season Wins 2008</name>
+        <league>PF</league>
+        <acro>Event-id:71694</acro>
+        <time>2009-02-01 21:00:00.0</time>
+        <home>Under 4.5 (ATL)</home>
+        <away>Over 4.5 (ATL)</away>
+        <overall>
+          <spread />
+          <total>[0.0] [-10000][0.0] [-350]</total>
+          <money />
+        </overall>
+      </contest>
+      <event id="72976">
+        <name>AFC East</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>NE</name>
+          <rotation />
+          <money>[Yes][-115][No][]</money>
+        </participant>
+        <participant>
+          <name>Buf</name>
+          <rotation />
+          <money>[Yes][-135][No][-105]</money>
+        </participant>
+        <participant>
+          <name>Mia</name>
+          <rotation />
+          <money>[Yes][800][No][]</money>
+        </participant>
+        <participant>
+          <name>Nyj</name>
+          <rotation />
+          <money>[Yes][125][No][]</money>
+        </participant>
+      </event>
+      <event id="72977">
+        <name>AFC North</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Pit</name>
+          <rotation />
+          <money>[Yes][-350][No][]</money>
+        </participant>
+        <participant>
+          <name>Cle</name>
+          <rotation />
+          <money>[Yes][1000][No][-2500]</money>
+        </participant>
+        <participant>
+          <name>Bal</name>
+          <rotation />
+          <money>[Yes][350][No][-550]</money>
+        </participant>
+        <participant>
+          <name>Cin</name>
+          <rotation />
+          <money>[Yes][3000][No][-30000]</money>
+        </participant>
+      </event>
+      <event id="72978">
+        <name>AFC West</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Oak</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>SD</name>
+          <rotation />
+          <money>[Yes][-250][No][]</money>
+        </participant>
+        <participant>
+          <name>Den</name>
+          <rotation />
+          <money>[Yes][200][No][-350]</money>
+        </participant>
+        <participant>
+          <name>Kan</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+      </event>
+      <event id="72979">
+        <name>AFC South</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Ind</name>
+          <rotation />
+          <money>[Yes][140][No][-240]</money>
+        </participant>
+        <participant>
+          <name>Hou</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Ten</name>
+          <rotation />
+          <money>[Yes][110][No][-145]</money>
+        </participant>
+        <participant>
+          <name>Jac</name>
+          <rotation />
+          <money>[Yes][130][No][]</money>
+        </participant>
+      </event>
+      <event id="72980">
+        <name>NFC East</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>Dal</name>
+          <rotation />
+          <money>[Yes][-140][No][-110]</money>
+        </participant>
+        <participant>
+          <name>Was</name>
+          <rotation />
+          <money>[Yes][200][No][]</money>
+        </participant>
+        <participant>
+          <name>Nyg</name>
+          <rotation />
+          <money>[Yes][200][No][]</money>
+        </participant>
+        <participant>
+          <name>Phi</name>
+          <rotation />
+          <money>[Yes][200][No][]</money>
+        </participant>
+      </event>
+      <event id="72981">
+        <name>NFC North</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>GB</name>
+          <rotation />
+          <money>[Yes][140][No][-200]</money>
+        </participant>
+        <participant>
+          <name>Det</name>
+          <rotation />
+          <money>[Yes][][No][]</money>
+        </participant>
+        <participant>
+          <name>Min</name>
+          <rotation />
+          <money>[Yes][250][No][-400]</money>
+        </participant>
+        <participant>
+          <name>Chi</name>
+          <rotation />
+          <money>[Yes][135][No][-200]</money>
+        </participant>
+      </event>
+      <event id="72982">
+        <name>NFC West</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>StL</name>
+          <rotation />
+          <money>[Yes][2000][No][-99999]</money>
+        </participant>
+        <participant>
+          <name>Sea</name>
+          <rotation />
+          <money>[Yes][150][No][-250]</money>
+        </participant>
+        <participant>
+          <name>SF</name>
+          <rotation />
+          <money>[Yes][225][No][]</money>
+        </participant>
+        <participant>
+          <name>Ari</name>
+          <rotation />
+          <money>[Yes][120][No][-160]</money>
+        </participant>
+      </event>
+      <event id="72983">
+        <name>NFC South</name>
+        <league>PF</league>
+        <acro />
+        <time>2009-04-01 21:00:00.0</time>
+        <home>lose</home>
+        <away>win</away>
+        <participant />
+        <participant>
+          <name>TB</name>
+          <rotation />
+          <money>[Yes][150][No][-250]</money>
+        </participant>
+        <participant>
+          <name>NO</name>
+          <rotation />
+          <money>[Yes][200][No][-300]</money>
+        </participant>
+        <participant>
+          <name>Atl</name>
+          <rotation />
+          <money>[Yes][600][No][]</money>
+        </participant>
+        <participant>
+          <name>Car</name>
+          <rotation />
+          <money>[Yes][140][No][-170]</money>
+        </participant>
+      </event>
+      <contest>
+        <name>Indianapolis at Houston</name>
+        <league>PF</league>
+        <acro>Event-id:74736</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="406">HOU</home>
+        <away rotation="405">IND</away>
+        <overall>
+          <spread>[-3.0] [-115][3.0] [112]</spread>
+          <total>[46.5] [-110][46.5] [105]</total>
+          <money>[-160][159]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Tennessee at Baltimore</name>
+        <league>PF</league>
+        <acro>Event-id:74737</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="408">BAL</home>
+        <away rotation="407">TEN</away>
+        <overall>
+          <spread>[-3.0] [116][3.0] [-119]</spread>
+          <total>[33.0] [-102][33.0] [-103]</total>
+          <money>[-139][132]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>San Diego at Miami</name>
+        <league>PF</league>
+        <acro>Event-id:74738</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="410">MIA</home>
+        <away rotation="409">SD</away>
+        <overall>
+          <spread>[-6.5] [107][6.5] [-111]</spread>
+          <total>[45.0] [103][45.0] [-109]</total>
+          <money>[-236][224]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Kansas City at Carolina</name>
+        <league>PF</league>
+        <acro>Event-id:74739</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="412">CAR</home>
+        <away rotation="411">KAN</away>
+        <overall>
+          <spread>[9.5] [102][-9.5] [-104]</spread>
+          <total>[38.5] [105][38.5] [-110]</total>
+          <money>[375][-400]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Washington at Philadelphia</name>
+        <league>PF</league>
+        <acro>Event-id:74740</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="414">PHI</home>
+        <away rotation="413">WAS</away>
+        <overall>
+          <spread>[5.5] [111][-5.5] [-115]</spread>
+          <total>[42.5] [102][42.5] [-106]</total>
+          <money>[238][-248]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Chicago at Detroit</name>
+        <league>PF</league>
+        <acro>Event-id:74741</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="416">DET</home>
+        <away rotation="415">CHI</away>
+        <overall>
+          <spread>[-3.5] [104][3.5] [-108]</spread>
+          <total>[44.5] [-103][44.5] [-103]</total>
+          <money>[-180][172]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Atlanta at Green Bay</name>
+        <league>PF</league>
+        <acro>Event-id:74742</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="418">GB</home>
+        <away rotation="417">ATL</away>
+        <overall>
+          <spread />
+          <total />
+          <money>[234][-800]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Seattle at New York (N)</name>
+        <league>PF</league>
+        <acro>Event-id:74743</acro>
+        <time>2008-10-05 13:00:00.0</time>
+        <home rotation="420">NYG</home>
+        <away rotation="419">SEA</away>
+        <overall>
+          <spread>[7.0] [102][-7.0] [-104]</spread>
+          <total>[43.0] [-104][43.0] [-102]</total>
+          <money>[288][-298]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Tampa Bay at Denver</name>
+        <league>PF</league>
+        <acro>Event-id:74744</acro>
+        <time>2008-10-05 16:05:00.0</time>
+        <home rotation="422">DEN</home>
+        <away rotation="421">TB</away>
+        <overall>
+          <spread>[3.0] [111][-3.0] [-112]</spread>
+          <total>[47.5] [-102][47.5] [-103]</total>
+          <money>[153][-161]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>New England at San Francisco</name>
+        <league>PF</league>
+        <acro>Event-id:74745</acro>
+        <time>2008-10-05 16:15:00.0</time>
+        <home rotation="424">SF</home>
+        <away rotation="423">NE</away>
+        <overall>
+          <spread>[-3.0] [-120][3.0] [116]</spread>
+          <total>[41.0] [102][41.0] [-107]</total>
+          <money>[-179][171]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Buffalo at Arizona</name>
+        <league>PF</league>
+        <acro>Event-id:74746</acro>
+        <time>2008-10-05 16:15:00.0</time>
+        <home rotation="426">ARI</home>
+        <away rotation="425">BUF</away>
+        <overall>
+          <spread>[1.0] [-103][-1.0] [100]</spread>
+          <total>[44.5] [-101][44.5] [-103]</total>
+          <money>[103][-108]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Cincinnati at Dallas</name>
+        <league>PF</league>
+        <acro>Event-id:74747</acro>
+        <time>2008-10-05 16:15:00.0</time>
+        <home rotation="428">DAL</home>
+        <away rotation="427">CIN</away>
+        <overall>
+          <spread>[17.5] [-110][-17.5] [107]</spread>
+          <total>[44.0] [-103][44.0] [-103]</total>
+          <money>[700][-1400]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Pittsburgh at Jacksonville</name>
+        <league>PF</league>
+        <acro>Event-id:74748</acro>
+        <time>2008-10-05 20:15:00.0</time>
+        <home rotation="430">JAC</home>
+        <away rotation="429">PIT</away>
+        <overall>
+          <spread>[4.0] [106][-4.0] [-108]</spread>
+          <total>[36.0] [100][36.0] [-105]</total>
+          <money>[200][-208]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Minnesota at New Orleans</name>
+        <league>PF</league>
+        <acro>Event-id:74749</acro>
+        <time>2008-10-06 20:35:00.0</time>
+        <home rotation="432">NO</home>
+        <away rotation="431">MIN</away>
+        <overall>
+          <spread>[3.0] [107][-3.0] [-110]</spread>
+          <total>[46.5] [100][46.5] [-105]</total>
+          <money>[155][-157]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>B.C. Lions at Toronto</name>
+        <league>PF</league>
+        <acro>Event-id:74774</acro>
+        <time>2008-10-03 19:00:00.0</time>
+        <home rotation="442">TOR</home>
+        <away rotation="441">BCL</away>
+        <overall>
+          <spread>[-9.5] [][9.5] []</spread>
+          <total>[51.5] [][51.5] []</total>
+          <money>[][]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Calgary at Saskatchewan</name>
+        <league>PF</league>
+        <acro>Event-id:74775</acro>
+        <time>2008-10-03 22:00:00.0</time>
+        <home rotation="444">SAS</home>
+        <away rotation="443">CAL</away>
+        <overall>
+          <spread>[-4.0] [109][4.0] []</spread>
+          <total>[53.0] [][53.0] []</total>
+          <money>[][]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Montreal at Hamilton</name>
+        <league>PF</league>
+        <acro>Event-id:74776</acro>
+        <time>2008-10-04 16:00:00.0</time>
+        <home rotation="446">HAM</home>
+        <away rotation="445">MON</away>
+        <overall>
+          <spread>[-10.0] [][10.0] []</spread>
+          <total>[55.0] [][55.0] []</total>
+          <money>[][]</money>
+        </overall>
+      </contest>
+      <contest>
+        <name>Winnipeg at Edmonton</name>
+        <league>PF</league>
+        <acro>Event-id:74777</acro>
+        <time>2008-10-04 19:00:00.0</time>
+        <home rotation="448">EDM</home>
+        <away rotation="447">WIN</away>
+        <overall>
+          <spread>[4.0] [108][-4.0] []</spread>
+          <total>[54.0] [][54.0] []</total>
+          <money>[][]</money>
+        </overall>
+      </contest>
+    </contests>
+  </response>
+  <time-period>1222893549456</time-period>
+  <stats res-time="11">
+    <count e-no="11" m-no="0" r-no="0" br-no="0" o-no="0" mb-no="0" />
+    <perf res-time="2802" res-size="37810" req-size="239" />
+  </stats>
+</machine-response>
