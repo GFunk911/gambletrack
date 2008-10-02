@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080929210215) do
+ActiveRecord::Schema.define(:version => 20080930235332) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -31,17 +31,11 @@ ActiveRecord::Schema.define(:version => 20080929210215) do
     t.integer  "period_id"
   end
 
-  create_table "lines", :force => true do |t|
-    t.integer  "game_id",            :null => false
-    t.float    "spread"
-    t.float    "return_from_dollar"
-    t.string   "status"
-    t.integer  "site_id"
-    t.datetime "expire_dt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "team"
-  end
+# Could not dump table "line_sets" because of following StandardError
+#   Unknown type 'team' for column 'string'
+
+# Could not dump table "lines" because of following StandardError
+#   Unknown type 'effective_dt' for column 'timestamp'
 
   create_table "passwords", :force => true do |t|
     t.integer  "user_id"

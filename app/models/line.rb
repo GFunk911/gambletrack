@@ -7,7 +7,7 @@ class Spread
     if fb > 0
       "-#{fb}"
     else
-      "+#{fb}"
+      "+#{fb*-1}"
     end
   end
 end
@@ -42,11 +42,17 @@ end
 class Line < ActiveRecord::Base
   include LineSingleBet
   after_save { |x| x.save_single_bet! }
+  before_save { |x| x.effective_dt ||= Time.now }
   belongs_to :game
   belongs_to :site
   has_many :bets
+  belongs_to :line_set
   validates_presence_of :odds
   validates_presence_of :site
+  validates_presence_of :game
+  named_scope :active, lambda { {:conditions => ["expire_dt is null",Time.now]} }
+  before_save { |x| x.find_or_create_line_set }
+  after_create { |x| x.line_set.mark_active! }
   #include BetSummary
   def save
     puts "calling Line#save"
@@ -67,7 +73,7 @@ class Line < ActiveRecord::Base
     self.return_from_dollar = x.blank? ? nil : Gambling::Odds.get(x).rfd
   end
   def desc
-    "#{team} #{spr} #{odds} #{wager.kelly_perc}"
+    "#{team} #{spr} #{odds} #{wager.kelly_perc} #{created_at}"
   rescue => exp
     puts exp
     return "line desc"
@@ -95,7 +101,7 @@ class Line < ActiveRecord::Base
     act = home_favored - 6*home_favored_factor
     Gambling::Teaser.new(act,game.correct_spread,ha,Gambling::Odds.get('-261'),game, :bet_type => 'TEASER')
   end
-  def children
+  def childrenx
     bets
   end
   def actual_margin
@@ -128,6 +134,45 @@ class Line < ActiveRecord::Base
     else
       games.map { |x| [x.home_team,x.away_team] }.flatten.map { |x| x.to_s }.uniq.sort
     end
+  end
+  def self.find_or_create_from_hash(h)
+    $hh ||= []
+    $hh2 ||= []
+    desc = "#{h[:away_team]}@#{h[:home_team]} #{h[:team]} #{h[:spread]} #{h[:odds]} rfd: #{Gambling::Odds.get(h[:odds]).rfd}"
+    #puts desc
+    pid = Period.current_period.id
+    site = Site.find(:first, :conditions => ["name = ?",'Matchbook'])
+    g = Game.find(:first, :conditions => ["period_id = ? and home_team = ? and away_team = ?",pid,h[:home_team],h[:away_team]]).tap { |x| raise "no game for #{desc}" unless x }
+    index_match = lambda { |a,b| res = nil; (0..3).each { |i| res ||= i.to_s if a[i] != b[i] }; res || 'equal' }
+    match_arr = [h[:spread].to_closest_spread,Gambling::Odds.get(h[:odds]).rfd.to_f,h[:team],site.id]
+    match_arr += match_arr.map { |x| x.class }
+    game_arr = lambda { |x| [x.spread.to_closest_spread,x.return_from_dollar.to_f,x.team,x.site_id] + [x.spread.to_closest_spread,x.return_from_dollar,x.team,x.site_id].map { |x| x.class } }
+    $hh2 << match_arr
+    line = g.lines.select { |x| x.spread.to_closest_spread == h[:spread].to_closest_spread and x.return_from_dollar.round_dec(3) == Gambling::Odds.get(h[:odds]).rfd.round_dec(3) and x.team == h[:team] and x.site_id == site.id }.first
+    if line
+      puts "found #{desc}"
+    else
+      puts "creating #{desc}"
+      #g.lines.each { |x| puts x.inspect }
+      line = g.lines.new(:team => h[:team], :return_from_dollar => Gambling::Odds.get(h[:odds]).rfd.to_f, :spread => h[:spread], :site => site)
+      line.save!
+    end
+    line
+  end
+  def find_or_create_line_set
+    return line_set if line_set
+    set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and spread = ? and team = ?",site_id,game_id,spread,team])
+    set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :spread => spread.to_closest_spread, :team => team).tap { |x| x.save! }
+    self.line_set = set
+    set
+  end
+  def self.reset_lineset!
+    LineSet.find(:all).each { |x| x.destroy }
+    find(:all).each { |x| x.line_set = nil; x.save! }
+    LineSet.find(:all).each { |x| x.mark_active! }
+  end
+  def active?
+    !expire_dt
   end
 end
 

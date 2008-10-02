@@ -30,6 +30,7 @@ class Game < ActiveRecord::Base
   include BetSummary
 
   has_many :lines, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :bets, :through => :lines, :attributes => true, :discard_if => lambda { |x| x.blank? }
   belongs_to :period
   def self.load_nfl_games
