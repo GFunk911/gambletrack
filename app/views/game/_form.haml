@@ -8,7 +8,7 @@
   = f.text_field :home_score, :size => 4
   %table
     %tr
-      - (@games ? ['Game'] : []) + %w(Team Site Spread Odds Desired Outstanding Wagered Status Active).each do |col|
+      - (@games ? ['Game'] : []) + %w(Team Site Spread Odds Desired Outstanding Wagered Expired Status Active).each do |col|
         %th= col
     %div#lines
       = f.render_associated_form(@game.lines, :new => 3, :partial => 'game/line')

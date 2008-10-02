@@ -174,6 +174,14 @@ class Line < ActiveRecord::Base
   def active?
     !expire_dt
   end
+  def expired
+    !!expire_dt
+  end
+  def expired=(x)
+    x = (x and x.to_i == 1)
+    self.expire_dt ||= Time.now if x
+    self.expire_dt = nil if !x
+  end
 end
 
 

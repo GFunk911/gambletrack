@@ -14,18 +14,6 @@ class LineSet < ActiveRecord::Base
   def rfd
     Gambling::Odds.get(odds).rfd
   end
-  def find_matching
-    lines.find { |x| x.spread == spread and x.return_from_dollar == rfd }
-  end
-  def save
-    puts "LineSet#save"
-    super.tap { |x| return x unless x }
-    if !find_matching
-      lines.new(:return_from_dollar => rfd, :game_id => game_id, :site_id => site_id, :spread => spread).save
-    else
-      true
-    end
-  end
   def possible_teams
     if game
       game.teams
@@ -47,7 +35,7 @@ class LineSet < ActiveRecord::Base
     lines.first ? lines.first.result : nil
   end
   def mark_active!
-    ls = lines.sort_by { |x| x.created_at }
+    ls = lines.reject { |x| x.expire_dt }.sort_by { |x| x.created_at }
     ls[0..-2].each { |x| x.expire_dt ||= Time.now; x.save! }
     #ls[-1].tap { |x| x.expire_dt = nil; x.save! }
   end
