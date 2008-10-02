@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
   end
 
   create_table "games", :force => true do |t|
-    t.string   "home_team",  :null => false
-    t.string   "away_team",  :null => false
+    t.string   "home_team",  :default => "", :null => false
+    t.string   "away_team",  :default => "", :null => false
     t.datetime "event_dt"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
   end
 
   create_table "periods", :force => true do |t|
-    t.string   "name",       :null => false
+    t.string   "name",       :default => "", :null => false
     t.datetime "start_dt"
     t.datetime "end_dt"
     t.datetime "created_at"
@@ -63,17 +63,17 @@ ActiveRecord::Schema.define(:version => 20080930235332) do
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
+    t.string   "session_id", :default => "", :null => false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "sites", :force => true do |t|
-    t.string   "name",       :null => false
+    t.string   "name",       :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

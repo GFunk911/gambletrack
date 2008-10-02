@@ -31,7 +31,9 @@ class Game < ActiveRecord::Base
 
   has_many :lines, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
-  has_many :bets, :through => :lines, :attributes => true, :discard_if => lambda { |x| x.blank? }
+  def bets
+    lines.map { |x| x.bets }.flatten
+  end
   belongs_to :period
   def self.load_nfl_games
     ps = Period.find(:all)

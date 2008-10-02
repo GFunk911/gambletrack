@@ -25,7 +25,6 @@ test:
   # password:
 
 production:
-  Mysql Settings
   adapter: mysql
   encoding: utf8
   database: gamble_track_prod
