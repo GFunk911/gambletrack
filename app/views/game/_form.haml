@@ -11,7 +11,7 @@
       - (@games ? ['Game'] : []) + %w(Team Site Spread Odds Desired Outstanding Wagered Expired Status Active).each do |col|
         %th= col
     %div#lines
-      = f.render_associated_form(@game.lines, :new => 3, :partial => 'game/line')
+      = f.render_associated_form(@game.lines, :new => 2, :partial => 'game/line')
       - f.add_associated_link('Add Line',@game.lines.build, :partial => 'game/line')
   = f.submit 'Save'
 

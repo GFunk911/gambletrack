@@ -1,16 +1,32 @@
 %tr.line
-  - if @games
-    %td= f.select :game_id, @games.map { |x| [x.desc,x.id] }
-  %td= f.select :team, line.possible_teams
-  %td= f.select :site_id, Site.find(:all).map { |x| [x.name,x.id] }
-  %td= f.text_field :pretty_spread, :size => 4
-  %td= f.text_field :odds, :size => 4
-  %td= f.text_field :desired_amount, :size => 4
-  %td= f.text_field :outstanding_amount, :size => 4
-  %td= f.text_field :wagered_amount, :size => 4
-  %td= f.check_box :expired
-  %td= line.result
-  %td= line.active?
-  - f.remove_link 'Remove'
+  - if line.new_record? 
+    - if @games
+      %td= f.select :game_id, @games.map { |x| [x.desc,x.id] }
+    %td= f.select :team, line.possible_teams
+    %td= f.select :site_id, Site.find(:all).map { |x| [x.name,x.id] }
+    %td= f.text_field :pretty_spread, :size => 4
+    %td= f.text_field :odds, :size => 4
+    %td= f.text_field :desired_amount, :size => 4
+    %td= f.text_field :outstanding_amount, :size => 4
+    %td= f.text_field :wagered_amount, :size => 4
+    %td= f.check_box :expired
+    %td= line.result
+    %td= line.active?
+    - f.remove_link 'Remove'
+  - else
+    - if @games
+      %td= line.game.desc
+    %td= line.team
+    %td= line.site.name
+    %td= line.pretty_spread
+    %td= line.odds
+    %td= f.text_field :desired_amount, :size => 4
+    %td= f.text_field :outstanding_amount, :size => 4
+    %td= f.text_field :wagered_amount, :size => 4
+    %td= line.expired
+    %td= line.result
+    %td= line.active?
+ 
+  
   
   
