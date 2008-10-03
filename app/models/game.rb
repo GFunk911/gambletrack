@@ -29,7 +29,7 @@ class Game < ActiveRecord::Base
   extend PO::GameModule::ClassMethods
   include BetSummary
 
-  has_many :lines, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :lines, :order => ["team,line_set_id,expire_dt"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   def bets
     lines.map { |x| x.bets }.flatten
