@@ -91,6 +91,9 @@ class Game < ActiveRecord::Base
   def wagers
     lines.map { |x| x.wagers }.flatten.sort_by { |x| x.kelly_perc }.reverse
   end
+  def active_wagers
+    lines.select { |x| !x.expired? or x.has_bet? }.map { |x| x.wagers }.flatten.sort_by { |x| x.kelly_perc }.reverse
+  end
   def team_margin(t)
     return nil unless played?
     (t.to_s == home_team) ? home_score-away_score : away_score - home_score

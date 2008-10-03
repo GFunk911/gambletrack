@@ -174,6 +174,9 @@ class Line < ActiveRecord::Base
   def active?
     !expire_dt
   end
+  def expired?
+    !active?
+  end
   def expired
     !!expire_dt
   end

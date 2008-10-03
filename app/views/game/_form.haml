@@ -1,6 +1,6 @@
 - @game = form
 %div= flash_messages
-= render :partial => 'game/wagers', :object => @game.wagers
+= render :partial => 'game/wagers', :object => @game.active_wagers
 - remote_form_for(@game) do |f|
   Away Score:
   = f.text_field :away_score, :size => 4
