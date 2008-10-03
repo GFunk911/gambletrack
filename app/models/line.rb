@@ -94,7 +94,8 @@ class Line < ActiveRecord::Base
     Gambling::Wager.new(home_favored,game.correct_spread,ha,odds,game)
   end
   def wagers
-    [wager,teaser_wager].select { |x| x }
+    #[wager,teaser_wager].select { |x| x }
+    [wager].select { |x| x }
   end
   def teaser_wager
     return nil if home_favored == 0
