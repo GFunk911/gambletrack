@@ -1,4 +1,4 @@
-%tr.line
+%tr.line{:bgcolor => (line.expire_dt ? 'Gray' : 'White')}
   - if line.new_record? 
     - if @games
       %td= f.select :game_id, @games.map { |x| [x.desc,x.id] }

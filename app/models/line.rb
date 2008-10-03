@@ -182,6 +182,11 @@ class Line < ActiveRecord::Base
     self.expire_dt ||= Time.now if x
     self.expire_dt = nil if !x
   end
+  def sort_array
+    a = new_record? ? 99999 : self.line_set_id
+    b = expire_dt ? expire_dt : 999.days.ago
+    [a,b]
+  end
 end
 
 
