@@ -1,4 +1,4 @@
-= render :partial => 'game/wagers', :object => @games.map { |x| x.wagers }.flatten
+= render :partial => 'game/wagers', :object => @games.map { |x| x.active_wagers }.flatten
 = render :partial => 'game/game_summary', :object => @games.map { |x| x.lines }.flatten
 = render :partial => 'game/game_summary', :object => @games
 - remote_form_for(@period) do |f|

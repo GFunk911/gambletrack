@@ -32,7 +32,7 @@ module LineSingleBet
     single_bet.save!
   end
   def has_bet?
-    wagered_amount > 0 or desired_amount > 0
+    (wagered_amount||0) > 0 or (desired_amount||0) > 0
   end
   def win_amount
     single_bet.win_amount
