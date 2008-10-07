@@ -32,7 +32,7 @@ module LineSingleBet
     single_bet.save!
   end
   def has_bet?
-    wagered_amount > 0 or desired_amount > 0
+    (wagered_amount||0) > 0 or (desired_amount||0) > 0
   end
   def win_amount
     single_bet.win_amount
@@ -141,7 +141,9 @@ class Line < ActiveRecord::Base
     $hh2 ||= []
     desc = "#{h[:away_team]}@#{h[:home_team]} #{h[:team]} #{h[:spread]} #{h[:odds]} rfd: #{Gambling::Odds.get(h[:odds]).rfd}"
     #puts desc
-    pid = Period.current_period.id
+    #pid = Period.current_period.id
+    pid = Period.find_by_name("Week 6")
+    raise "no period" unless pid
     site = Site.find(:first, :conditions => ["name = ?",'Matchbook'])
     g = Game.find(:first, :conditions => ["period_id = ? and home_team = ? and away_team = ?",pid,h[:home_team],h[:away_team]]).tap { |x| raise "no game for #{desc}" unless x }
     index_match = lambda { |a,b| res = nil; (0..3).each { |i| res ||= i.to_s if a[i] != b[i] }; res || 'equal' }

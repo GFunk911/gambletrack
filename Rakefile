@@ -16,6 +16,10 @@ namespace :dataload do
       Line.find_or_create_from_hash(h)
     end
   end
+  task :scores do
+    require File.dirname(__FILE__) + "/config/environment"
+    Game.update_nfl_games
+  end
   task :lineset do
     require(File.join(File.dirname(__FILE__), 'config', 'environment'))
     Line.find(:all).each { |x| x.save! }
