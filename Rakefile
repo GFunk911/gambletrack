@@ -27,12 +27,15 @@ namespace :dataload do
     Line.find(:all).each { |x| x.save! }
   end
   rails_task :update_period_dates do
-    t = Time.local(2008,9,9,2)
+    start_dt = Time.local(2008,9,2,2)
+    end_dt = Time.local(2008,9,9,2)
     (1..17).each do |w|
       p = Period.find_by_name("Week #{w}")
-      p.end_dt = t
+      p.start_dt = start_dt
+      p.end_dt = end_dt
       p.save!
-      t += 7.days
+      start_dt += 7.days
+      end_dt += 7.days
     end
   end
 end
