@@ -9,24 +9,34 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
+def rails_task(*args,&b)
+  require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+  task(*args,&b)
+end
+
 namespace :dataload do
-  task :mb_lines do
-    require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+  rails_task :mb_lines do
     Matchbook.instance.line_hashes.each do |h|
       Line.find_or_create_from_hash(h)
     end
   end
-  task :scores do
-    require File.dirname(__FILE__) + "/config/environment"
+  rails_task :scores do
     Game.update_nfl_games
   end
-  task :lineset do
-    require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+  rails_task :lineset do
     Line.find(:all).each { |x| x.save! }
+  end
+  rails_task :update_period_dates do
+    t = Time.local(2008,9,9,2)
+    (1..17).each do |w|
+      p = Period.find_by_name("Week #{w}")
+      p.end_dt = t
+      p.save!
+      t += 7.days
+    end
   end
 end
 
-task :delete_bad_lines do
-  require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+rails_task :delete_bad_lines do
   Line.find(:all, :conditions => ["return_from_dollar <= 0 or return_from_dollar >= 100"]).each { |x| x.destroy }
 end

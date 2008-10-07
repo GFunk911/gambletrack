@@ -31,10 +31,10 @@ class Period < ActiveRecord::Base
     res
   end
   def self.prev_periods
-    find(:all, :conditions => ["end_dt < ?",Time.now])
+    find(:all, :conditions => ["end_dt < ?",current_period.start_dt])
   end
   def self.future_periods
-    find(:all, :conditions => ["start_dt > ?",Time.now])
+    find(:all, :conditions => ["start_dt > ?",current_period.end_dt])
   end
   def desc
     self.name
