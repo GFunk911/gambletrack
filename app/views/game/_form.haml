@@ -1,18 +1,13 @@
-- @game = form
 %div= flash_messages
-= render :partial => 'game/wagers', :object => @game.active_wagers
-- remote_form_for(@game) do |f|
-  Away Score:
-  = f.text_field :away_score, :size => 4
-  Home Score:
-  = f.text_field :home_score, :size => 4
-  %table
-    %tr
-      - (@games ? ['Game'] : []) + %w(Team Site Spread Odds Desired Outstanding Wagered Expired Status Active).each do |col|
-        %th= col
-    %div#lines
-      = f.render_associated_form(@game.lines, :new => 2, :partial => 'game/line')
-      - f.add_associated_link('Add Line',@game.lines.build, :partial => 'game/line')
-  = f.submit 'Save'
+
+%h2= form.desc
+
+= render :partial => 'game/line_summary', :object => form
+
+= link_to_remote('Show Wagers', :update => 'wagers', :url => {:controller => 'wagers', :action => 'show', :id => form.id, :obj_class => form.class}) if form.active_wagers.size >= 20
+%div{:id => 'wagers'}= render :partial => 'game/wagers', :object => form.active_wagers if form.active_wagers.size < 20
+
+= link_to_remote 'Show Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => form.id, :obj_class => form.class} if form.lines.size >= 20
+%div{:id => 'lines'}= render :partial => 'game/lines', :object => form if form.lines.size < 20
 
     

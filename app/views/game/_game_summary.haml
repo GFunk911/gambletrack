@@ -2,15 +2,14 @@
   %tr
     - %w(Game Desired Wagered Won).each do |col|
       %th= col
-  - game_summary.select { |x| x.has_bet? }.each do |g|
+  - lines.each do |g|
     %tr
       %td= g.desc
       %td= g.desired_amount
       %td= g.wagered_amount
       %td= g.win_amount
   %tr
-    %td= "Total"
-    %td= @period.desired_amount
-    %td= @period.wagered_amount
-    %td= @period.win_amount
+    - ['Total',root.desired_amount,root.wagered_amount,root.win_amount].each do |cell|
+      %td
+        %b= cell
     

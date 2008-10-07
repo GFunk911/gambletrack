@@ -73,7 +73,7 @@ class Line < ActiveRecord::Base
     self.return_from_dollar = x.blank? ? nil : Gambling::Odds.get(x).rfd
   end
   def desc
-    "#{team} #{spr} #{odds} #{wager.kelly_perc} #{created_at}"
+    "#{team} #{spr} #{odds}"
   rescue => exp
     puts exp
     return "line desc"
@@ -173,10 +173,10 @@ class Line < ActiveRecord::Base
     LineSet.find(:all).each { |x| x.mark_active! }
   end
   def active?
-    !expire_dt
+    !expired? || has_bet?
   end
   def expired?
-    !active?
+    !!expire_dt
   end
   def expired
     !!expire_dt

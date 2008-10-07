@@ -1,29 +1,3 @@
-module BetSummary
-  def bet_summary_end?
-    !respond_to?(:children)
-  end
-  def desired_amount
-    bet_children.map { |x| x.desired_amount }.sum
-  end
-  def outstanding_amount
-    bet_children.map { |x| x.outstanding_amount }.sum
-  end
-  def wagered_amount
-    bet_children.map { |x| x.wagered_amount }.sum
-  end
-  def win_amount
-    bet_children.map { |x| x.win_amount }.sum
-  end
-  def has_bet?
-    [desired_amount,wagered_amount].any? { |x| x > 0 }
-  end
-  def bet_children
-    return bets if respond_to?(:bets)
-    return games if respond_to?(:games)
-    raise 'foo'
-  end
-end
-
 class Game < ActiveRecord::Base
   include PO::GameModule
   extend PO::GameModule::ClassMethods
@@ -31,6 +5,7 @@ class Game < ActiveRecord::Base
 
   has_many :lines, :order => ["team,line_set_id,expire_dt"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  include WagerModule
   def bets
     lines.map { |x| x.bets }.flatten
   end
@@ -87,12 +62,6 @@ class Game < ActiveRecord::Base
     lines.map do |ln|
       wager_for_line(ln)
     end.flatten.sort_by { |x| x.kelly_perc }.reverse
-  end
-  def wagers
-    lines.map { |x| x.wagers }.flatten.sort_by { |x| x.kelly_perc }.reverse
-  end
-  def active_wagers
-    lines.select { |x| !x.expired? or x.has_bet? }.map { |x| x.wagers }.flatten.sort_by { |x| x.kelly_perc }.reverse
   end
   def team_margin(t)
     return nil unless played?

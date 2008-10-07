@@ -16,5 +16,4 @@ module ApplicationHelper
     end
     messages
   end
-  
 end

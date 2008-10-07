@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :passwords
   map.resource :session
   #map.resources :trees
-  map.resources :line do |l|
+  map.resources(:lines, :controller => 'line') do |l|
     l.resources :bets
   end
   map.resources :main
