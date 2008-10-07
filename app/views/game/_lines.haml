@@ -1,19 +1,22 @@
+%h3= 'Lines'
 - if defined?(active) && active
   = link_to_remote 'Show Expired Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => lines.id, :obj_class => lines.class, :active => false}
 - else
   = link_to_remote 'Hide Expired Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => lines.id, :obj_class => lines.class, :active => true}
 
 - remote_form_for(lines) do |f|
+  %table
+    %tr
+      - line_table_cols(lines).each do |col|
+        %th= col
+    %div#lines
+      - form_lines = (defined?(active) && active) ? lines.lines.active : lines.lines
+      = f.render_associated_form(form_lines, :new => 2, :partial => 'game/line')
+  %br
   - if lines.respond_to?(:away_score)
     Away Score:
     = f.text_field :away_score, :size => 4
     Home Score:
     = f.text_field :home_score, :size => 4
-  %table
-    %tr
-      - (lines.respond_to?(:games) ? ['Game'] : []) + %w(Team Site Spread Odds Desired Outstanding Wagered Expired Status Active).each do |col|
-        %th= col
-    %div#lines
-      - form_lines = (defined?(active) && active) ? lines.lines.active : lines.lines
-      = f.render_associated_form(form_lines, :new => 2, :partial => 'game/line')
+  %br
   = f.submit 'Save'

@@ -1,2 +1,4 @@
-= render :partial => 'game/game_summary', :locals => {:root => line_summary, :lines => line_summary.lines_with_bet}
-= render(:partial => 'game/game_summary', :locals => {:root => line_summary, :lines => line_summary.games}) if line_summary.respond_to?(:games)
+-if line_summary.lines_with_bet.size > 0 or line_summary.respond_to?(:games)
+  %h3= 'Line Summary'
+  = render :partial => 'game/game_summary', :locals => {:root => line_summary, :lines => line_summary.lines_with_bet}
+  = render(:partial => 'game/game_summary', :locals => {:root => line_summary, :lines => line_summary.games}) if line_summary.respond_to?(:games)
