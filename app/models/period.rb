@@ -23,6 +23,7 @@ end
 class Period < ActiveRecord::Base
   has_many :games
   has_many :lines, :through => :games, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  belongs_to :sport
   include BetSummary
   include WagerModule
   def self.current_period

@@ -3,9 +3,18 @@ class Game < ActiveRecord::Base
   extend PO::GameModule::ClassMethods
   include BetSummary
 
-  has_many :lines, :order => ["team,line_set_id,expire_dt"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :lines, :order => ["team_id,line_set_id,expire_dt"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  belongs_to :home_team_obj, :class_name => 'Team', :foreign_key => 'home_team_id'
+  belongs_to :away_team_obj, :class_name => 'Team', :foreign_key => 'away_team_id'
   include WagerModule
+  belongs_to :sport
+  def home_team
+    home_team_obj.abbr
+  end
+  def away_team
+    away_team_obj.abbr
+  end
   def bets
     lines.map { |x| x.bets }.flatten
   end
@@ -32,7 +41,7 @@ class Game < ActiveRecord::Base
     end
   end
   named_scope :week, lambda { |w| {:include => :lines, :conditions => ['event_dt >= ? and event_dt <= ?']+dates_for_week(w)}}
-  named_scope :teams, lambda { |a,h| {:conditions => ['home_team = ? and away_team = ?',h,a]} }
+  #named_scope :teams, lambda { |a,h| {:conditions => ['home_team = ? and away_team = ?',h,a]} }
 
   def self.dates_for_week(i)
     start = Time.local(2008,9,4,13) + (i - 1)*7.days
@@ -51,7 +60,7 @@ class Game < ActiveRecord::Base
     "#{away_team}@#{home_team}"
   end
   def teams
-    [away_team,home_team]
+    [away_team_obj,home_team_obj]
   end
 
   def wager_for_linex(ln)

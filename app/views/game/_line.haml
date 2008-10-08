@@ -2,7 +2,7 @@
   - if line.new_record? 
     - if @games
       %td= f.select :game_id, @games.map { |x| [x.desc,x.id] }
-    %td= f.select :team, line.possible_teams
+    %td= f.select :team_id, line.possible_teams.map { |x| [x.abbr,x.id] }
     %td= f.select :site_id, Site.find(:all).map { |x| [x.name,x.id] }
     %td= f.text_field :pretty_spread, :size => 4
     %td= f.text_field :odds, :size => 4
@@ -10,7 +10,7 @@
     %td= f.text_field :outstanding_amount, :size => 4
     %td= f.text_field :wagered_amount, :size => 4
     %td= f.check_box :expired
-    - if line.game.played?
+    - if line.game && line.game.played?
       %td= line.result
     - f.remove_link 'Remove'
   - else

@@ -20,6 +20,12 @@ namespace :dataload do
       Line.find_or_create_from_hash(h)
     end
   end
+  rails_task :log_mb_lines do
+    str = Matchbook.instance.team_abbr_hash.map { |k,v| "#{k}: #{v}" }.join("\n")
+    str += Matchbook.instance.lines.map { |x| x.inspect }.join("\n")
+    str += Matchbook.instance.line_hashes.map { |x| x.inspect }.join("\n")
+    File.create("#{RAILS_ROOT}\\mb_lines.txt",str)
+  end
   rails_task :scores do
     Game.update_nfl_games
   end
@@ -42,4 +48,13 @@ end
 
 rails_task :delete_bad_lines do
   Line.find(:all, :conditions => ["return_from_dollar <= 0 or return_from_dollar >= 100"]).each { |x| x.destroy }
+end
+
+rails_task :sagtest do
+  Matchbook.instance.team_abbr_hash.each do |long,abbr|
+    rtg = Sagarin.instance.get_rating(long)
+    puts "#{long}: #{rtg}" unless rtg
+  end
+  str = Matchbook.instance.lines.select { |x| x.sagarin_home_margin }.sort_by { |x| x.sagarin_diff }.map { |x| x.to_s_sagarin }.join("\n")
+  File.create("#{RAILS_ROOT}\\sagarin.txt",str)
 end

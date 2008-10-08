@@ -10,6 +10,10 @@ end
 class LineSet < ActiveRecord::Base
   has_many :lines
   belongs_to :game
+  belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'
+  def team
+    team_obj.abbr
+  end
   include BetSummary
   def rfd
     Gambling::Odds.get(odds).rfd
@@ -18,7 +22,7 @@ class LineSet < ActiveRecord::Base
     if game
       game.teams
     else
-      games.map { |x| [x.home_team,x.away_team] }.flatten.map { |x| x.to_s }.uniq.sort
+      Team.all
     end
   end
   def pretty_spread
