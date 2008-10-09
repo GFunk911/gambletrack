@@ -10,7 +10,7 @@ class CreateSports < ActiveRecord::Migration
     {'NFL' => 'Pro Football', 'CFB' => 'College Football'}.each do |a,n|
       Sport.new(:name => n, :abbr => a).save!
     end
-    sid = Sport.find_by_appr('NFL')
+    sid = Sport.find_by_abbr('NFL')
     Game.find(:all).each { |x| x.sport_id = sid; x.save! }
   end
 
