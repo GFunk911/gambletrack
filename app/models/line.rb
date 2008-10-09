@@ -141,18 +141,7 @@ class Line < ActiveRecord::Base
     end
   end
   def self.find_or_create_from_hash(h)
-    pid = Period.current_period.id
-    site = Site.find(:first, :conditions => ["name = ?",'Matchbook'])
-    g = Game.find(:first, :conditions => ["period_id = ? and home_team_id = ? and away_team_id = ?",pid,Team.find_by_abbr(h[:home_team]).id,Team.find_by_abbr(h[:away_team]).id]).tap { |x| raise "no game for #{desc}" unless x }      
-    line = g.lines.select { |x| x.spread.to_closest_spread == h[:spread].to_closest_spread and x.return_from_dollar.round_dec(3) == Gambling::Odds.get(h[:odds]).rfd.round_dec(3) and x.team.abbr == h[:team] and x.site_id == site.id }.first
-    if line
-      puts "found #{desc}"
-    else
-      puts "creating #{desc}"
-      line = g.lines.new(:team => Team.find_by_abbr(h[:team]), :return_from_dollar => Gambling::Odds.get(h[:odds]).rfd.to_f, :spread => h[:spread], :site => site)
-      line.save!
-    end
-    line
+    LineCreator.new(h).run!
   end
   def find_or_create_line_set
     return line_set if line_set
@@ -184,6 +173,76 @@ class Line < ActiveRecord::Base
     a = new_record? ? 99999 : self.line_set_id
     b = expire_dt ? expire_dt : 999.days.ago
     [a,b]
+  end
+  def corrected_rfd
+    Gambling::Odds.get(odds.to_s).rfd
+  end
+end
+
+class Class
+  def fattr_nn(name,&b)
+    fattr(name) do 
+      instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
+    end
+  end
+end
+
+module Enumerable
+  def comp_array
+    map { |x| x.is_a?(Team) ? "#{x.id} #{x.abbr}" : x }.map { |x| [x,x.class] }.flatten
+  end
+  def eq_comp(b)
+    res = (comp_array == b.comp_array)
+    puts "#{res} #{comp_array.inspect} #{b.comp_array.inspect}"
+  end
+end
+
+class LineCreator
+  attr_accessor :h
+  def initialize(h)
+    @h = h
+  end
+  fattr_nn(:period) do
+    sport.current_period
+  end
+  fattr_nn(:site) do
+    Site.find(:first, :conditions => {:name => 'Matchbook'})
+  end
+  fattr_nn(:sport) do
+    Sport.find_by_abbr('NFL')
+  end
+  fattr_nn(:home_team) { team(h[:home_team]) }
+  fattr_nn(:away_team) { team(h[:away_team]) }
+  fattr_nn(:selected_team) { team(h[:team]) }
+  def odds
+    Gambling::Odds.get(h[:odds])
+  end
+  def team(t)
+    sport.find_team(t).tap { |x| raise "no team found for #{t}" unless x and t }
+  end
+  fattr(:game) do
+    Game.find(:first, :conditions => ["period_id = ? and home_team_id = ? and away_team_id = ?",period.id,home_team.id,away_team.id]).tap { |x| raise "no game for #{h}" unless x } 
+  end
+  def line_compare_array(x)
+    [x.spread.to_closest_spread,x.odds.to_s,x.team_obj,x.site_id]
+  end
+  def compare_array
+    [h[:spread].to_closest_spread,odds.to_s,selected_team,site.id]
+  end
+  fattr(:existing_line) do 
+    game.lines.select do |x| 
+      #line_compare_array(x).eq_comp(compare_array)
+      #puts (0.694).round_dec(3).round_dec(3).round_dec(3)
+      x.spread.to_closest_spread == h[:spread].to_closest_spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id 
+    end.first
+  end
+  fattr(:new_line) do 
+    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => h[:spread].to_closest_spread, :site => site).tap { |x| x.save! }
+  end
+  def run!
+    #return unless away_team.abbr == 'STL'
+    puts(existing_line ? "Found #{h}" : "Creating #{h}")
+    existing_line || new_line
   end
 end
 

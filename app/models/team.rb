@@ -5,7 +5,7 @@ class Team < ActiveRecord::Base
     t.names.new(:abbr => t.abbr, :team_name => t.team_name, :city => t.city, :primary => true).save! if t.names.empty?
   end
   before_save do |t|
-    t.full_name = t.city + " " + t.team_name
+    t.full_name = (t.city + " " + (t.team_name||'')).strip
   end
-  validates_uniqueness_of :abbr
+  validates_uniqueness_of :abbr, :allow_nil => true
 end

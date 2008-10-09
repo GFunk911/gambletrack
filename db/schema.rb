@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081008145208) do
+ActiveRecord::Schema.define(:version => 20081009123019) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -21,6 +21,25 @@ ActiveRecord::Schema.define(:version => 20081008145208) do
   end
 
   add_index "bets", ["line_id"], :name => "index_bets_on_line_id"
+
+  create_table "consensus", :force => true do |t|
+    t.integer  "game_id",         :null => false
+    t.integer  "bets"
+    t.integer  "home_spread_pct"
+    t.integer  "home_ml_pct"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "consensus_lines", :force => true do |t|
+    t.integer  "consensus_id",       :null => false
+    t.integer  "site_id"
+    t.integer  "spread"
+    t.decimal  "return_from_dollar"
+    t.string   "bet_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "games", :force => true do |t|
     t.datetime "event_dt"
@@ -114,15 +133,16 @@ ActiveRecord::Schema.define(:version => 20081008145208) do
   end
 
   create_table "team_names", :force => true do |t|
-    t.integer  "team_id",                       :null => false
+    t.integer  "team_id",                          :null => false
     t.string   "city"
     t.string   "team_name"
     t.string   "abbr"
     t.string   "full_name"
     t.integer  "site_id"
-    t.boolean  "primary",    :default => false
+    t.boolean  "primary",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "search_string"
   end
 
   create_table "teams", :force => true do |t|

@@ -26,10 +26,9 @@ class Period < ActiveRecord::Base
   belongs_to :sport
   include BetSummary
   include WagerModule
+  named_scope :current_and_future_periods, lambda { {:conditions => ["start_dt > ?",Time.now], :order => "start_dt asc"} }
   def self.current_period
-    res = find(:first, :conditions => ["start_dt < ? and ? < end_dt",Time.now,Time.now])
-    res ||= find(:first, :conditions => ["start_dt > ?",Time.now], :order => "start_dt asc")
-    res
+    current_and_future_periods.first
   end
   def self.prev_periods
     find(:all, :conditions => ["end_dt <= ?",current_period.start_dt])
