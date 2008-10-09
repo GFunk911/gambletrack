@@ -26,7 +26,7 @@ class Period < ActiveRecord::Base
   belongs_to :sport
   include BetSummary
   include WagerModule
-  named_scope :current_and_future_periods, lambda { {:conditions => ["start_dt > ?",Time.now], :order => "start_dt asc"} }
+  named_scope :current_and_future_periods, lambda { {:conditions => ["end_dt > ?",Time.now], :order => "start_dt asc"} }
   def self.current_period
     current_and_future_periods.first
   end
