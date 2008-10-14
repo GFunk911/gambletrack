@@ -61,11 +61,38 @@ rails_task :sagtest do
   str = Matchbook.instance.lines.select { |x| x.sagarin_home_margin }.sort_by { |x| x.sagarin_diff }.map { |x| x.to_s_sagarin }.join("\n")
   File.create("#{RAILS_ROOT}\\sagarin.txt",str)
 end
-
-rails_task :consensus do
-  Consensus.instance.games.each do |g|
-    
+  
+rails_task :consensus_loadx do
+  SIConsensus.instance.games.select { |x| x.home_team =~ /49ers/i }.each do |cg|
+    g = Game.upcoming.by_team_names(cg.away_team,cg.home_team).first
+    if g
+      c = g.consensus.new(:bets => cg.bets, :home_spread_pct => cg.home_spread_pct, :home_ml_pct => cg.home_ml_pct)
+      c.save!
+      puts cg.books.inspect
+      cg.books_each do |book,line|
+        puts "Book: #{book}, Line: #{line.inspect}"
+        sid = Site.find_by_name(book).tap { |x| raise "no site for #{book}" unless x }.id
+        c.lines.new(:site_id => sid, :spread => line[0], :return_from_dollar => Gambling::Odds.get(line[1]).rfd).save!
+      end
+    else
+      puts "couldn't find game #{cg.away_team}@#{cg.home_team}"
+    end
   end
+end
+
+rails_task :consensus_load do
+  LiveLines.new.games.map { |x| x.consensus_hashes }.flatten.each do |h|
+    Line
+    if Sport.find_by_abbr('NFL').find_team(h[:home_team]) and Sport.find_by_abbr('NFL').find_team(h[:away_team])
+      ConsensusCreator.new(h).run!
+    end
+  end
+end
+
+#attr_accessor *%w(row home_team away_team bets visit_spread_pct home_spread_pct visit_ml_pct home_ml_pct)
+rails_task :consensus_print do
+  str = SIConsensus.instance.games.join("\n")
+  File.create("#{RAILS_ROOT}/consensus.txt",str)
 end
 
 rails_task :mb_games do
@@ -97,4 +124,16 @@ task :gen_migration do
   filename = File.dirname(__FILE__) + "/db/migrate/#{t}_#{name}.rb"
   require 'facets/file/write'
   File.create(filename,str)
+end
+
+rails_task :contest do
+  puts LiveLines.new.games.size
+end
+
+rails_task :dump_teams do
+  Dataload.new.dump_teams!
+end
+
+rails_task :load_teams do
+  Dataload.new.load_teams!
 end
