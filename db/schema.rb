@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081009123019) do
+ActiveRecord::Schema.define(:version => 20081013191718) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -21,25 +21,6 @@ ActiveRecord::Schema.define(:version => 20081009123019) do
   end
 
   add_index "bets", ["line_id"], :name => "index_bets_on_line_id"
-
-  create_table "consensus", :force => true do |t|
-    t.integer  "game_id",         :null => false
-    t.integer  "bets"
-    t.integer  "home_spread_pct"
-    t.integer  "home_ml_pct"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "consensus_lines", :force => true do |t|
-    t.integer  "consensus_id",       :null => false
-    t.integer  "site_id"
-    t.integer  "spread"
-    t.decimal  "return_from_dollar"
-    t.string   "bet_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "games", :force => true do |t|
     t.datetime "event_dt"
@@ -55,6 +36,15 @@ ActiveRecord::Schema.define(:version => 20081009123019) do
 
   add_index "games", ["id"], :name => "index_games_on_id"
   add_index "games", ["period_id"], :name => "index_games_on_period_id"
+
+  create_table "line_consensus", :force => true do |t|
+    t.integer  "line_id"
+    t.integer  "game_id"
+    t.integer  "bets"
+    t.decimal  "bet_percent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "line_sets", :force => true do |t|
     t.integer  "game_id"

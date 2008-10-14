@@ -42,6 +42,22 @@ class Game < ActiveRecord::Base
   end
   named_scope :week, lambda { |w| {:include => :lines, :conditions => ['event_dt >= ? and event_dt <= ?']+dates_for_week(w)}}
   #named_scope :teams, lambda { |a,h| {:conditions => ['home_team = ? and away_team = ?',h,a]} }
+  named_scope(:upcoming, lambda do |*args|
+    days = args.first || 7
+    {:conditions => ["event_dt > ? and event_dt < ?",Time.my_current,Time.my_current+days.days]}
+  end)
+  named_scope(:by_away, lambda do |t|
+    {:conditions => ["team_names.search_string like ?","%#{t.downcase}%"], 
+     :include => {:away_team_obj => :names}}
+  end)
+  named_scope(:by_home, lambda do |t|
+    {:conditions => ["team_names.search_string like ?","%#{t.downcase}%"], 
+     :include => {:home_team_obj => :names}}
+  end)
+  named_scope(:by_team_names, lambda do |a,h|
+    {:conditions => ["team_names.search_string like ? and names_teams.search_string like ?","%#{a.downcase}%","%#{h.downcase}%"],
+     :include => {:away_team_obj => :names, :home_team_obj => :names}}
+  end)
 
   def self.dates_for_week(i)
     start = Time.local(2008,9,4,13) + (i - 1)*7.days

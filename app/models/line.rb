@@ -17,7 +17,7 @@ module LineSingleBet
     bets.empty? ? new_bet : bets.first
   end
   def new_bet
-    puts "line id #{self.id}"
+    #puts "line id #{self.id}"
     bets.new.tap { |x| x.save! if x.line_id }
   end
   %w(desired_amount outstanding_amount wagered_amount).each do |meth|
@@ -26,7 +26,7 @@ module LineSingleBet
     define_method(writ) { |x| single_bet.send(writ,x) }
   end
   def save_single_bet!
-    puts "calling save_single_bet!"
+    #puts "calling save_single_bet!"
     raise "line has no id" unless self.id
     single_bet.line_id = id
     single_bet.save!
@@ -36,6 +36,12 @@ module LineSingleBet
   end
   def win_amount
     single_bet.win_amount
+  end
+end
+
+class Time
+  def pretty_dt
+    strftime("%m/%d %H:%M")
   end
 end
 
@@ -54,12 +60,13 @@ class Line < ActiveRecord::Base
   named_scope :active, lambda { {:conditions => ["expire_dt is null",Time.now]} }
   before_save { |x| x.find_or_create_line_set }
   after_create { |x| x.line_set.mark_active! }
+  has_many :consensus, :class_name => 'LineConsensus'
   #include BetSummary
   def team
     team_obj.abbr
   end
   def save
-    puts "calling Line#save"
+    #puts "calling Line#save"
     super
   end
   def self.load_lines
@@ -177,6 +184,12 @@ class Line < ActiveRecord::Base
   def corrected_rfd
     Gambling::Odds.get(odds.to_s).rfd
   end
+  def add_consensus(h)
+    num,pct = (h[:bets]||0).to_i, h[:bet_percent].to_f
+    if consensus.select { |x| x.bets.to_i == num and x.bet_percent == pct }.empty?
+      consensus.new(:bets => num, :bet_percent => pct).save!
+    end
+  end
 end
 
 class Class
@@ -203,19 +216,22 @@ class LineCreator
     @h = h
   end
   fattr_nn(:period) do
-    sport.current_period
+    event_dt ? sport.periods.all_containing(event_dt).first : Period.find(6)
   end
   fattr_nn(:site) do
-    Site.find(:first, :conditions => {:name => 'Matchbook'})
+    Site.find(:first, :conditions => {:name => h[:site]})
   end
   fattr_nn(:sport) do
-    Sport.find_by_abbr('NFL')
+    Sport.find_by_abbr(h[:sport])
   end
   fattr_nn(:home_team) { team(h[:home_team]) }
   fattr_nn(:away_team) { team(h[:away_team]) }
   fattr_nn(:selected_team) { team(h[:team]) }
   def odds
     Gambling::Odds.get(h[:odds])
+  end
+  def spread
+     h[:spread].to_closest_spread
   end
   def team(t)
     sport.find_team(t).tap { |x| raise "no team found for #{t}" unless x and t }
@@ -233,19 +249,34 @@ class LineCreator
     game.lines.select do |x| 
       #line_compare_array(x).eq_comp(compare_array)
       #puts (0.694).round_dec(3).round_dec(3).round_dec(3)
-      x.spread.to_closest_spread == h[:spread].to_closest_spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id 
+      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id 
     end.first
   end
   fattr(:new_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => h[:spread].to_closest_spread, :site => site).tap { |x| x.save! }
+    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site).tap { |x| x.save! }
+  end
+  fattr(:event_dt) { h[:event_dt] }
+  def pretty_dt
+    event_dt ? event_dt.pretty_dt : ""
+  end
+  fattr(:desc) do
+    "#{away_team}@#{home_team} #{selected_team} #{spread} #{odds} #{pretty_dt}"
   end
   def run!
     #return unless away_team.abbr == 'STL'
-    puts(existing_line ? "Found #{h}" : "Creating #{h}")
+    puts(existing_line ? "Found #{desc}" : "Creating #{desc}")
     existing_line || new_line
   end
 end
 
-
-
+class ConsensusCreator
+  attr_accessor :h
+  def initialize(h)
+    @h = h
+  end
+  fattr(:line) { Line.find_or_create_from_hash(h) }
+  def run!
+    line.add_consensus(h)
+  end
+end
 
