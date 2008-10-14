@@ -9,7 +9,7 @@ class Periods
   def children
     a = PeriodSet.new("Prev Weeks",periods.prev_periods)
     b = PeriodSet.new("Future Weeks",periods.future_periods)
-    [a,periods.current_period_array.first,b]
+    [a,periods.current_period_array.first,b].reject { |x| x.is_a?(PeriodSet) and x.children.empty? }
   end
 end
 

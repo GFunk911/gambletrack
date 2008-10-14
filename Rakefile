@@ -156,6 +156,28 @@ rails_task :cf_periods do
   end
 end
   
+rails_task :bettest3 do
+  base = {:home_team => 'GB', :away_team => 'IND', :team => 'GB', :event_dt => Time.local(2008,10,19,13,0,0), :site => 'Matchbook', :sport => 'NFL'}
   
+  a = base.merge(:spread => -8, :odds => '-110')
+  Line.find_or_create_from_hash(a)
   
+  b = base.merge(:spread => -9, :odds => '-102')
+  Line.find_or_create_from_hash(b)
+end
+
+rails_task :hockey do
+  res = []
+  Matchbook.new('HK').lines.each do |g|
+    res << [g.home_team,g.home_long]
+    res << [g.away_team,g.away_long]
+  end
+  str = res.map { |x| "#{x[1]},,#{x[0]},NHL"}.join("\n")
+  File.create("#{RAILS_ROOT}/public/nhl_teams.csv",str)
+end
   
+rails_task :hockey_periods do
+  Sport.new(:name => 'Pro Hockey', :abbr => 'NHL').save! unless Sport.find_by_abbr('NHL')
+  sport = Sport.find_by_abbr('NHL')
+  sport.periods.new(:name => 'NHL Entire Season', :start_dt => Time.local(2008,9,1), :end_dt => Time.local(2009,7,1)).save!
+end

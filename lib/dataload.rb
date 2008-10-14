@@ -30,3 +30,10 @@ class Time
   end
 end
 
+def eat_exceptions(msg_if_exp=nil)
+  yield
+rescue => exp
+  puts msg_if_exp if msg_if_exp
+  return nil
+end
+

@@ -7,7 +7,7 @@ class Team < ActiveRecord::Base
   before_save do |t|
     t.full_name = (t.city + " " + (t.team_name||'')).strip
   end
-  validates_uniqueness_of :abbr, :allow_nil => true
+  validates_uniqueness_of :abbr, :allow_nil => true, :scope => :sport_id
   def to_s
     abbr.blank? ? city : abbr
   end
