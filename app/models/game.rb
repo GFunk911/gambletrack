@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   extend PO::GameModule::ClassMethods
   include BetSummary
 
-  has_many :lines, :order => ["team_id,line_set_id,expire_dt"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :lines, :order => ["team_id,line_set_id,created_at desc"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   belongs_to :home_team_obj, :class_name => 'Team', :foreign_key => 'home_team_id'
   belongs_to :away_team_obj, :class_name => 'Team', :foreign_key => 'away_team_id'
