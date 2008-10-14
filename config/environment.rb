@@ -65,6 +65,8 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   config.active_record.observers = :user_observer
+  
+  config.after_initialize { Dataload.load_teams! }
 end
 
 model_path = "#{RAILS_ROOT}/../gambling_co/gambling_model/model"

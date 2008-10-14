@@ -131,17 +131,9 @@ rails_task :contest do
 end
 
 rails_task :dump_teams do
-  str = Team.all.map { |x| x.csv }.join("\n")
-  File.create("#{RAILS_ROOT}/public/teams.csv",str)
-  
-  str = TeamName.all.map { |x| x.csv }.join("\n")
-  File.create("#{RAILS_ROOT}/public/team_names.csv",str)
+  Dataload.new.dump_teams!
 end
 
 rails_task :load_teams do
-  lines = File.open("#{RAILS_ROOT}/public/teams.csv") { |f| f.to_a }
-  lines.each { |ln| Team.load_csv!(ln) }
-  
-  lines = File.open("#{RAILS_ROOT}/public/team_names.csv") { |f| f.to_a }
-  lines.each { |ln| TeamName.load_csv!(ln) }
+  Dataload.new.load_teams!
 end
