@@ -1,7 +1,16 @@
 class LinesDataload
-  def load_matchbook!
-    Matchbook.new.line_hashes.each do |h|
+  def load_matchbook_sport!(sport)
+    Matchbook.new(sport).line_hashes.each do |h|
       Line.find_or_create_from_hash(h)
+    end
+  end
+  def load_matchbook!
+    %w(PF).each { |x| load_matchbook_sport!(x) }
+  end
+  def load_matchbook_games!(sport)
+    Line
+    Matchbook.new(sport).line_hashes.each do |h|
+      GameCreator.new(h).run!
     end
   end
 end

@@ -20,6 +20,9 @@ namespace :dataload do
   rails_task :mb_lines do
     LinesDataload.new.load_matchbook!
   end
+  rails_task :mb_college_games do
+    LinesDataload.new.load_matchbook_games!('CF')
+  end
   rails_task :log_mb_lines do
     str = Matchbook.instance.team_abbr_hash.map { |k,v| "#{k}: #{v}" }.join("\n")
     str += Matchbook.instance.lines.map { |x| x.inspect }.join("\n")
@@ -33,10 +36,11 @@ namespace :dataload do
     Line.find(:all).each { |x| x.save! }
   end
   rails_task :update_period_dates do
+    sport = Sport.find_by_abbr('NFL')
     start_dt = Time.local(2008,9,2,2)
     end_dt = Time.local(2008,9,9,2)
     (1..17).each do |w|
-      p = Period.find_by_name("Week #{w}")
+      p = sport.periods.find_by_name("Week #{w}")
       p.start_dt = start_dt
       p.end_dt = end_dt
       p.save!
@@ -47,8 +51,13 @@ namespace :dataload do
 end
 
 rails_task :mb_teams do
-  Matchbook.instance.lines.each { |x| puts "#{x.away_long}@#{x.home_long} #{x.away_team}@#{x.home_team}" }
+  #Matchbook.new('CF').lines.each { |x| puts "#{x.away_long}@#{x.home_long} #{x.away_team}@#{x.home_team}" }
+  sport = Sport.find_by_abbr('CFB')
+  Matchbook.new('CF').lines.map { |x| [x.home_team_hash,x.away_team_hash] }.flatten.each do |t|
+    puts "no team #{t}" unless sport.find_team(t)
+  end
 end
+
 rails_task :delete_bad_lines do
   Line.find(:all, :conditions => ["return_from_dollar <= 0 or return_from_dollar >= 100"]).each { |x| x.destroy }
 end
@@ -137,3 +146,16 @@ end
 rails_task :load_teams do
   Dataload.new.load_teams!
 end
+
+rails_task :cf_periods do
+  sport = Sport.find_by_abbr('CFB')
+  t = Time.local(2008,8,26,2,0,0)
+  (1..17).each do |w|
+    sport.periods.new(:name => "CF Week #{w}", :start_dt => t, :end_dt => t+7.days).save!
+    t += 7.days
+  end
+end
+  
+  
+  
+  

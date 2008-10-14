@@ -1,6 +1,7 @@
-%div{:id => 'foodiv', :style => 'width:250px'}
+%div{:id => 'foodiv', :style => 'width:300px'}
   - Period.new
   - LineSet.new
-  = render :partial => 'tree/tree', :object => Periods.new
-%div{:id => 'right_div', :style => 'position:absolute;top:0px;left:200px;float:right'}
-  = render :partial => 'game/form', :object => Game.week(5).first
+  - Sport
+  = render :partial => 'tree/tree', :object => Sports.new
+%div{:id => 'right_div', :style => 'position:absolute;top:0px;left:325px;float:right'}
+  = render :partial => 'game/form', :object => Sport.find_by_abbr('NFL').periods.current_period_array.first.games.first

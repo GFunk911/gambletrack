@@ -10,10 +10,10 @@ class Game < ActiveRecord::Base
   include WagerModule
   belongs_to :sport
   def home_team
-    home_team_obj.abbr
+    home_team_obj.short_name
   end
   def away_team
-    away_team_obj.abbr
+    away_team_obj.short_name
   end
   def bets
     lines.map { |x| x.bets }.flatten

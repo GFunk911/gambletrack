@@ -29,4 +29,7 @@ class Team < ActiveRecord::Base
   def csv
     [city,team_name,abbr,sport.abbr].join(",")
   end
+  def short_name
+    abbr ? abbr : city
+  end
 end

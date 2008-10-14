@@ -105,6 +105,7 @@ class Line < ActiveRecord::Base
     Gambling::Wager.new(home_favored,game.correct_spread,ha,odds,game)
   end
   def wagers
+    return [] unless game.sport.abbr == 'NFL'
     #[wager,teaser_wager].select { |x| x }
     [wager].select { |x| x }
   end
@@ -192,7 +193,7 @@ class Line < ActiveRecord::Base
   end
 end
 
-class Class
+class Module
   def fattr_nn(name,&b)
     fattr(name) do 
       instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
@@ -210,22 +211,48 @@ module Enumerable
   end
 end
 
-class LineCreator
+module GLCreator
   attr_accessor :h
   def initialize(h)
     @h = h
   end
-  fattr_nn(:period) do
-    event_dt ? sport.periods.all_containing(event_dt).first : Period.find(6)
-  end
-  fattr_nn(:site) do
-    Site.find(:first, :conditions => {:name => h[:site]})
-  end
+  fattr(:event_dt) { h[:event_dt] }
   fattr_nn(:sport) do
     Sport.find_by_abbr(h[:sport])
   end
+  def team(t)
+    sport.find_team(t).tap { |x| raise "no team found for #{t}" unless x and t }
+  end
   fattr_nn(:home_team) { team(h[:home_team]) }
   fattr_nn(:away_team) { team(h[:away_team]) }
+  fattr_nn(:period) do
+    event_dt ? sport.periods.all_containing(event_dt).first : Period.find(6)
+  end
+  def pretty_dt
+    event_dt ? event_dt.pretty_dt : ""
+  end
+  fattr(:existing_game) do
+    sport.games.find(:first, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id})
+  end
+end
+
+class GameCreator
+  include GLCreator
+  fattr(:new_game) do
+    sport.games.new(:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id, :event_dt => event_dt).tap { |x| x.save! }
+  end
+  fattr(:desc) { "#{away_team}@#{home_team} #{pretty_dt}" }
+  def run!
+    puts(existing_game ? "Found #{desc}" : "Creating #{desc}")
+    existing_game || new_game
+  end
+end
+
+class LineCreator
+  include GLCreator
+  fattr_nn(:site) do
+    Site.find(:first, :conditions => {:name => h[:site]})
+  end
   fattr_nn(:selected_team) { team(h[:team]) }
   def odds
     Gambling::Odds.get(h[:odds])
@@ -233,18 +260,7 @@ class LineCreator
   def spread
      h[:spread].to_closest_spread
   end
-  def team(t)
-    sport.find_team(t).tap { |x| raise "no team found for #{t}" unless x and t }
-  end
-  fattr(:game) do
-    Game.find(:first, :conditions => ["period_id = ? and home_team_id = ? and away_team_id = ?",period.id,home_team.id,away_team.id]).tap { |x| raise "no game for #{h}" unless x } 
-  end
-  def line_compare_array(x)
-    [x.spread.to_closest_spread,x.odds.to_s,x.team_obj,x.site_id]
-  end
-  def compare_array
-    [h[:spread].to_closest_spread,odds.to_s,selected_team,site.id]
-  end
+  fattr_nn(:game) { existing_game }
   fattr(:existing_line) do 
     game.lines.select do |x| 
       #line_compare_array(x).eq_comp(compare_array)
@@ -254,10 +270,6 @@ class LineCreator
   end
   fattr(:new_line) do 
     game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site).tap { |x| x.save! }
-  end
-  fattr(:event_dt) { h[:event_dt] }
-  def pretty_dt
-    event_dt ? event_dt.pretty_dt : ""
   end
   fattr(:desc) do
     "#{away_team}@#{home_team} #{selected_team} #{spread} #{odds} #{pretty_dt}"
