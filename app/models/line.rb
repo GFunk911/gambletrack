@@ -63,7 +63,7 @@ class Line < ActiveRecord::Base
   has_many :consensus, :class_name => 'LineConsensus'
   #include BetSummary
   def team
-    team_obj.abbr
+    team_obj.short_name
   end
   def save
     #puts "calling Line#save"
