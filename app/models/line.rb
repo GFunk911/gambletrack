@@ -151,12 +151,22 @@ class Line < ActiveRecord::Base
   def self.find_or_create_from_hash(h)
     LineCreator.new(h).run!
   end
+  def bet_type
+    (spread.to_f == 0.0) ? 'moneyline' : 'spread'
+  end
   def find_or_create_line_set
     return line_set if line_set
-    set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and spread = ? and team_id = ?",site_id,game_id,spread,team_id])
-    set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :spread => spread.to_closest_spread, :team_id => team_id).tap { |x| x.save! }
-    self.line_set = set
-    set
+    if site.changes_spread?
+      set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and bet_type = ? and team_id = ?",site_id,game_id,bet_type,team_id])
+      set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :bet_type => bet_type, :team_id => team_id).tap { |x| x.save! }
+      self.line_set = set
+      set
+    else
+      set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and spread = ? and team_id = ?",site_id,game_id,spread,team_id])
+      set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :spread => spread.to_closest_spread, :team_id => team_id).tap { |x| x.save! }
+      self.line_set = set
+      set
+    end
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }

@@ -11,6 +11,9 @@ class LineSet < ActiveRecord::Base
   has_many :lines
   belongs_to :game
   belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'
+  before_save do |x|
+    x.bet_type ||= x.calc_bet_type if x.calc_bet_type
+  end
   def team
     team_obj.abbr
   end
@@ -51,5 +54,9 @@ class LineSet < ActiveRecord::Base
   rescue => exp
     puts exp
     return "line desc"
+  end
+  def calc_bet_type
+    return nil unless spread
+    (spread.to_f == 0) ? 'moneyline' : 'spread'
   end
 end

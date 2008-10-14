@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081013191718) do
+ActiveRecord::Schema.define(:version => 20081014165034) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20081013191718) do
     t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
   end
 
   add_index "sites", ["id"], :name => "index_sites_on_id"
