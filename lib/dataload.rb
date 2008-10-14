@@ -23,3 +23,10 @@ class Dataload
     end
   end
 end
+
+class Time
+  def self.my_current
+    now
+  end
+end
+
