@@ -1,7 +1,7 @@
 class TeamName < ActiveRecord::Base
   belongs_to :team
   before_save do |t|
-    t.full_name = (t.city + " " + (t.team_name||'')).strip
+    t.full_name = "#{t.city} #{t.team_name}".strip
     t.search_string = t.gen_search_string
   end
   def gen_search_string
