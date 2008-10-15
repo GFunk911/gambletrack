@@ -10,6 +10,7 @@
     %td= f.text_field :outstanding_amount, :size => 4
     %td= f.text_field :wagered_amount, :size => 4
     %td= f.check_box :expired
+    %td
     - if line.game && line.game.played?
       %td= line.result
     - f.remove_link 'Remove'
@@ -24,6 +25,7 @@
     %td= f.text_field :outstanding_amount, :size => 4
     %td= f.text_field :wagered_amount, :size => 4
     %td= f.check_box :expired
+    %td= line.effective_dt.pretty_dt
     -if line.game.played?
       %td= line.result
  
