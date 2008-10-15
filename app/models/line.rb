@@ -349,6 +349,9 @@ class Module
     fattr(name) do 
       instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
     end
+    fattr("#{name}_cbn") do
+      instance_eval(&b)
+    end
   end
 end
 
@@ -372,7 +375,7 @@ module GLCreator
     Sport.find_by_abbr(h[:sport])
   end
   def team(t)
-    sport.find_team(t).tap { |x| raise "no team found for #{t}" unless x and t }
+    sport.find_team(t)#.tap { |x| raise "no team found for #{t}" unless x and t }
   end
   fattr_nn(:home_team) { team(h[:home_team]) }
   fattr_nn(:away_team) { team(h[:away_team]) }
@@ -383,7 +386,21 @@ module GLCreator
     event_dt ? event_dt.pretty_dt : ""
   end
   fattr(:existing_game) do
-    sport.games.find(:first, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id})
+    sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id}).select { |x| x.event_dt.day == event_dt.day }.first
+  end
+end
+
+class GameUpdater
+  include GLCreator
+  def run!
+    unless sport_cbn and home_team_cbn and away_team_cbn and existing_game
+      puts "no game for #{h.inspect}" if %w(NFL NHL MLB CFB).include?(h[:sport])
+      return
+    end
+    puts "making game for #{h.inspect}"
+    existing_game.home_score ||= h[:home_score]
+    existing_game.away_score ||= h[:away_score]
+    existing_game.save!
   end
 end
 

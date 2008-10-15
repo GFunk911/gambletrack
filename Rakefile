@@ -188,3 +188,10 @@ rails_task :hockey_periods do
   sport = Sport.find_by_abbr('NHL')
   sport.periods.new(:name => 'NHL Entire Season', :start_dt => Time.local(2008,9,1), :end_dt => Time.local(2009,7,1)).save!
 end
+
+rails_task :scores do
+  Line
+  SIScores.new.hashes.each do |h|
+    GameUpdater.new(h).run!
+  end
+end  
