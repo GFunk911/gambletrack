@@ -22,7 +22,7 @@ namespace :dataload do
   end
   rails_task :mb_lines_all do
     LinesDataload.new.load_matchbook!
-    %w(CF HK).each do |s|
+    %w(CF HK BB).each do |s|
       LinesDataload.new.load_matchbook_games!(s)
       LinesDataload.new.load_matchbook_sport!(s)
     end
