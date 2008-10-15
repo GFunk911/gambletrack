@@ -11,6 +11,9 @@ module BetSummary
   def wagered_amount
     bet_children.map { |x| x.wagered_amount||0 }.sum
   end
+  def wagered_amount_on_played_games
+    bet_children.select { |x| x.played? }.map { |x| x.wagered_amount||0 }.sum
+  end
   def win_amount
     bet_children.map { |x| x.win_amount||0 }.sum
   end

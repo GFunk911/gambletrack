@@ -225,8 +225,11 @@ class Line < ActiveRecord::Base
   def actual_margin
     game.team_margin(team)
   end
+  def played?
+    game.played?
+  end
   def result
-    return :unplayed unless game.played?
+    return :unplayed unless played?
     margin = actual_margin - spread
     return :win if margin > 0
     return :loss if margin < 0

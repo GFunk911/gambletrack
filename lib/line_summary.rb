@@ -9,6 +9,6 @@ module LineSummary
     line_summary_children.select { |x| x.push? }.size
   end
   def roi
-    (win_amount.to_f / wagered_amount.to_f).to_perc
+    (win_amount.to_f / wagered_amount_on_played_games.to_f).to_perc
   end
 end
