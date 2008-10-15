@@ -10,6 +10,14 @@ RAILS_GEM_VERSION = '2.1.1' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+
+def eat_exceptions(msg_if_exp=nil)
+  yield
+rescue => exp
+  puts msg_if_exp if msg_if_exp
+  return nil
+end
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -68,8 +76,22 @@ Rails::Initializer.run do |config|
   
   config.after_initialize do 
     eat_exceptions('Team Dataload Failed') { Dataload.new.load_teams! }
+    require "#{RAILS_ROOT}/lib/attribute_fu_ext"
   end
 end
 
 model_path = "#{RAILS_ROOT}/../gambling_co/gambling_model/model"
 require_dependency model_path
+def dbg(ln)
+  File.append("#{RAILS_ROOT}/log/debug.log",ln+"\n")
+end
+class Object
+  def send_catch(sym,*args,&b)
+    send(sym,*args,&b)
+  rescue => exp
+    dbg exp.inspect
+    return nil
+  end
+end
+
+

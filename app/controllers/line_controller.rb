@@ -1,5 +1,7 @@
 class LineController < ApplicationController
   def show
+    $bet_type_track = 938457
+    dbg "\nLine#show"
     @obj = get_poly_obj(params)
     render :partial => 'game/lines', :object => @obj, :layout => false, :locals => {:active => params[:active]}
   end

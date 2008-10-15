@@ -4,7 +4,11 @@ class Sport < ActiveRecord::Base
   has_many :names, :through => :teams
   has_many :periods, :include => :games
   def find_team(t)
-    names.matching(t).tap { |x| raise "found #{x.size} matching teams for #{t}.  #{x.inspect}" if x.size > 1; return nil if x.empty? }.first.team
+    if Team.over_under?(t)
+      Team.find_by_city(t)
+    else
+      names.matching(t).tap { |x| raise "found #{x.size} matching teams for #{t}.  #{x.inspect}" if x.size > 1; return nil if x.empty? }.first.team
+    end
   end
   def current_period
     periods.current_and_future_periods.first

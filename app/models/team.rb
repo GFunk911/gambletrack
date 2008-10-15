@@ -17,10 +17,20 @@ class Team < ActiveRecord::Base
     %w(city team_name abbr).zip(fields[0..-2]).each { |f,v| res[f] = v unless v.blank? }
     sport_abbr = fields[-1]
     
-    sport = Sport.find_by_abbr(sport_abbr)
-    t = sport.teams.find(:first, :conditions => res)
+    t = nil
+    sport = nil
+    if sport_abbr.blank?
+      t = Team.find(:first, :conditions => res)
+    else
+      sport = Sport.find_by_abbr(sport_abbr)
+      t = sport.teams.find(:first, :conditions => res)
+    end
     if !t
-      sport.teams.new(res).save!
+      if sport
+        sport.teams.new(res).save!
+      else
+        Team.new(res).save!
+      end
       puts "made team #{res.inspect}"
     else
       puts "Already exists team #{t.full_name}"
@@ -31,5 +41,14 @@ class Team < ActiveRecord::Base
   end
   def short_name
     abbr ? abbr : city
+  end
+  def self.ou_teams
+    find(:all, :conditions => ["city = ? or city = ?",'Over','Under'])
+  end
+  def self.over_under?(t)
+    %w(over under).include?(t.to_s.downcase)
+  end
+  def over_under?
+    klass.over_under?(city)
   end
 end

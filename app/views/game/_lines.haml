@@ -1,4 +1,4 @@
-%h3= 'Lines'
+%h2= 'Lines'
 - if defined?(active) && active
   = link_to_remote 'Show Expired Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => lines.id, :obj_class => lines.class, :active => false}
 - else
@@ -6,12 +6,9 @@
 
 - remote_form_for(lines) do |f|
   %table
-    %tr
-      - line_table_cols(lines).each do |col|
-        %th= col
     %div#lines
       - form_lines = (defined?(active) && active) ? lines.lines.active : lines.lines
-      = f.render_associated_form(form_lines, :new => 2, :partial => 'game/line')
+      = f.render_associated_form(form_lines, :new => 2, :partial => 'game/line_wrap', :locals => {:lines => lines})
   %br
   - if lines.respond_to?(:away_score)
     Away Score:

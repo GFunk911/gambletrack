@@ -45,7 +45,45 @@ class Time
   end
 end
 
+module LineTypes
+  def self.line_type_hash
+    {:spread => 'SpreadLine', :ml => 'MoneyLine', :ou => 'OverUnderLine'}
+  end
+  LineTypes.line_type_hash.each do |m,cls|
+    define_method("#{m}?") { bet_type == cls }
+  end
+  def no_bet_type?
+    !bet_type
+  end
+  def team_line?
+    spread? or ml?
+  end
+  %w(spread ml ou).each do |m|
+    define_method("#{m}?") { bet_type == klass.send(m.upcase) }
+  end
+  module ClassMethods
+    fattr(:bet_type_map) do
+      res = Hash.new { |h,k| raise "no bet type for #{k}" }
+      %w(spread spreadline).each { |x| res[x] = SPREAD }
+      %w(moneyline ml).each { |x| res[x] = ML }
+      %w(overunder ou over_under overunderline).each { |x| res[x] = OU }
+      res
+    end
+    def get_bet_type(t)
+      bet_type_map[t.to_s.downcase]
+    end
+    LineTypes.line_type_hash.each do |m,cls|
+      define_method(m.to_s.upcase) { cls }
+    end
+  end
+end
+
 class Line < ActiveRecord::Base
+  SPREAD = 'SpreadLine'
+  ML = 'MoneyLine'
+  OU = 'OverUnderLine'
+  include LineTypes
+  extend LineTypes::ClassMethods
   include LineSingleBet
   after_save { |x| x.save_single_bet! }
   before_save { |x| x.effective_dt ||= Time.now }
@@ -60,8 +98,14 @@ class Line < ActiveRecord::Base
   named_scope :active, lambda { {:conditions => ["expire_dt is null",Time.now]} }
   before_save { |x| x.find_or_create_line_set }
   after_create { |x| x.line_set.mark_active! }
+  before_save { |x| x.set_bet_type! }
   has_many :consensus, :class_name => 'LineConsensus'
+  set_inheritance_column 'bet_type'
   #include BetSummary
+  def set_bet_type!
+    dbg "set_bet_type #{bet_type} #{calc_bet_type}"
+    self.bet_type ||= calc_bet_type
+  end
   def team
     team_obj.short_name
   end
@@ -134,39 +178,30 @@ class Line < ActiveRecord::Base
     h = {:unplayed => 0, :push => 0, :win => 1*odds, :loss => -1}
     h[result]
   end
-  def pretty_spread
-    return spread unless spread
-    spread * -1
-  end
-  def pretty_spread=(x)
-    self.spread = (x ? x.to_f * -1 : x)
-  end
   def possible_teams
-    if game
-      game.teams
-    else
-      Team.all
-    end
+    game ? sub_possible_teams : period.sport.teams.all + Team.ou_teams
+  end
+  def sub_possible_teams
+    game.teams + Team.ou_teams
   end
   def self.find_or_create_from_hash(h)
     LineCreator.new(h).run!
   end
-  def bet_type
-    (spread.to_f == 0.0) ? 'moneyline' : 'spread'
+  def calc_bet_type
+    return klass.OU if team_obj and team_obj.over_under?
+    case spread.to_closest_spread
+      when 0: klass.ML
+      else klass.SPREAD
+    end
+  end
+  def line_set_hash
+    res = {:game_id => game_id, :site_id => site_id, :bet_type => bet_type, :team_id => team_id}
+    res[:spread] = spread.to_closest_spread unless site.changes_spread? 
+    res
   end
   def find_or_create_line_set
     return line_set if line_set
-    if site.changes_spread?
-      set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and bet_type = ? and team_id = ?",site_id,game_id,bet_type,team_id])
-      set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :bet_type => bet_type, :team_id => team_id).tap { |x| x.save! }
-      self.line_set = set
-      set
-    else
-      set = LineSet.find(:first, :conditions => ["site_id = ? and game_id = ? and spread = ? and team_id = ?",site_id,game_id,spread,team_id])
-      set ||= LineSet.new(:game_id => game_id, :site_id => site_id, :spread => spread.to_closest_spread, :team_id => team_id).tap { |x| x.save! }
-      self.line_set = set
-      set
-    end
+    self.line_set = LineSet.find(:first, :conditions => line_set_hash) || LineSet.new(line_set_hash)
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }
@@ -200,6 +235,48 @@ class Line < ActiveRecord::Base
     if consensus.select { |x| x.bets.to_i == num and x.bet_percent == pct }.empty?
       consensus.new(:bets => num, :bet_percent => pct).save!
     end
+  end
+  def pretty_spread
+    spread
+  end
+  def spread
+    read_attribute(:spread) ? read_attribute(:spread).to_closest_spread : read_attribute(:spread)
+  end
+  def pretty_spread
+    spread
+  end
+  def pretty_spread=(x)
+    self.spread = x
+  end
+end
+
+class TeamLine < Line
+  def pretty_spread
+    spread ? spread * -1 : spread
+  end
+  def pretty_spread=(x)
+    self.spread = (x ? x.to_f * -1 : x)
+  end
+  def sub_possible_teams
+    game.teams
+  end
+end
+
+class SpreadLine < TeamLine
+end
+
+class MoneyLine < TeamLine
+end
+
+class OverUnderLine < Line
+  def wagers
+    []
+  end
+  def sub_possible_teams
+    game.teams + Team.ou_teams
+  end
+  def actual_margin
+    game.home_score + game.away_score
   end
 end
 
@@ -271,18 +348,19 @@ class LineCreator
      h[:spread].to_closest_spread
   end
   fattr_nn(:game) { existing_game }
+  fattr(:bet_type) do
+    h[:bet_type] ? klass.get_bet_type(h[:bet_type]) : nil
+  end
   fattr(:existing_line) do 
     game.lines.select do |x| 
-      #line_compare_array(x).eq_comp(compare_array)
-      #puts (0.694).round_dec(3).round_dec(3).round_dec(3)
-      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id 
+      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id and (x.bet_type == bet_type or !bet_type)
     end.first
   end
   fattr(:new_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site).tap { |x| x.save! }
+    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type).tap { |x| x.save! }
   end
   fattr(:desc) do
-    "#{away_team}@#{home_team} #{selected_team} #{spread} #{odds} #{pretty_dt}"
+    "#{away_team}@#{home_team} #{selected_team} #{bet_type} #{spread} #{odds} #{pretty_dt}"
   end
   def run!
     #return unless away_team.abbr == 'STL'

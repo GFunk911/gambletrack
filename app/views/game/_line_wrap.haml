@@ -1,0 +1,9 @@
+- line = line_wrap
+- if first_of_bet_type?(line)
+  %tr
+    %td
+      %h3= line.bet_type || 'New'
+  %tr
+    - line_table_cols(lines).each do |col|
+      %th= col
+= render :partial => 'game/line', :object => line, :locals => {:f => f}

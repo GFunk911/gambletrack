@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081014165034) do
+ActiveRecord::Schema.define(:version => 20081015020530) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20081014165034) do
     t.datetime "effective_dt"
     t.integer  "line_set_id"
     t.integer  "team_id"
+    t.string   "bet_type"
   end
 
   create_table "passwords", :force => true do |t|
