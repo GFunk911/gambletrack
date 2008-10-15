@@ -58,6 +58,9 @@ class Game < ActiveRecord::Base
     {:conditions => ["team_names.search_string like ? and names_teams.search_string like ?","%#{a.downcase}%","%#{h.downcase}%"],
      :include => {:away_team_obj => :names, :home_team_obj => :names}}
   end)
+  named_scope(:since, lambda do |t|
+    {:conditions => ["event_dt > ?",t]}
+  end)
 
   def self.dates_for_week(i)
     start = Time.local(2008,9,4,13) + (i - 1)*7.days

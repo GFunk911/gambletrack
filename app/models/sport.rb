@@ -27,6 +27,9 @@ class Sport < ActiveRecord::Base
   def line_summary_children
     effective_lines
   end
+  def win_amount_since(t)
+    games(:include => {:lines => :bets}).since(t).map { |x| x.win_amount }.sum
+  end
 end
 
 class Sports
@@ -49,5 +52,8 @@ class Sports
   end
   def lines_grouped_by_sport
     GroupedLines.new(children,%w(Sport),%w(num_wins num_losses num_pushes desired_amount wagered_amount win_amount roi)) { |x| x.name }
+  end
+  def win_amount_since(t)
+    children.map { |x| x.win_amount_since(t) }.sum
   end
 end
