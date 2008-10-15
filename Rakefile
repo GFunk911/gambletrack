@@ -20,6 +20,13 @@ namespace :dataload do
   rails_task :mb_lines do
     LinesDataload.new.load_matchbook!
   end
+  rails_task :mb_lines_all do
+    LinesDataload.new.load_matchbook!
+    %w(CF HK).each do |s|
+      LinesDataload.new.load_matchbook_games!(s)
+      LinesDataload.new.load_matchbook_sport!(s)
+    end
+  end
   rails_task :mb_college_games do
     LinesDataload.new.load_matchbook_games!('CF')
   end
@@ -156,13 +163,13 @@ rails_task :cf_periods do
   end
 end
   
-rails_task :bettest3 do
-  base = {:home_team => 'GB', :away_team => 'IND', :team => 'GB', :event_dt => Time.local(2008,10,19,13,0,0), :site => 'Matchbook', :sport => 'NFL'}
+rails_task :bettest do
+  base = {:home_team => 'GB', :away_team => 'IND', :team => 'Over', :event_dt => Time.local(2008,10,19,13,0,0), :site => 'Matchbook', :sport => 'NFL', :bet_type => 'overunder'}
   
-  a = base.merge(:spread => -8, :odds => '-110')
+  a = base.merge(:spread => 55, :odds => '-110')
   Line.find_or_create_from_hash(a)
   
-  b = base.merge(:spread => -9, :odds => '-102')
+  b = base.merge(:spread => 56, :odds => '-105')
   Line.find_or_create_from_hash(b)
 end
 
