@@ -30,6 +30,7 @@ class Period < ActiveRecord::Base
   belongs_to :sport
   include BetSummary
   include WagerModule
+  include LineSummary
   named_scope(:all_containing, lambda do |t|
     {:conditions => ["start_dt < ? and end_dt > ?",t,t]}
   end)
@@ -57,5 +58,11 @@ class Period < ActiveRecord::Base
   end
   def week
     name.split[-1].to_i
+  end
+  def lines_grouped_by_game
+    GroupedLines.new(games,%w(Game),%w(desired_amount wagered_amount win_amount)) { |x| x.desc }
+  end
+  def summary_groupings
+    [lines_grouped_by_line,lines_grouped_by_effective_line,lines_grouped_by_game]
   end
 end

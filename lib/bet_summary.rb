@@ -20,6 +20,7 @@ module BetSummary
   def bet_children
     return bets if respond_to?(:bets)
     return games if respond_to?(:games)
+    return [self] if is_a?(Bet)
     raise 'foo'
   end
 end

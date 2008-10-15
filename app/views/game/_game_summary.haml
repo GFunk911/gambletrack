@@ -1,13 +1,11 @@
 %table
   %tr
-    - %w(Game Desired Wagered Won).each do |col|
+    - (lines.headers + lines.pretty_fields).each do |col|
       %th= col
-  - lines.each do |g|
+  - lines.each do |k,g|
     %tr
-      %td= g.desc
-      %td= g.desired_amount
-      %td= g.wagered_amount
-      %td= g.win_amount
+      - ([k].flatten + lines.fields.map { |x| g.send(x) }).each do |cell|
+        %td= cell
   %tr
     - ['Total',root.desired_amount,root.wagered_amount,root.win_amount].each do |cell|
       %td

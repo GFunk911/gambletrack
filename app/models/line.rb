@@ -78,6 +78,66 @@ module LineTypes
   end
 end
 
+module LineResult
+  def win?
+    result == :win
+  end
+  def loss?
+    result == :loss
+  end
+  def push?
+    result == :push
+  end
+end
+
+class EffectiveLine
+  include BetSummary
+  include LineResult
+  include Enumerable
+  def initialize(a)
+    @arr = a
+  end
+  def each(&b)
+    @arr.each(&b)
+  end
+  def bet_children
+    @arr
+  end
+  def result
+    @arr.first.result
+  end
+  def method_missing(sym,*args,&b)
+    @arr.first.send(sym,*args,&b)
+  end
+end
+
+class GroupedLines
+  attr_accessor :lines, :group_blk, :headers, :fields
+  def initialize(lines,headers,fields,&b)
+    dbg "GroupedLines constructor"
+    @lines = lines
+    @headers = headers
+    @group_blk = b 
+    @fields = fields
+  end
+  fattr(:line_map) do
+    lines.group_by { |x| group_blk[x] }.map_value { |x| EffectiveLine.new(x) }
+  end
+  def each(&b)
+    dbg "GroupedLines size #{line_map.size}"
+    if b.arity == 1
+      line_map.values.each(&b)
+    else
+      line_map.each(&b)
+    end
+  end
+  def pretty_fields
+    fields.map do |x| 
+      x.gsub(/_[a-z]/) { |m| " " + m[1..1].upcase }.gsub(/^[a-z]/) { |m| m.upcase }
+    end
+  end
+end
+
 class Line < ActiveRecord::Base
   SPREAD = 'SpreadLine'
   ML = 'MoneyLine'
@@ -85,6 +145,7 @@ class Line < ActiveRecord::Base
   include LineTypes
   extend LineTypes::ClassMethods
   include LineSingleBet
+  include LineResult
   after_save { |x| x.save_single_bet! }
   before_save { |x| x.effective_dt ||= Time.now }
   belongs_to :game

@@ -95,6 +95,9 @@ class Game < ActiveRecord::Base
   def played?
     home_score and away_score
   end
+  def summary_groupings
+    [lines_grouped_by_line,lines_grouped_by_effective_line]
+  end
 end
 
 class FlexMigration < ActiveRecord::Migration
