@@ -26,4 +26,7 @@ module BetSummary
     return [self] if is_a?(Bet)
     raise 'foo'
   end
+  def self.unit_size
+    750
+  end
 end

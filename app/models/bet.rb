@@ -14,4 +14,10 @@ class Bet < ActiveRecord::Base
     puts exp
     return :null_win_amount
   end
+  %w(desired_amount outstanding_amount wagered_amount).each do |m|
+    define_method("#{m}=") do |amt|
+      amt = (amt.strip[0..-2].to_f * BetSummary.unit_size) if amt.to_s.strip[-1..-1] == 'u'
+      write_attribute(m,amt)
+    end
+  end
 end
