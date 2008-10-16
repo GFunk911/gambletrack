@@ -259,13 +259,13 @@ class Line < ActiveRecord::Base
     end
   end
   def line_set_hash
-    res = {:game_id => game_id, :site_id => site_id, :bet_type => bet_type, :team_id => team_id}
+    res = {:game_id => game_id, :site_id => site_id, :bet_type => bet_type||calc_bet_type, :team_id => team_id}
     res[:spread] = spread.to_closest_spread unless site.changes_spread? 
     res
   end
   def find_or_create_line_set
     return line_set if line_set
-    self.line_set = LineSet.find(:first, :conditions => line_set_hash) || LineSet.new(line_set_hash).tap { |x| x.save! }
+    self.line_set = LineSet.find(:first, :conditions => line_set_hash, :order => "id asc") || LineSet.new(line_set_hash).tap { |x| x.save! }
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }
