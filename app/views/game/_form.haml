@@ -1,15 +1,17 @@
 %div= flash_messages
 
 %h2= form.desc
-%h2= Time.now
 
-- if form.is_a?(Period) and %w(NFL CFB).include?(form.sport.abbr)
-  - form.games.select { |x| x.spread_gap? }.sort_by { |x| x.spread_gap.abs }.reverse.each do |g|
-    = g.game_line
-    %br
-- elsif form.is_a?(Game) and %w(NFL CFB).include?(form.sport.abbr)
-  = form.game_line
-  %br
+- gsg = game_spread_games(form)
+- if gsg
+  %table
+    %tr
+      - ["Game","Current","Correct","Diff","Away","Home"].each do |col|
+        %th= col
+    - gsg.each do |g|
+      %tr
+        - g.game_line_fields.each do |cell|
+          %td= cell
 
 = render :partial => 'game/line_summary', :object => form
 
@@ -18,3 +20,8 @@
 
 = link_to_remote 'Show Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => form.id, :obj_class => form.class} if form.lines.size >= 20
 %div{:id => 'lines'}= render :partial => 'game/lines', :object => form if form.lines.size < 20
+
+%br
+%br
+
+%span= "Updated at #{Time.now}"
