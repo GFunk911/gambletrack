@@ -104,6 +104,32 @@ class Game < ActiveRecord::Base
   def <=>(x)
     event_dt <=> x.event_dt
   end
+  def cfb_correct_spread
+    a = away_team_obj.cfb_sagarin
+    h = home_team_obj.cfb_sagarin
+    return nil unless a and h
+    (h - a + 3.0).to_closest_spread
+  end
+  def inner_correct_spread
+    return nfl_correct_spread if sport.abbr == 'NFL'
+    return cfb_correct_spread if sport.abbr == 'CFB'
+    nil
+  end
+  def correct_spread
+    inner_correct_spread ? inner_correct_spread*-1 : nil
+  end
+  fattr(:current_spread) do
+    lines.find(:first, :conditions => ["expire_dt is null and team_id = ? and bet_type = ?",home_team_id,'SpreadLine'], :order => "created_at desc").tap { |x| return nil unless x }.spread * -1
+  end
+  def spread_gap
+    correct_spread - current_spread
+  end
+  def spread_gap?
+    correct_spread and current_spread
+  end
+  def game_line
+    "#{away_team}@#{home_team} Line is #{current_spread}, should be #{correct_spread}, difference of #{spread_gap}"
+  end
 end
 
 class FlexMigration < ActiveRecord::Migration

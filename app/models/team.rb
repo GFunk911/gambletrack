@@ -42,13 +42,18 @@ class Team < ActiveRecord::Base
   def short_name
     abbr ? abbr : city
   end
-  def self.ou_teams
-    find(:all, :conditions => ["city = ? or city = ?",'Over','Under'])
+  class << self
+    fattr(:ou_teams) do
+      find(:all, :conditions => ["city = ? or city = ?",'Over','Under'])
+    end
   end
   def self.over_under?(t)
     %w(over under).include?(t.to_s.downcase)
   end
   def over_under?
     klass.over_under?(city)
+  end
+  def cfb_sagarin
+    Sagarin.instance.get_rating(city)
   end
 end

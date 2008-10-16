@@ -243,7 +243,7 @@ class Line < ActiveRecord::Base
     h[result]
   end
   def possible_teams
-    game ? sub_possible_teams : period.sport.teams.all + Team.ou_teams
+    game ? sub_possible_teams : Team.all
   end
   def sub_possible_teams
     game.teams + Team.ou_teams
