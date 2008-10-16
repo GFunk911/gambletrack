@@ -243,7 +243,7 @@ class Line < ActiveRecord::Base
     h[result]
   end
   def possible_teams
-    game ? sub_possible_teams : period.sport.teams.all + Team.ou_teams
+    game ? sub_possible_teams : Team.all
   end
   def sub_possible_teams
     game.teams + Team.ou_teams
@@ -345,17 +345,6 @@ class OverUnderLine < Line
   def actual_margin
     game.home_score + game.away_score
   end
-end
-
-class Module
-  def fattr_nn(name,&b)
-    fattr(name) do 
-      instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
-    end
-    fattr("#{name}_cbn") do
-      instance_eval(&b)
-    end
-  end
   def result
     return :unplayed unless played?
     margin = actual_margin - spread
@@ -366,6 +355,17 @@ class Module
   rescue => exp
     puts exp
     return :error
+  end
+end
+
+class Module
+  def fattr_nn(name,&b)
+    fattr(name) do 
+      instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
+    end
+    fattr("#{name}_cbn") do
+      instance_eval(&b)
+    end
   end
 end
 

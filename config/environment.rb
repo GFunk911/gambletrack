@@ -1,8 +1,15 @@
+def ec2?
+ `ifconfig`
+ true
+rescue
+  return false
+end
+
 # Be sure to restart your server when you modify this file
 
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
-ENV['RAILS_ENV'] ||= 'development'
+ENV['RAILS_ENV'] ||= (ec2? ? 'PRODUCTION' : 'DEVELOPMENT')
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.1.1' unless defined? RAILS_GEM_VERSION
@@ -34,6 +41,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem :haml
+  config.gem :fattr
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -75,7 +83,7 @@ Rails::Initializer.run do |config|
   config.active_record.observers = :user_observer
   
   config.after_initialize do 
-    eat_exceptions('Team Dataload Failed') { Dataload.new.load_teams! }
+    Dataload.new.load_teams! 
     require "#{RAILS_ROOT}/lib/attribute_fu_ext"
   end
 end
