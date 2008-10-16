@@ -196,10 +196,19 @@ rails_task :scores do
   end
 end  
 
-rails_task :restart do
+task :update do
   puts `git pull origin ec2`
   puts `svn up ../gambling_co`
+end
+
+task :restart do
   puts `mongrel_rails stop`
   sleep(3)
   puts `mongrel_rails start -p 1999 -d`
+end
+
+task :refresh => [:update,:restart]
+
+task :logdump do
+  `tail --lines=1000 log/production.log > public/production.log`
 end
