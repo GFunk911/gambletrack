@@ -312,6 +312,9 @@ class Line < ActiveRecord::Base
   def pretty_spread=(x)
     self.spread = x
   end
+  def <=>(x)
+    game <=> x.game
+  end
 end
 
 class TeamLine < Line
