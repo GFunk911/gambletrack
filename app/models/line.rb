@@ -265,7 +265,7 @@ class Line < ActiveRecord::Base
   end
   def find_or_create_line_set
     return line_set if line_set
-    self.line_set = LineSet.find(:first, :conditions => line_set_hash) || LineSet.new(line_set_hash)
+    self.line_set = LineSet.find(:first, :conditions => line_set_hash) || LineSet.new(line_set_hash).tap { |x| x.save! }
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }
