@@ -127,8 +127,8 @@ class Game < ActiveRecord::Base
   def spread_gap?
     correct_spread and current_spread
   end
-  def game_line
-    "#{away_team}@#{home_team} Line is #{current_spread}, should be #{correct_spread}, difference of #{spread_gap}"
+  def game_line_fields
+    ["#{away_team}@#{home_team}",current_spread,correct_spread,spread_gap,away_team_obj.rating,home_team_obj.rating]
   end
 end
 
