@@ -356,6 +356,17 @@ class Module
       instance_eval(&b)
     end
   end
+  def result
+    return :unplayed unless played?
+    margin = actual_margin - spread
+    margin *= -1 if team_obj.city == 'Under'
+    return :win if margin > 0
+    return :loss if margin < 0
+    return :push
+  rescue => exp
+    puts exp
+    return :error
+  end
 end
 
 module Enumerable
