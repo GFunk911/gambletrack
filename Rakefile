@@ -198,6 +198,8 @@ end
 
 rails_task :restart do
   puts `git pull origin ec2`
+  puts `svn up ../gambling_co`
   puts `mongrel_rails stop`
+  sleep(3)
   puts `mongrel_rails start -p 1999 -d`
 end
