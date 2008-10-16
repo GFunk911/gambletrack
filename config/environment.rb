@@ -34,6 +34,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem :haml
+  config.gem :fattr
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -75,7 +76,7 @@ Rails::Initializer.run do |config|
   config.active_record.observers = :user_observer
   
   config.after_initialize do 
-    eat_exceptions('Team Dataload Failed') { Dataload.new.load_teams! }
+    Dataload.new.load_teams! 
     require "#{RAILS_ROOT}/lib/attribute_fu_ext"
   end
 end
