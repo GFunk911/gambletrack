@@ -65,4 +65,10 @@ class Period < ActiveRecord::Base
   def summary_groupings
     [lines_grouped_by_line,lines_grouped_by_effective_line,lines_grouped_by_game]
   end
+  def line_summary_children
+    effective_lines
+  end
+  def <=>(x)
+    start_dt <=> x.start_dt
+  end
 end

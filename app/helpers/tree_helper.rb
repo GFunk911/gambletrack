@@ -4,6 +4,8 @@ module TreeHelper
     if leaf.is_a?(Game)
       link_to_remote leaf.desc, :url => {:controller => 'game', :action => 'show', :id => leaf.id}, :update => 'right_div'
     elsif leaf.is_a?(Sports)
+      link_to_remote leaf.desc, :url => {:controller => 'summary', :action => 'show', :id => 'Sports'}, :update => 'right_div'
+    elsif leaf.is_a?(Sport)
       link_to_remote leaf.desc, :url => {:controller => 'summary', :action => 'show', :id => leaf.id}, :update => 'right_div'
     else
       link_to_remote leaf.desc, :url => {:controller => 'period', :action => 'show', :id => leaf.id}, :update => 'right_div'

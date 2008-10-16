@@ -101,6 +101,9 @@ class Game < ActiveRecord::Base
   def summary_groupings
     [lines_grouped_by_line,lines_grouped_by_effective_line]
   end
+  def <=>(x)
+    event_dt <=> x.event_dt
+  end
 end
 
 class FlexMigration < ActiveRecord::Migration
@@ -115,3 +118,4 @@ class FlexMigration < ActiveRecord::Migration
     instance_eval(&up_blk)
   end
 end
+

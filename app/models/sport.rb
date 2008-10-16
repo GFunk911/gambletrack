@@ -1,8 +1,8 @@
 class Sport < ActiveRecord::Base
-  has_many :games
+  has_many :games, :order => 'event_dt asc'
   has_many :teams
   has_many :names, :through => :teams
-  has_many :periods, :include => :games
+  has_many :periods, :include => :games, :order => 'start_dt asc'
   has_many :lines, :through => :games
   include BetSummary
   include LineSummary
@@ -29,6 +29,12 @@ class Sport < ActiveRecord::Base
   end
   def win_amount_since(t)
     games(:include => {:lines => :bets}).since(t).map { |x| x.win_amount }.sum
+  end
+  def lines_grouped_by_period
+    GroupedLines.new(periods,%w(Period),%w(num_wins num_losses num_pushes desired_amount wagered_amount win_amount roi)) { |x| x.name }
+  end
+  def summary_groupings
+    [lines_grouped_by_period]
   end
 end
 

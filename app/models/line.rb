@@ -126,9 +126,9 @@ class GroupedLines
   def each(&b)
     dbg "GroupedLines size #{line_map.size}"
     if b.arity == 1
-      line_map.values.each(&b)
+      line_map.values.sort.each(&b)
     else
-      line_map.each(&b)
+      line_map.to_a.sort_by { |x| x[1] }.each { |a| yield(a[0],a[1]) }
     end
   end
   def pretty_fields
