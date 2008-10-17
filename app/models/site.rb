@@ -10,10 +10,16 @@ class Sportsbook < Site
   def changes_spread?
     true
   end
+  def commision
+    0
+  end
 end
 
 class Exchange < Site
   def changes_spread?
     false
+  end
+  def commision
+    0.02
   end
 end

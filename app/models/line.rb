@@ -238,8 +238,13 @@ class Line < ActiveRecord::Base
     puts exp
     return :error
   end
+  def commision
+    return 0 unless site.commision > 0
+    return 0.01 if game.sport.abbr == 'MLB'
+    0.02
+  end
   def result_factor
-    h = {:unplayed => 0, :push => 0, :win => 1*odds, :loss => -1}
+    h = {:unplayed => 0, :push => 0, :win => 1*odds*(1-commision), :loss => -1}
     h[result]
   end
   def possible_teams
