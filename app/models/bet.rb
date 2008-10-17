@@ -20,4 +20,7 @@ class Bet < ActiveRecord::Base
       write_attribute(m,amt)
     end
   end
+  named_scope(:has_wager,lambda do
+    {:conditions => ["wagered_amount > 0"]  }
+  end)
 end

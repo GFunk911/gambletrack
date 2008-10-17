@@ -3,8 +3,9 @@ class Game < ActiveRecord::Base
   extend PO::GameModule::ClassMethods
   include BetSummary
 
-  has_many :lines, :order => ["bet_type,team_id,line_set_id,created_at desc"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :lines, :order => ["bet_type,team_id,line_set_id,created_at desc"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }, :include => [:team_obj,:bets]
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :bets, :through => :lines
   belongs_to :home_team_obj, :class_name => 'Team', :foreign_key => 'home_team_id'
   belongs_to :away_team_obj, :class_name => 'Team', :foreign_key => 'away_team_id'
   include WagerModule
@@ -129,6 +130,21 @@ class Game < ActiveRecord::Base
   end
   def game_line_fields
     ["#{away_team}@#{home_team}",current_spread,correct_spread,spread_gap,away_team_obj.rating,home_team_obj.rating]
+  end
+  named_scope(:has_wager, lambda do
+    {:conditions => ["bets.wagered_amount > 0"], :include => {:lines => :bets}}
+  end)
+  named_scope(:between, lambda do |s,e|
+    {:conditions => ["? < event_dt and event_dt < ?",s,e]}
+  end)
+  def page_title
+    "#{desc} #{event_dt.pretty_dt}"
+  end
+end
+
+class Object
+  def page_title
+    desc
   end
 end
 
