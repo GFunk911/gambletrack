@@ -1,4 +1,5 @@
 class LineController < ApplicationController
+  cache_sweeper :game_sweeper
   def show
     $bet_type_track = 938457
     dbg "\nLine#show"

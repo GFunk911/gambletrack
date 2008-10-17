@@ -1,4 +1,6 @@
 class GameController < ApplicationController
+  caches_page :show
+  cache_sweeper :game_sweeper
   def show
     @game = Game.find(params[:id])
     render :partial => 'form', :object => @game

@@ -25,6 +25,9 @@ rescue => exp
   return nil
 end
 
+$model_path = "#{RAILS_ROOT}/../gambling_co/gambling_model/model"
+require_dependency $model_path
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -83,7 +86,7 @@ Rails::Initializer.run do |config|
   config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
 
   # Activate observers that should always be running
-  config.active_record.observers = :user_observer
+  config.active_record.observers = [:user_observer,:game_sweeper]
   
   config.after_initialize do 
     Dataload.new.load_teams! 
@@ -91,8 +94,6 @@ Rails::Initializer.run do |config|
   end
 end
 
-model_path = "#{RAILS_ROOT}/../gambling_co/gambling_model/model"
-require_dependency model_path
 def dbg(ln)
   File.append("#{RAILS_ROOT}/log/debug.log",ln+"\n")
 end
