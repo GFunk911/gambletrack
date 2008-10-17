@@ -103,3 +103,9 @@ class Object
 end
 
 
+
+class Time
+  def pretty_dt
+    strftime("%m/%d %H:%M")
+  end
+end
