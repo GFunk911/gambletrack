@@ -78,6 +78,9 @@ Rails::Initializer.run do |config|
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
+  
+  config.action_controller.cache_store = :file_store, "#{RAILS_ROOT}/tmp/cache"
+  config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
 
   # Activate observers that should always be running
   config.active_record.observers = :user_observer

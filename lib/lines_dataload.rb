@@ -16,6 +16,7 @@ class LinesDataload
     Matchbook.new(sport).line_hashes.each do |h|
       GameCreator.new(h).run!
     end
+    delete_cache!
   end
   def load_matchbook_both!(s)
     load_matchbook_games!(s)
@@ -26,5 +27,9 @@ class LinesDataload
     %w(CF HK BB).each do |s|
       load_matchbook_both!(s)
     end
+  end
+  def delete_cache!
+    f = "#{RAILS_ROOT}/tmp/cache/views/localhost.3000/tree/show/1.cache"
+    `rm #{f}` if FileTest.exists?(f)
   end
 end
