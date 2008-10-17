@@ -4,12 +4,13 @@ class Periods
     @periods = ps
   end
   def desc
-    "Weeks"
+    periods.first.week? ? "Weeks" : "Days"
   end
+  fattr(:current_period) { periods.current_period_array.first }
   def children
-    a = PeriodSet.new("Prev Weeks",periods.prev_periods)
-    b = PeriodSet.new("Future Weeks",periods.future_periods)
-    [a,periods.current_period_array.first,b].reject { |x| x.is_a?(PeriodSet) and x.children.empty? }
+    a = PeriodSet.new("Prev #{desc}",periods.prev_periods)
+    b = PeriodSet.new("Future #{desc}",periods.future_periods)
+    [a,periods.current_period,b].reject { |x| x.is_a?(PeriodSet) and x.children.empty? }.select { |x| x }
   end
 end
 
@@ -31,6 +32,9 @@ class Period < ActiveRecord::Base
   include BetSummary
   include WagerModule
   include LineSummary
+  named_scope(:has_games, lambda do
+    {:conditions => "periods.id in (select period_id from games)"}
+  end)
   named_scope(:all_containing, lambda do |t|
     {:conditions => ["start_dt < ? and end_dt > ?",t,t]}
   end)
@@ -70,5 +74,8 @@ class Period < ActiveRecord::Base
   end
   def <=>(x)
     start_dt <=> x.start_dt
+  end
+  def week?
+    (600000..620000).include?((end_dt - start_dt).to_i)
   end
 end

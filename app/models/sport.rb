@@ -22,7 +22,7 @@ class Sport < ActiveRecord::Base
   end
   def children
     Period
-    Periods.new(periods).children
+    Periods.new(periods.has_games).children
   end
   def line_summary_children
     effective_lines
