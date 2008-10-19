@@ -39,12 +39,6 @@ module LineSingleBet
   end
 end
 
-class Time
-  def pretty_dt
-    strftime("%m/%d %H:%M")
-  end
-end
-
 module LineTypes
   def self.line_type_hash
     {:spread => 'SpreadLine', :ml => 'MoneyLine', :ou => 'OverUnderLine'}
@@ -62,6 +56,9 @@ module LineTypes
     define_method("#{m}?") { bet_type == klass.send(m.upcase) }
   end
   module ClassMethods
+    SPREAD = 'SpreadLine'
+    ML = 'MoneyLine'
+    OU = 'OverUnderLine'
     fattr(:bet_type_map) do
       res = Hash.new { |h,k| raise "no bet type for #{k}" }
       %w(spread spreadline).each { |x| res[x] = SPREAD }
@@ -409,6 +406,28 @@ module GLCreator
   end
 end
 
+module LineUpdate
+  fattr(:existing_line) do 
+    game.lines.select do |x| 
+      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id and (x.bet_type == bet_type or !bet_type)
+    end.first
+  end
+  fattr_nn(:site) do
+    Site.find(:first, :conditions => {:name => h[:site]})
+  end
+  fattr_nn(:selected_team) { team(h[:team]) }
+  def odds
+    Gambling::Odds.get(h[:odds])
+  end
+  def spread
+     h[:spread].to_closest_spread
+  end
+  fattr_nn(:game) { existing_game }
+  fattr(:bet_type) do
+    h[:bet_type] ? Line.get_bet_type(h[:bet_type]) : nil
+  end
+end
+
 class GameUpdater
   include GLCreator
   def run!
@@ -420,6 +439,23 @@ class GameUpdater
     existing_game.home_score ||= h[:home_score]
     existing_game.away_score ||= h[:away_score]
     existing_game.save!
+  end
+end
+
+class BetUpdater
+  include GLCreator
+  include LineUpdate
+  def game
+    existing_game
+  end
+  def run!
+    unless sport_cbn and home_team_cbn and away_team_cbn and existing_game
+      puts "no game for #{h.inspect}" if %w(NFL NHL MLB CFB).include?(h[:sport])
+      return
+    end
+    puts "making bet for #{h.inspect}"
+    existing_line.wagered_amount = h[:wagered_amount].to_f
+    existing_line.save!
   end
 end
 
@@ -437,27 +473,12 @@ end
 
 class LineCreator
   include GLCreator
-  fattr_nn(:site) do
-    Site.find(:first, :conditions => {:name => h[:site]})
-  end
-  fattr_nn(:selected_team) { team(h[:team]) }
-  def odds
-    Gambling::Odds.get(h[:odds])
-  end
-  def spread
-     h[:spread].to_closest_spread
-  end
-  fattr_nn(:game) { existing_game }
-  fattr(:bet_type) do
-    h[:bet_type] ? klass.get_bet_type(h[:bet_type]) : nil
-  end
-  fattr(:existing_line) do 
-    game.lines.select do |x| 
-      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id and (x.bet_type == bet_type or !bet_type)
-    end.first
-  end
+  include LineUpdate
+
+
+  fattr(:effective_dt) { h[:effective_dt] || Time.now }
   fattr(:new_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type).tap { |x| x.save! }
+    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type, :effective_dt => effective_dt).tap { |x| x.save! }
   end
   fattr(:desc) do
     "#{away_team}@#{home_team} #{selected_team} #{bet_type} #{spread} #{odds} #{pretty_dt}"
