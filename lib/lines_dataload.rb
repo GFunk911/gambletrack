@@ -34,7 +34,6 @@ class LinesDataload
     %w(CF HK BB).each do |s|
       load_matchbook_both!(s)
     end
-    load_matchbook_bets!
   end
   def delete_cache!
     f = "#{RAILS_ROOT}/tmp/cache/views/localhost.3000/tree/show/1.cache"

@@ -9,6 +9,10 @@ class MainController < ApplicationController
       LinesDataload.new.load_all!
       flash[:notice] = "Loaded lines from Matchbook"
       redirect_to :controller => 'main', :action => 'index'
+    elsif params[:id] == 'load_bets'
+      LinesDataload.new.load_bets!
+      flash[:notice] = "Loaded bets from Matchbook"
+      redirect_to :controller => 'main', :action => 'index'
     else
       g = Game.find(340)
       t = g.sport.teams[rand(28)]
