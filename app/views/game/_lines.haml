@@ -4,7 +4,7 @@
 - else
   = link_to_remote 'Hide Expired Lines', :update => 'lines', :url => {:controller => 'line', :action => 'show', :id => lines.id, :obj_class => lines.class, :active => true}
 
-- remote_form_for(lines) do |f|
+- form_for(lines) do |f|
   %table
     %div#lines
       - form_lines = (defined?(active) && active) ? lines.lines.active : lines.lines

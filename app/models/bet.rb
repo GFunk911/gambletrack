@@ -23,4 +23,5 @@ class Bet < ActiveRecord::Base
   named_scope(:has_wager,lambda do
     {:conditions => ["wagered_amount > 0"]  }
   end)
+  after_save { |x| CacheManager.new.expire_bet!(x) }
 end

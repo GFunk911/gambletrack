@@ -159,6 +159,7 @@ class Line < ActiveRecord::Base
   before_save { |x| x.set_bet_type! }
   has_many :consensus, :class_name => 'LineConsensus'
   set_inheritance_column 'bet_type'
+  after_save { |x| CacheManager.new.expire_line!(x) }
   #include BetSummary
   def set_bet_type!
     dbg "set_bet_type #{bet_type} #{calc_bet_type}"

@@ -9,6 +9,8 @@ class Game < ActiveRecord::Base
   belongs_to :home_team_obj, :class_name => 'Team', :foreign_key => 'home_team_id'
   belongs_to :away_team_obj, :class_name => 'Team', :foreign_key => 'away_team_id'
   include WagerModule
+  after_save { |x| CacheManager.new.expire_game!(x) }
+  after_create { |x| CacheManager.new.expire_game_tree! }
   belongs_to :sport
   def home_team
     home_team_obj.short_name
@@ -61,6 +63,9 @@ class Game < ActiveRecord::Base
   end)
   named_scope(:since, lambda do |t|
     {:conditions => ["event_dt > ?",t]}
+  end)
+  named_scope(:on_day, lambda do |t|
+    {:conditions => ["event_dt > ? and event_dt < ?",t.start_of_day,t.start_of_day+1.days]}
   end)
 
   def self.dates_for_week(i)

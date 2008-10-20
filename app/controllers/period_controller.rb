@@ -1,6 +1,6 @@
 class PeriodController < ApplicationController
-  caches_page :show
-  cache_sweeper :game_sweeper
+  #caches_page :show
+  #cache_sweeper :game_sweeper
   def show
     @period = Period.find(params[:id])
     @games = @period.games

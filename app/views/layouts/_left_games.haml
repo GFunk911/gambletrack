@@ -1,0 +1,6 @@
+- cache(:controller => 'main', :action => 'show', :id => 'game_tree') do
+  %div{:id => 'foodiv', :style => 'width:300px'}
+    - Period.new
+    - LineSet.new
+    - Sport
+    = render :partial => 'tree/tree', :object => Sports.new

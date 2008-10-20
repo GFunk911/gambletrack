@@ -1,0 +1,6 @@
+- cache(:controller => 'main', :action => 'show', :id => 'top_left' ) do
+  %li= link_to 'Load Matchbook Lines', :controller => 'main', :action => 'load_matchbook' 
+  %li= link_to 'Load Matchbook Bets', :controller => 'main', :action => 'load_bets' 
+  %li= "Today's Starting Bankroll: $" + Bankroll.new(:start_dt => Time.local(2008,10,14), :start_amount => 75000).current.to_i.to_s 
+  %li= "Today's Profit: $" + Bankroll.new(:start_dt => Time.my_current.start_of_day, :end_dt => Time.my_current).change.to_i.to_s 
+  %li= "Yesterday's Profit: $" + Bankroll.new(:start_dt => Time.my_current.start_of_day - 1.days, :end_dt => Time.my_current.start_of_day).change.to_i.to_s 

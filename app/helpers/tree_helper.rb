@@ -2,13 +2,13 @@ module TreeHelper
   def link_to_leaf(leaf)
     return "nil" unless leaf
     if leaf.is_a?(Game)
-      link_to_remote leaf.desc, :url => {:controller => 'game', :action => 'show', :id => leaf.id}, :update => 'right_div'
+      link_to leaf.desc, :controller => 'game', :action => 'show', :id => leaf.id
     elsif leaf.is_a?(Sports)
-      link_to_remote leaf.desc, :url => {:controller => 'summary', :action => 'show', :id => 'Sports'}, :update => 'right_div'
+      link_to leaf.desc, :controller => 'summary', :action => 'show', :id => 'Sports'
     elsif leaf.is_a?(Sport)
-      link_to_remote leaf.desc, :url => {:controller => 'summary', :action => 'show', :id => leaf.id}, :update => 'right_div'
+      link_to leaf.desc, :controller => 'summary', :action => 'show', :id => leaf.id
     else
-      link_to_remote leaf.desc, :url => {:controller => 'period', :action => 'show', :id => leaf.id}, :update => 'right_div'
+      link_to leaf.desc, :controller => 'period', :action => 'show', :id => leaf.id
     end
   end
   def has_children?(leaf) 
