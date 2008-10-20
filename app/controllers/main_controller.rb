@@ -8,11 +8,11 @@ class MainController < ApplicationController
     if params[:id] == 'load_matchbook'
       LinesDataload.new.load_all!
       flash[:notice] = "Loaded lines from Matchbook"
-      redirect_to :controller => 'main', :action => 'index'
+      #redirect_to :controller => 'main', :action => 'index'
     elsif params[:id] == 'load_bets'
-      LinesDataload.new.load_bets!
+      LinesDataload.new.load_matchbook_bets!
       flash[:notice] = "Loaded bets from Matchbook"
-      redirect_to :controller => 'main', :action => 'index'
+      #redirect_to :controller => 'main', :action => 'index'
     elsif params[:id] == 'exp'
       expire_fragment(:controller => 'main', :action => 'show', :id => 2)
       puts "Expired Fragment"
@@ -23,7 +23,7 @@ class MainController < ApplicationController
       g.home_team_obj = t
       g.save!
       Game.new.save!
-      redirect_to :controller => 'main', :action => 'index'
+      #redirect_to :controller => 'main', :action => 'index'
     end
   end
 end
