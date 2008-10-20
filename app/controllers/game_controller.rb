@@ -30,4 +30,14 @@ class GameController < ApplicationController
     end
     redirect_to :action => 'show'
   end
+  def index
+    #puts params[:search]['event_dt_gt']
+    if params[:search]
+      #params[:search][:conditions][:event_dt_lt] = Time.parsedate(params[:search][:conditions]['event_dt_gt']) + 1.days
+    end
+    @search = Game.new_search(params[:search])
+    #@search.event_dt_lt = @search.event_dt_gt + 1.days
+    @games, @games_count = @search.all, @search.count
+    #render :partial => 'game/index'
+  end
 end

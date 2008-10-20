@@ -1,0 +1,17 @@
+%table
+  %tr
+    %th= 'Desc'
+    %th= order_by_link({:bets => :wagered_amount})
+  - @games.each do |game|
+    %tr
+      %td= game.desc
+      %td= game.wagered_amount
+      %td= game.win_amount
+      
+Per page: 
+= per_page_select 
+
+- if @search.page_count > 1 
+  Page: 
+  = page_select 
+

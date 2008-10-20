@@ -1,0 +1,10 @@
+- form_for(@search, :html => {:id => "search_form"}, :js_lib => :jquery) do |f|
+  - f.fields_for @search.conditions do |games|
+    = games.calendar_date_select :event_dt_gt
+    = games.calendar_date_select :event_dt_lt
+    %br
+    - games.fields_for games.object.bets do |bets|
+      = bets.text_field :wagered_amount_gt
+    = f.submit 'search'
+
+= render :partial => 'games'

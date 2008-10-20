@@ -23,6 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :periods, :controller => 'period'
   map.resources :summary, :controller => 'summary'
   map.connect 'game/:away/:home/:date', :controller => 'game', :action => 'show'
+  map.resources :games, :controller => :game
   
   # Home Page
   map.root :controller => 'sessions', :action => 'new'
