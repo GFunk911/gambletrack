@@ -32,10 +32,19 @@ class GameController < ApplicationController
   end
   def index
     #puts params[:search]['event_dt_gt']
-    if params[:search]
+    #if params[:search]
+    #  if params[:search][:conditions][:home_score_gt] == '0'
+    #    params[:search][:conditions][:home_score_gt] = nil
+    #  else
+    #    params[:search][:conditions][:home_score_gt] = 0
+    #  puts params[:search][:conditions][:home_score_gt].to_s + " " + params[:search][:conditions][:home_score_gt].class.to_s
+    #end
+    if params[:search] and params[:search][:conditions][:event_dt_lt] and Time.parsedate(params[:search][:conditions][:event_dt_lt]).hour != 23
+      params[:search][:conditions][:event_dt_lt] = Time.parsedate(params[:search][:conditions][:event_dt_lt]) + (0.999).days.to_f
       #params[:search][:conditions][:event_dt_lt] = Time.parsedate(params[:search][:conditions]['event_dt_gt']) + 1.days
     end
     @search = Game.new_search(params[:search])
+    
     #@search.event_dt_lt = @search.event_dt_gt + 1.days
     @games, @games_count = @search.all, @search.count
     #render :partial => 'game/index'

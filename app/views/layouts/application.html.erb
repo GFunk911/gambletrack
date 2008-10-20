@@ -33,18 +33,8 @@ APP_CONFIG[:site_name] %></title>
 					<% else %>
 					<li><%= link_to 'Login', login_path %></li>
 					<li><%= link_to 'Signup', signup_path %></li>
-<<<<<<< HEAD:app/views/layouts/application.html.erb
           <%= render :partial => 'layouts/top_left' %>
-          
-=======
-          <li><%= link_to 'Load Matchbook Lines', :controller => 'main', :action => 'load_matchbook' %></li>
-           <li><%= link_to 'Load Matchbook Bets', :controller => 'main', :action => 'load_bets' %></li>
-          <%- Dataload; today_bankroll =  Bankroll.new(:start_dt => Time.local(2008,10,14), :start_amount => 75000) %>
-          <li>Today's Starting Bankroll: <%= "$" +  today_bankroll.current.to_i.to_s %></li>
-          <li>Today's Profit: <%= "$" + Bankroll.new(:start_dt => Time.my_current.start_of_day, :end_dt => Time.my_current).change.to_i.to_s %></li>
-          <li>Yesterday's Profit: <%= "$" + Bankroll.new(:start_dt => Time.my_current.start_of_day - 1.days, :end_dt => Time.my_current.start_of_day).change.to_i.to_s %></li>
-          <li><%= link_to_remote 'Games', :url => {:controller => 'game', :action => 'index'}, :update => 'right_div' %></li>
->>>>>>> Initial game search:app/views/layouts/application.html.erb
+          <li><%= link_to 'Games', :controller => 'game', :action => 'index' %></li>
 					<% end %>
 				</ul>
 			</div>

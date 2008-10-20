@@ -1,12 +1,23 @@
 %table
   %tr
-    %th= 'Desc'
-    %th= order_by_link({:bets => :wagered_amount})
+    %th= order_by_link({:sport => :abbr}, :text => 'Sport')
+    %th= order_by_link(:event_dt, :text => 'Date')
+    %th= 'Game'
+    %th= order_by_link({:bets => :wagered_amount}, :text => 'Wagered')
+    %th= "Profit"
   - @games.each do |game|
     %tr
+      %td= game.sport.abbr
+      %td= game.event_dt.pretty_dt
       %td= game.desc
-      %td= game.wagered_amount
-      %td= game.win_amount
+      %td= game.wagered_amount.to_i
+      %td= game.win_amount.to_i
+  %tr
+    %td
+    %td
+    %td
+    %th= @games.map(&:wagered_amount).sum.to_i
+    %th= @games.map(&:win_amount).sum.to_i
       
 Per page: 
 = per_page_select 

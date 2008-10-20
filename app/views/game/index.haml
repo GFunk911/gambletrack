@@ -1,10 +1,17 @@
-- form_for(@search, :html => {:id => "search_form"}, :js_lib => :jquery) do |f|
+- form_for(@search) do |f|
   - f.fields_for @search.conditions do |games|
+    Between
     = games.calendar_date_select :event_dt_gt
+    and
     = games.calendar_date_select :event_dt_lt
     %br
+    Has bet of at least: 
     - games.fields_for games.object.bets do |bets|
       = bets.text_field :wagered_amount_gt
+    %br
+    Sport:
+    = games.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
     = f.submit 'search'
+    %br
 
 = render :partial => 'games'
