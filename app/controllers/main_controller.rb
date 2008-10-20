@@ -4,7 +4,7 @@ class MainController < ApplicationController
   def index
   end
   def show
-    raise "can't show" unless params[:id] == 'load_matchbook' or params[:id] == 'test'
+    raise "can't show" unless %w(load_matchbook load_bets test).include?(params[:id])
     if params[:id] == 'load_matchbook'
       LinesDataload.new.load_all!
       flash[:notice] = "Loaded lines from Matchbook"

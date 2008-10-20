@@ -359,6 +359,7 @@ class OverUnderLine < Line
     return :error
   end
 end
+  
 
 class Module
   def fattr_nn(name,&b)
@@ -368,7 +369,7 @@ class Module
     fattr("#{name}_cbn") do
       instance_eval(&b)
     end
-  end
+  end      
 end
 
 module Enumerable
@@ -402,7 +403,12 @@ module GLCreator
     event_dt ? event_dt.pretty_dt : ""
   end
   fattr(:existing_game) do
-    sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id}).select { |x| x.event_dt.day == event_dt.day }.first
+    begin
+      sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id}).select { |x| x.event_dt.day == event_dt.day }.first
+    rescue => exp
+      puts "could not find existing game for #{h.inspect}"
+      raise exp
+    end
   end
 end
 
