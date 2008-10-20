@@ -509,3 +509,40 @@ class ConsensusCreator
   end
 end
 
+def load_line!(ln)
+  res = {}
+  res[:home_team] = ln['Home Team']
+  res[:away_team] = ln['Away Team']
+  res[:event_dt] = Time.parsedate(ln['Date'])
+  res[:team] = ln['Bet On']
+  res[:site] = 'Matchbook'
+  res[:bet_type] = ln['Type']
+  res[:spread] = ln['Line'].to_f
+  res[:odds] = ln['Juice']
+  res[:sport] = ln['Sport']
+  res[:wagered_amount] = ln['Risk']
+  LineCreator.new(res).run!
+  BetUpdater.new(res).run!
+end
+
+def load_linfe!(away,home,team,spread,odds,amt,bet_type,day,sport)
+  res = {}
+  res[:home_team] = home
+  res[:away_team] = away
+  res[:event_dt] = Time.local(2008,10,day)
+  res[:team] = team
+  res[:site] = 'Matchbook'
+  res[:bet_type] = bet_type
+  res[:spread] = spread
+  res[:odds] = odds.to_s
+  res[:sport] = sport
+  res[:wagered_amount] = amt
+  LineCreator.new(res).run!
+  BetUpdater.new(res).run!
+end
+
+def load_lines!
+  FasterCSV.foreach("#{RAILS_ROOT}/public/cfb.csv", :headers => true) do |ln|
+    load_line!(ln)
+  end
+end
