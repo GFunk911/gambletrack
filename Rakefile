@@ -192,7 +192,12 @@ end
 rails_task :scores do
   Line
   SIScores.new.hashes.each do |h|
-    GameUpdater.new(h).run!
+    begin
+      GameUpdater.new(h).run!
+    rescue => exp
+      puts exp.message
+      puts exp.backtrace.join("\n")
+    end
   end
 end  
 
