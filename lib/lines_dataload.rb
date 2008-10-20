@@ -36,7 +36,7 @@ class LinesDataload
     end
   end
   def delete_cache!
-    f = "#{RAILS_ROOT}/tmp/cache/views/localhost.3000/tree/show/1.cache"
+    f = "#{RAILS_ROOT}/tmp/cache/views/75.101.152.201.1999/tree/show/1.cache"
     `rm #{f}` if FileTest.exists?(f)
   end
 end

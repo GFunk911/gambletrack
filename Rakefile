@@ -207,7 +207,11 @@ task :restart do
   puts `mongrel_rails start -p 1999 -d`
 end
 
-task :refresh => [:update,:restart]
+task :run_migration do
+  puts `rake db:migrate --trace`
+end
+
+task :refresh => [:update,:run_migration, :restart]
 
 task :logdump do
   `tail --lines=1000 log/production.log > public/production.log`
