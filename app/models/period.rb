@@ -51,6 +51,9 @@ class Period < ActiveRecord::Base
   named_scope(:future_periods, lambda do
     {:conditions => ["start_dt > ?",Time.now]}
   end)
+  named_scope(:in_year, lambda do |y|
+    {:conditions => ["start_dt > ? and start_dt < ?",Time.local(y,1,1),Time.local(y,12,30)]}
+  end)
   def desc
     self.name
   end

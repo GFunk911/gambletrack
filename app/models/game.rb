@@ -67,6 +67,9 @@ class Game < ActiveRecord::Base
   named_scope(:on_day, lambda do |t|
     {:conditions => ["event_dt > ? and event_dt < ?",t.start_of_day,t.start_of_day+1.days]}
   end)
+  named_scope(:played, lambda do 
+    {:conditions => ["home_score + away_score > 0"]}
+  end)
 
   def self.dates_for_week(i)
     start = Time.local(2008,9,4,13) + (i - 1)*7.days
@@ -100,6 +103,9 @@ class Game < ActiveRecord::Base
   def team_margin(t)
     return nil unless played?
     (t.to_s == home_team) ? home_score-away_score : away_score - home_score
+  end
+  def home_margin
+    home_score - away_score
   end
   def played?
     home_score and away_score
