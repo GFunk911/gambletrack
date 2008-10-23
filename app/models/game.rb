@@ -129,7 +129,7 @@ class Game < ActiveRecord::Base
     ln ? ln.spread * -1 : nil
   end
   def spread_gap
-    correct_spread - current_spread
+    spread_gap? ? correct_spread - current_spread : nil
   end
   def spread_gap?
     correct_spread and current_spread

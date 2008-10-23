@@ -221,3 +221,19 @@ task :refresh => [:update,:run_migration, :restart]
 task :logdump do
   `tail --lines=1000 log/production.log > public/production.log`
 end
+
+task :add_cron do
+  require 'cronedit'
+  cm = CronEdit::Crontab.new 'root'
+  cm.add 'load_data', {:minute => 20, :command => "cd ~/gambletrack && rake load_data"}
+end
+
+rails_task :lofad_data do
+  LinesDataload.new.load_all!
+  LinesDataload.new.load_matchbook_bets!
+end 
+
+rails_task :latest_line do
+  puts Line.find(:first, :order => "created_at desc").created_at
+  puts Bet.find(:first, :order => "updated_at desc").updated_at
+end

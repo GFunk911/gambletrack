@@ -26,7 +26,7 @@ rescue => exp
 end
 
 $model_path = "#{RAILS_ROOT}/../gambling_co/gambling_model/model"
-require_dependency $model_path
+require $model_path
 
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
