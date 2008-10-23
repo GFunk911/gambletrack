@@ -29,8 +29,8 @@
     -if line.game.played?
       %td= line.result
     - if line.consensus.first 
-      %td= line.consensus.first.bets
-      %td= line.consensus.first.bet_percent.to_perc 
+      %td= line.consensus(:first, :order => 'created_at desc').first.bets
+      %td= line.consensus(:first, :order => 'created_at desc').first.bet_percent.to_perc 
  
   
   

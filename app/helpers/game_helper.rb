@@ -5,6 +5,7 @@ module GameHelper
     res += %w(Team Site Spread Odds Desired Outstanding Wagered Expired Time)
     game = lines.respond_to?(:games) ? lines.games.first : lines
     res << 'Status' if game.played?
+    res += ['Bets','Perc']
     res
   end
   def game_spread_games(obj)

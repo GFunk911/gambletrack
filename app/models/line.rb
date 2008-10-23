@@ -365,7 +365,7 @@ end
 class Module
   def fattr_nn(name,&b)
     fattr(name) do 
-      instance_eval(&b).tap { |x| raise "#{name} returning #{x.class}" unless x }
+      instance_eval(&b).tap { |x| str = respond_to?(:h) ? h.inspect : ""; raise "#{name} returning #{x.class} #{str}" unless x }
     end
     fattr("#{name}_cbn") do
       instance_eval(&b)
@@ -505,6 +505,8 @@ class ConsensusCreator
   fattr(:line) { Line.find_or_create_from_hash(h) }
   def run!
     line.add_consensus(h)
+  rescue => exp
+    puts "no game " + exp.message
   end
 end
 
