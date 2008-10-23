@@ -394,6 +394,7 @@ module GLCreator
     Sport.find_by_abbr(h[:sport])
   end
   def team(t)
+    t = $1.strip if t and t =~ /^(.*)\(.*\)/
     sport.find_team(t)#.tap { |x| raise "no team found for #{t}" unless x and t }
   end
   fattr_nn(:home_team) { team(h[:home_team]) }
