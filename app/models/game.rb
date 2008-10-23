@@ -125,10 +125,15 @@ class Game < ActiveRecord::Base
     inner_correct_spread ? inner_correct_spread*-1 : nil
   end
   fattr(:current_spread) do
-    lines.find(:first, :conditions => ["expire_dt is null and team_id = ? and bet_type = ?",home_team_id,'SpreadLine'], :order => "created_at desc").tap { |x| return nil unless x }.spread * -1
+    ls = lines.find(:first, :conditions => ["expire_dt is null and team_id = ? and bet_type = ?",home_team_id,'SpreadLine'], :order => "created_at desc")
+    if ls
+      ls.spread * -1
+    else
+      nil
+    end
   end
   def spread_gap
-    correct_spread - current_spread
+    spread_gap? ? correct_spread - current_spread : nil
   end
   def spread_gap?
     correct_spread and current_spread
