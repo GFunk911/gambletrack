@@ -4,7 +4,7 @@ class MainController < ApplicationController
   def index
   end
   def show
-    raise "can't show" unless %w(load_matchbook load_bets test exp load_scores).include?(params[:id])
+    raise "can't show" unless %w(load_matchbook load_bets test exp load_scores load_consensus).include?(params[:id])
     if params[:id] == 'load_matchbook'
       LinesDataload.new.load_all!
       flash[:notice] = "Loaded lines from Matchbook"
@@ -13,6 +13,9 @@ class MainController < ApplicationController
       LinesDataload.new.load_matchbook_bets!
       flash[:notice] = "Loaded bets from Matchbook"
       #redirect_to :controller => 'main', :action => 'index'
+    elsif params[:id] == 'load_consensus'
+      load_consensus!
+      flash[:notice] = "Loaded Consensus"
     elsif params[:id] == 'exp'
       expire_fragment(:controller => 'main', :action => 'show', :id => 2)
       puts "Expired Fragment"

@@ -550,5 +550,5 @@ def load_lines!
 end
 
 def load_consensus!
-  SIConsensus.instance.games.map { |x| x.pinny_spread_hash }.select { |x| %w(NFL NHL CFB).include?(x[:sport]) }.each { |x| ConsensusCreator.new(x).run! }
+  SIConsensus.new.games.map { |x| x.pinny_spread_hash }.select { |x| %w(NFL NHL CFB).include?(x[:sport]) }.each { |x| ConsensusCreator.new(x).run! }
 end
