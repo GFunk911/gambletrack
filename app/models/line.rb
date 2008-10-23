@@ -208,7 +208,7 @@ class Line < ActiveRecord::Base
     Gambling::Wager.new(home_favored,game.correct_spread*-1,ha,odds,game)
   end
   def wagers
-    return [] unless game.sport.abbr == 'NFL'
+    return [] unless game.sport.abbr == 'NFL' or game.sport.abbr == 'CFB'
     #[wager,teaser_wager].select { |x| x }
     [wager].select { |x| x }
   end
@@ -394,7 +394,7 @@ module GLCreator
     Sport.find_by_abbr(h[:sport])
   end
   def team(t)
-    t = $1.strip if t and t =~ /^(.*)\(.*\)/
+    t = $1.strip if t and t =~ /^(.*)\(.*\)/ and h[:sport] == 'MLB'
     sport.find_team(t)#.tap { |x| raise "no team found for #{t}" unless x and t }
   end
   fattr_nn(:home_team) { team(h[:home_team]) }
