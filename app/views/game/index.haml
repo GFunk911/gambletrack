@@ -11,6 +11,11 @@
     %br
     Sport:
     = games.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
+    %br
+    Save?
+    = check_box_tag 'Save',nil
+    = text_field_tag 'Name'
+    %br
     = f.submit 'search'
     %br
 

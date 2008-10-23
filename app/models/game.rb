@@ -125,7 +125,8 @@ class Game < ActiveRecord::Base
     inner_correct_spread ? inner_correct_spread*-1 : nil
   end
   fattr(:current_spread) do
-    lines.find(:first, :conditions => ["expire_dt is null and team_id = ? and bet_type = ?",home_team_id,'SpreadLine'], :order => "created_at desc").tap { |x| return nil unless x }.spread * -1
+    ln = lines.find(:first, :conditions => ["expire_dt is null and team_id = ? and bet_type = ?",home_team_id,'SpreadLine'], :order => "created_at desc")
+    ln ? ln.spread * -1 : nil
   end
   def spread_gap
     correct_spread - current_spread
@@ -133,8 +134,11 @@ class Game < ActiveRecord::Base
   def spread_gap?
     correct_spread and current_spread
   end
+  def link
+    "<a href=\"/game/#{id}\">#{away_team}@#{home_team}</a>"
+  end
   def game_line_fields
-    ["#{away_team}@#{home_team}",current_spread,correct_spread,spread_gap,away_team_obj.rating,home_team_obj.rating]
+    [link,current_spread,correct_spread,spread_gap,away_team_obj.rating,home_team_obj.rating]
   end
   named_scope(:has_wager, lambda do
     {:conditions => ["bets.wagered_amount > 0"], :include => {:lines => :bets}}
