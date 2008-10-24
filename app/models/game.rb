@@ -149,9 +149,12 @@ class Game < ActiveRecord::Base
   end
   def rating_team_pub
     rid = rating_team.id
+    other_id = (rid == home_team_id) ? away_team_id : home_team_id
     cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",rid]).map { |x| x.consensus }.flatten
-    return nil if cs.empty?
-    cs.sort_by { |x| x.created_at }[-1].bet_percent
+    return cs.sort_by { |x| x.created_at }[-1].bet_percent.to_perc unless cs.empty?
+    cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",other_id]).map { |x| x.consensus }.flatten
+    return 1.0 - cs.sort_by { |x| x.created_at }[-1].bet_percent.to_perc unless cs.empty?
+    nil    
   end
   def game_line_fields
     [link,current_spread,correct_spread,spread_gap,rating_team.short_name,rating_team_pub,away_team_obj.rating,home_team_obj.rating]
