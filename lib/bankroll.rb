@@ -21,3 +21,4 @@ class Bankroll
     change + start_amount
   end
 end
+
