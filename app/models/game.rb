@@ -143,8 +143,18 @@ class Game < ActiveRecord::Base
   def link
     "<a href=\"/game/#{id}\">#{away_team}@#{home_team}</a>"
   end
+  def rating_team
+    return nil unless spread_gap?
+    (spread_gap < 0) ? home_team_obj : away_team_obj
+  end
+  def rating_team_pub
+    rid = rating_team.id
+    cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",rid]).map { |x| x.consensus }.flatten
+    return nil if cs.empty?
+    cs.sort_by { |x| x.created_at }[-1].bet_percent
+  end
   def game_line_fields
-    [link,current_spread,correct_spread,spread_gap,away_team_obj.rating,home_team_obj.rating]
+    [link,current_spread,correct_spread,spread_gap,rating_team.short_name,rating_team_pub,away_team_obj.rating,home_team_obj.rating]
   end
   named_scope(:has_wager, lambda do
     {:conditions => ["bets.wagered_amount > 0"], :include => {:lines => :bets}}
@@ -164,6 +174,10 @@ class Game < ActiveRecord::Base
 
   def line_summary_children
     effective_lines(lines_with_bet)
+  end
+  def home_margin
+    return nil unless home_score and away_score
+    (home_score - away_score).to_i
   end
 end
 
