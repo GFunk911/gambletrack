@@ -5,7 +5,7 @@ class GameController < ApplicationController
     str = params[:date]
     str += Time.now.year.to_s if str.length == 4
     raise "can't get date for #{str}" unless str.length == 8
-    Time.local(str[4...8].to_i,str[0...2].to_i,str[2...4].to_i).tap { |x| puts "returning #{x}" }
+    Time.local(str[4...8].to_i,str[0...2].to_i,str[2...4].to_i).tap_to_s('Returning')
   end
   def get_game
     return Game.find(params[:id]) if params[:id]
@@ -39,7 +39,7 @@ class GameController < ApplicationController
     return str if str.is_a?(Time)
     return Time.parsedate(str) unless str =~ /today/i
     mod = str.gsub(/today/i,"").strip
-    (effective_today + mod.to_i.days).tap { |x| puts "parse_date #{x}" }
+    (effective_today + mod.to_i.days).tap_to_s('parse_date')
   end
   def modified_params(ps=params[:search])
     res = Marshal.load(Marshal.dump(ps))
@@ -73,8 +73,8 @@ class GameController < ApplicationController
       @search = Game.new_search(modified_params(@search_object.search_params))
     elsif params[:search]
       @search_object = Search.new(params[:search]['search'])
-      @search_object.save! if @search_object.do_save
       @search_object.search_params = modified_params
+      @search_object.save! if @search_object.do_save
       @search = Game.new_search(modified_params)
     else
       @search_object = Search.new

@@ -14,7 +14,7 @@ class MainController < ApplicationController
       flash[:notice] = "Loaded bets from Matchbook"
       #redirect_to :controller => 'main', :action => 'index'
     elsif params[:id] == 'load_consensus'
-      load_consensus!
+      ConsensusLoad.new.load!
       flash[:notice] = "Loaded Consensus"
     elsif params[:id] == 'exp'
       expire_fragment(:controller => 'main', :action => 'show', :id => 2)

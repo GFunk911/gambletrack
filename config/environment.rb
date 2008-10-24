@@ -45,6 +45,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem :haml
   config.gem :fattr
+  config.gem :andand
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -90,26 +91,14 @@ Rails::Initializer.run do |config|
   
   config.after_initialize do 
     Dataload.new.load_teams! 
+    Dir["#{RAILS_ROOT}/lib/core_ext/*.rb"].each { |x| require x }
     require "#{RAILS_ROOT}/lib/attribute_fu_ext"
+    require "#{RAILS_ROOT}/lib/data_creation"
   end
 end
 
 def dbg(ln)
   File.append("#{RAILS_ROOT}/log/debug.log",ln+"\n")
 end
-class Object
-  def send_catch(sym,*args,&b)
-    send(sym,*args,&b)
-  rescue => exp
-    dbg exp.inspect
-    return nil
-  end
-end
 
 
-
-class Time
-  def pretty_dt
-    strftime("%m/%d %H:%M")
-  end
-end

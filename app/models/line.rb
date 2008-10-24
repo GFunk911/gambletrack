@@ -1,17 +1,3 @@
-class Spread
-  attr_accessor :fb
-  def initialize(fb)
-    @fb = fb ? fb.to_closest_spread : fb
-  end
-  def to_s
-    if fb > 0
-      "-#{fb}"
-    else
-      "+#{fb*-1}"
-    end
-  end
-end
-  
 module LineSingleBet
   fattr(:single_bet) do
     bets.empty? ? new_bet : bets.first
@@ -84,58 +70,6 @@ module LineResult
   end
   def push?
     result == :push
-  end
-end
-
-class EffectiveLine
-  include BetSummary
-  include LineResult
-  include Enumerable
-  include LineSummary
-  def initialize(a)
-    @arr = a
-  end
-  def each(&b)
-    @arr.each(&b)
-  end
-  def bet_children
-    @arr
-  end
-  def result
-    @arr.first.result
-  end
-  def method_missing(sym,*args,&b)
-    @arr.first.send(sym,*args,&b)
-  end
-  def line_summary_children
-    @arr.first.respond_to?(:line_summary_children) ? @arr.map { |x| x.line_summary_children }.flatten : @arr
-  end
-end
-
-class GroupedLines
-  attr_accessor :lines, :group_blk, :headers, :fields
-  def initialize(lines,headers,fields,&b)
-    dbg "GroupedLines constructor"
-    @lines = lines
-    @headers = headers
-    @group_blk = b 
-    @fields = fields
-  end
-  fattr(:line_map) do
-    lines.group_by { |x| group_blk[x] }.map_value { |x| EffectiveLine.new(x) }
-  end
-  def each(&b)
-    dbg "GroupedLines size #{line_map.size}"
-    if b.arity == 1
-      line_map.values.sort.each(&b)
-    else
-      line_map.to_a.sort_by { |x| x[1] }.each { |a| yield(a[0],a[1]) }
-    end
-  end
-  def pretty_fields
-    fields.map do |x| 
-      x.gsub(/_[a-z]/) { |m| " " + m[1..1].upcase }.gsub(/^[a-z]/) { |m| m.upcase }
-    end
   end
 end
 
@@ -272,7 +206,7 @@ class Line < ActiveRecord::Base
   end
   def find_or_create_line_set
     return line_set if line_set
-    self.line_set = LineSet.find(:first, :conditions => line_set_hash, :order => "id asc") || LineSet.new(line_set_hash).tap { |x| x.save! }
+    self.line_set = LineSet.find(:first, :conditions => line_set_hash, :order => "id asc") || LineSet.new(line_set_hash).tap(&:save!)
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }
@@ -346,6 +280,9 @@ class OverUnderLine < Line
   def wagers
     []
   end
+  def spr
+    spread
+  end
   def sub_possible_teams
     game.teams + Team.ou_teams
   end
@@ -363,197 +300,4 @@ class OverUnderLine < Line
     puts exp
     return :error
   end
-end
-  
-
-class Module
-  def fattr_nn(name,&b)
-    fattr(name) do 
-      str = respond_to?(:h) ? h.inspect : ""
-      instance_eval(&b).tap { |x| raise "#{name} returning #{x.class} #{str} " unless x }
-    end
-    fattr("#{name}_cbn") do
-      instance_eval(&b)
-    end
-  end      
-end
-
-module Enumerable
-  def comp_array
-    map { |x| x.is_a?(Team) ? "#{x.id} #{x.abbr}" : x }.map { |x| [x,x.class] }.flatten
-  end
-  def eq_comp(b)
-    res = (comp_array == b.comp_array)
-    puts "#{res} #{comp_array.inspect} #{b.comp_array.inspect}"
-  end
-end
-
-module GLCreator
-  attr_accessor :h
-  def initialize(h)
-    @h = h
-  end
-  fattr(:event_dt) { h[:event_dt] }
-  fattr_nn(:sport) do
-    Sport.find_by_abbr(h[:sport])
-  end
-  def team(t)
-    t = $1.strip if t and t =~ /^(.*)\(.*\)/ and h[:sport] == 'MLB'
-    sport.find_team(t)#.tap { |x| raise "no team found for #{t}" unless x and t }
-  end
-  fattr_nn(:home_team) { team(h[:home_team]) }
-  fattr_nn(:away_team) { team(h[:away_team]) }
-  fattr_nn(:period) do
-    event_dt ? sport.periods.all_containing(event_dt).first : Period.find(6)
-  end
-  def pretty_dt
-    event_dt ? event_dt.pretty_dt : ""
-  end
-  fattr(:existing_game) do
-    begin
-      sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id}).select { |x| x.event_dt.day == event_dt.day }.first
-    rescue => exp
-      puts "could not find existing game for #{h.inspect}"
-      raise exp
-    end
-  end
-end
-
-module LineUpdate
-  fattr(:existing_line) do 
-    game.lines.select do |x| 
-      x.spread.to_closest_spread == spread and x.odds.to_s == odds.to_s and x.team_obj == selected_team and x.site_id == site.id and (x.bet_type == bet_type or !bet_type)
-    end.first
-  end
-  fattr_nn(:site) do
-    Site.find(:first, :conditions => {:name => h[:site]})
-  end
-  fattr_nn(:selected_team) { team(h[:team]) }
-  def odds
-    Gambling::Odds.get(h[:odds])
-  end
-  def spread
-     h[:spread].to_closest_spread
-  end
-  fattr_nn(:game) { existing_game }
-  fattr(:bet_type) do
-    h[:bet_type] ? Line.get_bet_type(h[:bet_type]) : nil
-  end
-end
-
-class GameUpdater
-  include GLCreator
-  def run!
-    unless sport_cbn and home_team_cbn and away_team_cbn and existing_game
-      puts "no game for #{h.inspect}" if %w(NFL NHL MLB CFB).include?(h[:sport])
-      return
-    end
-    puts "making game for #{h.inspect}"
-    existing_game.home_score ||= h[:home_score]
-    existing_game.away_score ||= h[:away_score]
-    existing_game.save!
-  end
-end
-
-class BetUpdater
-  include GLCreator
-  include LineUpdate
-  def game
-    existing_game
-  end
-  def run!
-    unless sport_cbn and home_team_cbn and away_team_cbn and existing_game
-      puts "no game for #{h.inspect}" if %w(NFL NHL MLB CFB).include?(h[:sport])
-      return
-    end
-    puts "making bet for #{h.inspect}"
-    existing_line.wagered_amount = h[:wagered_amount].to_f
-    existing_line.save!
-  end
-end
-
-class GameCreator
-  include GLCreator
-  fattr(:new_game) do
-    sport.games.new(:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id, :event_dt => event_dt).tap { |x| x.save! }
-  end
-  fattr(:desc) { "#{away_team}@#{home_team} #{pretty_dt}" }
-  def run!
-    puts(existing_game ? "Found #{desc}" : "Creating #{desc}")
-    existing_game || new_game
-  end
-end
-
-class LineCreator
-  include GLCreator
-  include LineUpdate
-
-
-  fattr(:effective_dt) { h[:effective_dt] || Time.now }
-  fattr(:new_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type, :effective_dt => effective_dt).tap { |x| x.save! }
-  end
-  fattr(:desc) do
-    "#{away_team}@#{home_team} #{selected_team} #{bet_type} #{spread} #{odds} #{pretty_dt}"
-  end
-  def run!
-    #return unless away_team.abbr == 'STL'
-    puts(existing_line ? "Found #{desc}" : "Creating #{desc}")
-    existing_line || new_line
-  end
-end
-
-class ConsensusCreator
-  attr_accessor :h
-  def initialize(h)
-    @h = h
-  end
-  fattr(:line) { Line.find_or_create_from_hash(h) }
-  def run!
-    line.add_consensus(h)
-  rescue => exp
-    puts "no game " + exp.message
-  end
-end
-
-def load_line!(ln)
-  res = {}
-  res[:home_team] = ln['Home Team']
-  res[:away_team] = ln['Away Team']
-  res[:event_dt] = Time.parsedate(ln['Date'])
-  res[:team] = ln['Bet On']
-  res[:site] = 'Matchbook'
-  res[:bet_type] = ln['Type']
-  res[:spread] = ln['Line'].to_f
-  res[:odds] = ln['Juice']
-  res[:sport] = ln['Sport']
-  res[:wagered_amount] = ln['Risk']
-  LineCreator.new(res).run!
-  BetUpdater.new(res).run!
-end
-
-def load_linfe!(away,home,team,spread,odds,amt,bet_type,day,sport)
-  res = {}
-  res[:home_team] = home
-  res[:away_team] = away
-  res[:event_dt] = Time.local(2008,10,day)
-  res[:team] = team
-  res[:site] = 'Matchbook'
-  res[:bet_type] = bet_type
-  res[:spread] = spread
-  res[:odds] = odds.to_s
-  res[:sport] = sport
-  res[:wagered_amount] = amt
-  LineCreator.new(res).run!
-  BetUpdater.new(res).run!
-end
-
-def load_lines!
-  FasterCSV.foreach("#{RAILS_ROOT}/public/cfb.csv", :headers => true) do |ln|
-    load_line!(ln)
-  end
-end
-
-def load_consensus!
-  SIConsensus.new.games.map { |x| x.pinny_spread_hash }.select { |x| %w(NFL NHL CFB).include?(x[:sport]) }.each { |x| ConsensusCreator.new(x).run! }
 end
