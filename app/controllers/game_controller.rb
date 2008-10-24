@@ -36,24 +36,26 @@ class GameController < ApplicationController
   def parse_date(str)
     puts "parse_date #{str}"
     return str unless str
+    return str if str.is_a?(Time)
     return Time.parsedate(str) unless str =~ /today/i
     mod = str.gsub(/today/i,"").strip
     (effective_today + mod.to_i.days).tap { |x| puts "parse_date #{x}" }
   end
-  def modified_params
-    ps = Marshal.load(Marshal.dump(params[:search]))
+  def modified_params(ps=params[:search])
+    res = Marshal.load(Marshal.dump(ps))
     
-    if ps
-      ps[:conditions][:event_dt_lt] = parse_date(ps[:conditions][:event_dt_lt])
-      ps[:conditions][:event_dt_gt] = parse_date(ps[:conditions][:event_dt_gt])
+    if res
+      res[:conditions][:event_dt_lt] = parse_date(res[:conditions][:event_dt_lt])
+      res[:conditions][:event_dt_gt] = parse_date(res[:conditions][:event_dt_gt])
       
-      if ps[:conditions][:event_dt_lt] and ps[:conditions][:event_dt_lt].hour != 23
-        ps[:conditions][:event_dt_lt] = ps[:conditions][:event_dt_lt] + (0.999).days.to_f
+      if res[:conditions][:event_dt_lt] and res[:conditions][:event_dt_lt].hour != 23
+        res[:conditions][:event_dt_lt] = res[:conditions][:event_dt_lt] + (0.999).days.to_f
         #params[:search][:conditions][:event_dt_lt] = Time.parsedate(params[:search][:conditions]['event_dt_gt']) + 1.days
       end
-      puts ps.inspect
+      res.delete('search')
     end
-    ps
+    puts "Res: " + res.inspect
+    res
   end
   def index
     #puts params[:search]['event_dt_gt']
@@ -65,10 +67,20 @@ class GameController < ApplicationController
     #  puts params[:search][:conditions][:home_score_gt].to_s + " " + params[:search][:conditions][:home_score_gt].class.to_s
     #end
     
-    Search.new(:search_params => params[:search], :name => params['Name']).save! if params['Save']
-    params[:search] = Search.find(params[:search_id]).search_params if params[:search_id]
-    
-    @search = Game.new_search(modified_params)
+    10.times { puts params.inspect }
+    if params[:search_id]
+      @search_object = Search.find(params[:search_id])
+      @search = Game.new_search(modified_params(@search_object.search_params))
+    elsif params[:search]
+      @search_object = Search.new(params[:search]['search'])
+      @search_object.save! if @search_object.do_save
+      @search_object.search_params = modified_params
+      @search = Game.new_search(modified_params)
+    else
+      @search_object = Search.new
+      @search = Game.new_search
+    end
+
     
     #@search.event_dt_lt = @search.event_dt_gt + 1.days
     @games, @games_count = @search.all, @search.count

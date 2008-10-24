@@ -155,6 +155,16 @@ class Game < ActiveRecord::Base
   def page_title
     "#{desc} #{event_dt.pretty_dt}"
   end
+  def winner
+    (home_score > away_score) ? home_team_obj : away_team_obj
+  end
+  def event_date
+    event_dt.start_of_day
+  end
+
+  def line_summary_children
+    effective_lines(lines_with_bet)
+  end
 end
 
 class Object

@@ -13,10 +13,21 @@
     = games.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
     %br
     Save?
-    = check_box_tag 'Save',nil
-    = text_field_tag 'Name'
+  - f.fields_for(@search_object) do |search_obj|
+    = search_obj.check_box :do_save
+    = search_obj.text_field :name
     %br
-    = f.submit 'search'
-    %br
+    %table
+      %tr
+        %th= "Group By"
+        %th= "Result Columns"
+      %tr
+        %td= search_obj.select :grouping_columns, @search_object.potential_grouping_columns.map { |x| [x.humanize,x] }, {}, :multiple => true
+        %td= search_obj.select :result_columns, @search_object.potential_result_columns.map { |x| [x.humanize,x] }, {}, :multiple => true
+  %br
+  = f.submit 'search'
+  %br
 
-= render :partial => 'games'
+%div
+  = render :partial => 'games'
+  = render :partial => 'game/game_summary', :locals => {:lines => @search_object.grouped_lines, :root => nil}

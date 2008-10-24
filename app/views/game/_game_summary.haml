@@ -4,10 +4,11 @@
       %th= col
   - lines.each do |k,g|
     %tr
-      - ([k].flatten + lines.fields.map { |x| g.send(x) }).each do |cell|
-        %td= cell
-  %tr
-    - ['Total',root.desired_amount,root.wagered_amount,root.win_amount].each do |cell|
-      %td
-        %b= cell
+      - ([k].flatten.map(&:ar_desc) + lines.fields.map { |x| g.respond_to?(x) ? g.send(x) : "N/A" }).each do |cell|
+        %td= cell.pretty
+  - if root
+    %tr
+      - ['Total',root.desired_amount,root.wagered_amount,root.win_amount].each do |cell|
+        %td
+          %b= cell
     
