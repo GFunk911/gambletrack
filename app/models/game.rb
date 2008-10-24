@@ -167,12 +167,6 @@ class Game < ActiveRecord::Base
   end
 end
 
-class Object
-  def page_title
-    desc
-  end
-end
-
 class FlexMigration < ActiveRecord::Migration
   class << self
     attr_accessor :up_blk

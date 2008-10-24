@@ -1,21 +1,3 @@
-class Object
-  def ar_desc
-    respond_to?(:desc) ? desc : self
-  end
-end
-
-class Object
-  def pretty
-    self
-  end
-end
-
-class Time
-  def pretty
-    strftime("%m/%d")
-  end
-end
-
 class Search < ActiveRecord::Base
   serialize :search_params
   attr_accessor :do_save, :grouping_columns, :result_columns

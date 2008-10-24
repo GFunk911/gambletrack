@@ -1,9 +1,3 @@
-class Time
-  def start_of_day
-    klass.local(year,month,day)
-  end
-end
-
 class Bankroll
   attr_accessor :start_dt, :end_dt, :start_amount
   def initialize(ops)

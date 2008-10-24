@@ -1,16 +1,3 @@
-class Time
-  def same_day_as?(t)
-    t.year == year and t.month == month and t.day == day
-  end
-  def today?
-    same_day_as?(Time.now)
-  end
-  def yesterday?
-    same_day_as?(Time.now - 1.days)
-  end
-end
-    
-
 class CacheManager < ActionController::Base
   include ActionController::Caching::Fragments
   def cache_configured?
