@@ -31,3 +31,7 @@
 %div
   = render :partial => 'games'
   = render :partial => 'game/game_summary', :locals => {:lines => @search_object.grouped_lines, :root => nil}
+  
+- @divs.each do |div|
+  = div.div
+  %br
