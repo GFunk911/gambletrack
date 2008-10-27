@@ -21,7 +21,8 @@ module GLCreator
   end
   fattr(:existing_game) do
     begin
-      sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id}).select { |x| x.event_dt.day == event_dt.day }.first
+      res = sport.games.find(:all, :conditions => {:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id})
+      res.select { |x| (x.event_dt - event_dt).abs < 2.days }.sort_by { |x| (x.event_dt - event_dt).abs }.first
     rescue => exp
       puts "could not find existing game for #{h.inspect}"
       raise exp

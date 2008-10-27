@@ -3,24 +3,13 @@
     
 
 class LinesDataload
-  def load_matchbook_sport!(sport)
-    Matchbook.new(sport).line_hashes.each do |h|
+  def load_matchbook_games_and_lines!(sport)
+    Line
+    Matchbook.new(sport).each_line_hash do |h|
+      GameCreator.new(h).run! unless sport.to_s == 'PF'
       Line.find_or_create_from_hash(h)
     end
-  end
-  def load_matchbook!
-    %w(PF).each { |x| load_matchbook_sport!(x) }
-  end
-  def load_matchbook_games!(sport)
-    Line
-    Matchbook.new(sport).line_hashes.each do |h|
-      GameCreator.new(h).run!
-    end
     delete_cache!
-  end
-  def load_matchbook_both!(s)
-    load_matchbook_games!(s)
-    load_matchbook_sport!(s)
   end
   def load_matchbook_bets!
     Matchbook.new('HK').combined_offers.map { |x| x.line_hash }.each do |h|
@@ -30,9 +19,8 @@ class LinesDataload
     end
   end
   def load_all!
-    load_matchbook!
-    %w(CF HK BB).each do |s|
-      load_matchbook_both!(s)
+    %w(PF CF HK BB).each do |s|
+      load_matchbook_games_and_lines!(s)
     end
   end
   def delete_cache!
