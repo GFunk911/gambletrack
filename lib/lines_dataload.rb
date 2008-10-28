@@ -19,7 +19,7 @@ class LinesDataload
     end
   end
   def load_all!
-    %w(PF CF HK BB).each do |s|
+    %w(PF CF HK BB BK).each do |s|
       load_matchbook_games_and_lines!(s)
     end
   end
