@@ -4,7 +4,7 @@ class Periods
     @periods = ps
   end
   def desc
-    periods.first.week? ? "Weeks" : "Days"
+    periods.first and periods.first.week? ? "Weeks" : "Days"
   end
   fattr(:current_period) { periods.current_period_array.first }
   def children
@@ -39,6 +39,9 @@ class Period < ActiveRecord::Base
   end)
   named_scope(:all_containing, lambda do |t|
     {:conditions => ["start_dt < ? and end_dt > ?",t,t]}
+  end)
+  named_scope(:since, lambda do |t|
+    {:conditions => ["end_dt > ? and start_dt < ?",t,Time.now + 7.days]}
   end)
   named_scope :current_and_future_periods, lambda { {:conditions => ["end_dt > ?",Time.now], :order => "start_dt asc"} }
   def self.current_period
