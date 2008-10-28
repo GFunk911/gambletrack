@@ -53,12 +53,4 @@ class Team < ActiveRecord::Base
   def over_under?
     klass.over_under?(city)
   end
-  def cfb_sagarin
-    Sagarin.instance.get_rating(city)
-  end
-  def rating
-    return cfb_sagarin if sport.abbr == 'CFB'
-    return get_dvoa_perc(abbr.to_sym).to_perc if sport.abbr == 'NFL'
-    nil
-  end
 end

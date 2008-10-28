@@ -116,16 +116,14 @@ class Game < ActiveRecord::Base
   def <=>(x)
     event_dt <=> x.event_dt
   end
-  def cfb_correct_spread
-    a = away_team_obj.cfb_sagarin
-    h = home_team_obj.cfb_sagarin
-    return nil unless a and h
-    (h - a + 3.0).to_closest_spread
+  def team_rating_obj(team_id)
+    period.ratings.find_by_team_id(team_id)
   end
   def inner_correct_spread
-    return nfl_correct_spread if sport.abbr == 'NFL'
-    return cfb_correct_spread if sport.abbr == 'CFB'
-    nil
+    a = team_rating_obj(away_team_obj)
+    h = team_rating_obj(home_team_obj)
+    return nil unless a and h and a.points_rating and h.points_rating
+    (h.points_rating - a.points_rating + 3.0).to_closest_spread
   end
   def correct_spread
     inner_correct_spread ? inner_correct_spread*-1 : nil
@@ -157,7 +155,7 @@ class Game < ActiveRecord::Base
     nil    
   end
   def game_line_fields
-    [link,current_spread,correct_spread,spread_gap,rating_team.short_name,rating_team_pub,away_team_obj.rating,home_team_obj.rating]
+    [link,current_spread,correct_spread,spread_gap,rating_team.short_name,rating_team_pub,team_rating_obj(away_team_obj).raw_rating,team_rating_obj(home_team_obj).raw_rating]
   end
   named_scope(:has_wager, lambda do
     {:conditions => ["bets.wagered_amount > 0"], :include => {:lines => :bets}}

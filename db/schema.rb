@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081015020530) do
+ActiveRecord::Schema.define(:version => 20081027223446) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(:version => 20081015020530) do
     t.string   "bet_type"
   end
 
+  add_index "lines", ["id"], :name => "index_lines_on_id"
+
   create_table "passwords", :force => true do |t|
     t.integer  "user_id"
     t.string   "reset_code"
@@ -89,6 +91,29 @@ ActiveRecord::Schema.define(:version => 20081015020530) do
     t.integer  "sport_id"
   end
 
+  create_table "rating_periods", :force => true do |t|
+    t.integer  "rating_type_id", :null => false
+    t.integer  "period_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rating_types", :force => true do |t|
+    t.integer  "sport_id",   :null => false
+    t.string   "name",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ratings", :force => true do |t|
+    t.integer  "rating_period_id", :null => false
+    t.float    "raw_rating"
+    t.float    "points_rating"
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", :force => true do |t|
     t.string "name"
   end
@@ -96,6 +121,14 @@ ActiveRecord::Schema.define(:version => 20081015020530) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
+  end
+
+  create_table "searches", :force => true do |t|
+    t.string   "name"
+    t.text     "search_params"
+    t.string   "search_class_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "sessions", :force => true do |t|
@@ -146,6 +179,8 @@ ActiveRecord::Schema.define(:version => 20081015020530) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "teams", ["id"], :name => "index_teams_on_id"
 
   create_table "users", :force => true do |t|
     t.string   "login",                     :limit => 40

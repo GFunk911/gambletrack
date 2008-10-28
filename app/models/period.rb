@@ -28,6 +28,8 @@ end
 class Period < ActiveRecord::Base
   has_many :games, :include => [:home_team_obj,:away_team_obj]
   has_many :lines, :through => :games, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
+  has_many :rating_periods
+  has_many :ratings, :through => :rating_periods
   belongs_to :sport
   include BetSummary
   include WagerModule

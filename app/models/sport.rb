@@ -4,6 +4,7 @@ class Sport < ActiveRecord::Base
   has_many :names, :through => :teams
   has_many :periods, :include => :games, :order => 'start_dt asc'
   has_many :lines, :through => :games
+  has_many :rating_types
   include BetSummary
   include LineSummary
   include WagerModule
