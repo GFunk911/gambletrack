@@ -123,7 +123,7 @@ class Game < ActiveRecord::Base
     a = team_rating_obj(away_team_obj)
     h = team_rating_obj(home_team_obj)
     return nil unless a and h and a.points_rating and h.points_rating
-    (h.points_rating - a.points_rating + 3.0).to_closest_spread
+    (h.points_rating - a.points_rating + sport.home_advantage.to_f).to_closest_spread
   end
   def correct_spread
     inner_correct_spread ? inner_correct_spread*-1 : nil

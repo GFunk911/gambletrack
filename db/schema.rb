@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081027223446) do
+ActiveRecord::Schema.define(:version => 20081028163415) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20081027223446) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "home_advantage"
   end
 
   create_table "team_names", :force => true do |t|

@@ -27,7 +27,11 @@ end
 
 def load_ratings!(ops)
   sport = Sport.find_by_abbr(ops[:sport])
+  
   rating_type = sport.rating_types.find_by_name(ops[:rating_type])
+  unless rating_type
+    rating_type = sport.rating_types.new(:name => ops[:rating_type]).tap { |x| x.save! }
+  end
   period = sport.periods.all_containing(ops[:dt]).first
   rating_period = rating_type.rating_periods.new(:period_id => period.id).tap { |x| x.save! }
   sport.teams.each do |t|
@@ -46,5 +50,11 @@ end
 dataload_task(:load_ratings,'Load College Football Sagarin') do
   load_ratings!(:sport => 'CFB', :rating_type => 'Sagarin', :dt => Time.now) do |t|
     Sagarin.instance.get_rating(t.city)
+  end
+end
+
+dataload_task(:load_ratings,'Load NBA Sagarin') do
+  load_ratings!(:sport => 'NBA', :rating_type => 'Sagarin', :dt => Time.now) do |t|
+    NBASagarin.instance.get_rating(t.city)
   end
 end
