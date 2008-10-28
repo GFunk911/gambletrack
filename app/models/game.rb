@@ -139,7 +139,9 @@ class Game < ActiveRecord::Base
     correct_spread and current_spread
   end
   def link
-    "<a href=\"/game/#{id}\">#{away_team}@#{home_team}</a>"
+    str = "<a href=\"/game/#{id}\">#{away_team}@#{home_team}</a>"
+    str = "<b>#{str}</b>" if bets.any? { |x| x.wagered_amount > 0 }
+    str
   end
   def rating_team
     return nil unless spread_gap?
@@ -151,7 +153,7 @@ class Game < ActiveRecord::Base
     cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",rid]).map { |x| x.consensus }.flatten
     return cs.sort_by { |x| x.created_at }[-1].bet_percent.to_perc unless cs.empty?
     cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",other_id]).map { |x| x.consensus }.flatten
-    return 1.0 - cs.sort_by { |x| x.created_at }[-1].bet_percent.to_perc unless cs.empty?
+    return (1.0 - cs.sort_by { |x| x.created_at }[-1].bet_percent).to_perc unless cs.empty?
     nil    
   end
   def game_line_fields
