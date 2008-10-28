@@ -184,6 +184,7 @@ HOuston U,,,,false,CFB,Houston
 NY,Giants,,,NFL,New York Giants
 ,,FLO,,false,NHL,Florida Panthers
 NY,Rangers,,,NHL,New York R Rangers
+NY,Islanders,,,NHL,New York I Islanders
 Brigham Young,Cougars,,,false,CFB,BYU
 Miami,,,,false,CFB,Miami-Florida
 North Carolina State,,,,false,CFB,NC State
@@ -195,3 +196,4 @@ Florida International,,,,false,CFB,Fla. International
 Texas El Paso,,,,false,CFB,UTEP
 Miami (Ohio),,,,false,CFB,Miami-Ohio
 Southern Methodist,,,,false,CFB,SMU
+,,UCF,,false,CFB,Central Florida

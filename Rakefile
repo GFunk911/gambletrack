@@ -201,8 +201,12 @@ rails_task :scores do
   end
 end  
 
+rails_task :copy_scores_local do
+  SIScores.new.copy_to_local!
+end
+
 task :update do
-  puts `git pull origin ec2`
+  puts `git pull origin ec4`
   puts `svn up ../gambling_co`
 end
 
