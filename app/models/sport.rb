@@ -24,7 +24,7 @@ class Sport < ActiveRecord::Base
   end
   def children
     Period
-    Periods.new(periods.has_games).children
+    Periods.new(periods.has_games.since(14.days.ago)).children
   end
   def line_summary_children
     effective_lines
