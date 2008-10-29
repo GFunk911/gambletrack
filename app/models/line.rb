@@ -87,13 +87,17 @@ class Line < ActiveRecord::Base
   belongs_to :site
   has_many :bets
   belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'
-  belongs_to :line_set
+  has_many :line_set_memberships
+  has_many :line_sets, :through => :line_set_memberships
+  has_one :book_line_set, :through => :line_set_memberships
+  has_one :spread_line_set, :through => :line_set_memberships
+  has_one :bet_type_line_set, :through => :line_set_memberships
   validates_presence_of :odds
   validates_presence_of :site
   validates_presence_of :game
   named_scope :active, lambda { {:conditions => ["expire_dt is null",Time.now]} }
-  before_save { |x| x.find_or_create_line_set }
-  after_create { |x| x.line_set.mark_active! }
+  after_save { |x| find(x.id).setup_line_sets }
+  after_create { |x| find(x.id).setup_line_sets; find(x.id).book_line_set.mark_active! }
   before_save { |x| x.set_bet_type! }
   has_many :consensus, :class_name => 'LineConsensus'
   set_inheritance_column 'bet_type'
@@ -204,9 +208,15 @@ class Line < ActiveRecord::Base
     res[:spread] = spread.to_closest_spread unless site.changes_spread? 
     res
   end
-  def find_or_create_line_set
-    return line_set if line_set
-    self.line_set = LineSet.find(:first, :conditions => line_set_hash, :order => "id asc") || LineSet.new(line_set_hash).tap(&:save!)
+  def setup_line_set(assoc_name)
+    send(assoc_name).tap { |x| return x if x }
+    set_class = klass.reflections[assoc_name].klass
+    h = set_class.get_key(self)
+    obj = set_class.find(:first, :conditions => h) || set_class.new(h).tap(&:save!)
+    LineSetMembership.new(:line_set_id => obj.id, :line_id => self.id).save!
+  end
+  def setup_line_sets
+    [:book_line_set,:spread_line_set,:bet_type_line_set].each { |x| setup_line_set(x) }
   end
   def self.reset_lineset!
     LineSet.find(:all).each { |x| x.destroy }

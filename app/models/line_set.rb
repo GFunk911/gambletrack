@@ -8,9 +8,11 @@ class LineSets
 end
 
 class LineSet < ActiveRecord::Base
-  has_many :lines
+  has_many :line_set_memberships
+  has_many :lines, :through => :line_set_memberships
   belongs_to :game
   belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'
+  set_inheritance_column :line_set_type
   before_save do |x|
     x.bet_type ||= x.calc_bet_type if x.calc_bet_type
   end
@@ -58,5 +60,29 @@ class LineSet < ActiveRecord::Base
   def calc_bet_type
     return nil unless spread
     (spread.to_f == 0) ? 'moneyline' : 'spread'
+  end
+  def self.get_base_key(l)
+    {:game_id => l.game_id, :team_id => l.team_id, :bet_type => l.bet_type||l.calc_bet_type }
+  end
+end
+
+# game,team,bet_type are implied
+class BookLineSet < LineSet
+  def self.get_key(l)
+    res = get_base_key(l).merge(:site_id => l.site_id)
+    res[:spread] = l.spread.to_closest_spread unless l.site.changes_spread? 
+    res
+  end
+end
+
+class SpreadLineSet < LineSet
+  def self.get_key(l)
+    get_base_key(l).merge(:spread => l.spread.to_closest_spread)
+  end
+end
+
+class BetTypeLineSet < LineSet
+  def self.get_key(l)
+    get_base_key(l)
   end
 end

@@ -193,6 +193,11 @@ class Game < ActiveRecord::Base
     return nil unless home_score and away_score
     (home_score - away_score).to_i
   end
+  def destroy_line_sets!
+    sets = LineSet.find_all_by_game_id(self.id)
+    sets.map { |x| x.line_set_memberships }.flatten.each { |x| x.destroy }
+    sets.each { |x| x.destroy }
+  end
 end
 
 class FlexMigration < ActiveRecord::Migration

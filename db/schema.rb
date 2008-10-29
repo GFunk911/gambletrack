@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081028163415) do
+ActiveRecord::Schema.define(:version => 20081029231121) do
 
   create_table "bets", :force => true do |t|
     t.integer  "line_id",                             :null => false
@@ -46,6 +46,16 @@ ActiveRecord::Schema.define(:version => 20081028163415) do
     t.datetime "updated_at"
   end
 
+  create_table "line_set_memberships", :force => true do |t|
+    t.integer  "line_set_id", :null => false
+    t.integer  "line_id",     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "line_set_memberships", ["line_set_id"], :name => "index_line_set_memberships_on_line_set_id"
+  add_index "line_set_memberships", ["line_id"], :name => "index_line_set_memberships_on_line_id"
+
   create_table "line_sets", :force => true do |t|
     t.integer  "game_id"
     t.decimal  "spread"
@@ -55,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20081028163415) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "team_id"
+    t.string   "line_set_type"
   end
 
   create_table "lines", :force => true do |t|
@@ -67,7 +78,6 @@ ActiveRecord::Schema.define(:version => 20081028163415) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "effective_dt"
-    t.integer  "line_set_id"
     t.integer  "team_id"
     t.string   "bet_type"
   end
