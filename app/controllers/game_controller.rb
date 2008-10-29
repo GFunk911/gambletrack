@@ -71,6 +71,9 @@ class GameController < ApplicationController
     if params[:search_id]
       @search_object = Search.find(params[:search_id])
       @search = Game.new_search(modified_params(@search_object.search_params))
+    elsif params[:search] and params[:search]['id']
+        @search_object = Search.find(params[:search]['id'])
+        @search = Game.new_search(modified_params(@search_object.search_params))
     elsif params[:search]
       @search_object = Search.new(params[:search]['search'])
       @search_object.search_params = modified_params

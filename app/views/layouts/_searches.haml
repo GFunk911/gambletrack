@@ -1,0 +1,5 @@
+- @search_object ||= Search.new
+- form_for(@search_object, :url => {:controller => 'game', :action => 'index'}, :html => { :method => :get }) do |f| 
+  = f.select :id, Search.find(:all, :conditions => "name is not null").map { |x| [x.name,x.id] }
+  = f.submit 'Go'
+	

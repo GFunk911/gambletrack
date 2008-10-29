@@ -48,6 +48,7 @@ APP_CONFIG[:site_name] %></title>
 					<li><%= link_to 'Signup', signup_path %></li>
           <%= render :partial => 'layouts/top_left' %>
           <li><%= link_to 'Games', :controller => 'game', :action => 'index' %></li>
+		  <li><%= render :partial => 'layouts/searches' %></li>
 					<% end %>
 				</ul>
 			</div>
