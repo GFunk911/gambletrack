@@ -84,12 +84,16 @@ class GameController < ApplicationController
     
     #@search.event_dt_lt = @search.event_dt_gt + 1.days
     @games, @games_count = @search.all, @search.count
+    @divs = get_espn_divs
+    #@divs = ESPNScores.new.game_divs.select { |x| @games.include?(x.game) }
+    #render :partial => 'game/index'
+  end
+  
+  def get_espn_divs
     @espn_hash = Hash.new { |h,k| h[k] = ESPNScores.new(k) }
-    @divs = @games.map do |g|
+    @games.map do |g|
       abbr = g.sport.abbr.gsub(/cfb/i,"ncf")
       @espn_hash[abbr].game_divs.find { |d| d.game == g }
     end.select { |x| x }
-    #@divs = ESPNScores.new.game_divs.select { |x| @games.include?(x.game) }
-    #render :partial => 'game/index'
   end
 end
