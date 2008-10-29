@@ -38,7 +38,7 @@ class Period < ActiveRecord::Base
     {:conditions => "periods.id in (select period_id from games)"}
   end)
   named_scope(:all_containing, lambda do |t|
-    {:conditions => ["start_dt < ? and end_dt > ?",t,t]}
+    {:conditions => ["start_dt <= ? and end_dt > ?",t,t]}
   end)
   named_scope(:since, lambda do |t|
     {:conditions => ["end_dt > ? and start_dt < ?",t,Time.now + 7.days]}

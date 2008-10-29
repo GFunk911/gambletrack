@@ -70,6 +70,9 @@ class Game < ActiveRecord::Base
   named_scope(:played, lambda do 
     {:conditions => ["home_score + away_score > 0"]}
   end)
+  named_scope(:today_or_tomorrow, lambda do 
+    {:conditions => ["event_dt > ? and event_dt < ?",Time.now.start_of_day,(Time.now+2.days).start_of_day]}
+  end)
 
   def self.dates_for_week(i)
     start = Time.local(2008,9,4,13) + (i - 1)*7.days
@@ -148,6 +151,7 @@ class Game < ActiveRecord::Base
     (spread_gap < 0) ? home_team_obj : away_team_obj
   end
   def rating_team_pub
+    return nil unless rating_team
     rid = rating_team.id
     other_id = (rid == home_team_id) ? away_team_id : home_team_id
     cs = lines.find(:all, :include => :consensus, :conditions => ["team_id = ?",rid]).map { |x| x.consensus }.flatten
@@ -156,8 +160,15 @@ class Game < ActiveRecord::Base
     return (1.0 - cs.sort_by { |x| x.created_at }[-1].bet_percent).to_perc unless cs.empty?
     nil    
   end
+  def raw_rating(team)
+    r = team_rating_obj(team)
+    return nil unless r
+    res = r.raw_rating
+    res = res.to_perc if res < 1 and res > -1 and res != 0
+    res
+  end
   def game_line_fields
-    [link,current_spread,correct_spread,spread_gap,rating_team.short_name,rating_team_pub,team_rating_obj(away_team_obj).raw_rating,team_rating_obj(home_team_obj).raw_rating]
+    [link,current_spread,correct_spread,spread_gap,rating_team.andand.short_name,rating_team_pub,raw_rating(away_team_obj),raw_rating(home_team_obj)]
   end
   named_scope(:has_wager, lambda do
     {:conditions => ["bets.wagered_amount > 0"], :include => {:lines => :bets}}
