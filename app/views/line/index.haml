@@ -1,0 +1,36 @@
+- form_for(@search, :url => {:controller => 'line', :action => 'index'}) do |f|
+  - f.fields_for @search.conditions do |line_sets|
+    - line_sets.fields_for line_sets.object.game do |game|
+      Between
+      = game.calendar_date_select :event_dt_gt
+      and
+      = game.calendar_date_select :event_dt_lt
+      %br
+      Sport:
+      = game.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
+      %br
+    Has bet of at least: 
+    - line_sets.fields_for line_sets.object.lines do |lines|
+      - lines.fields_for lines.object.bets do |bets|
+        = bets.text_field :wagered_amount_gt
+    %br
+    Save?
+  - f.fields_for(@search_object) do |search_obj|
+    = search_obj.check_box :do_save
+    = search_obj.text_field :name
+    %br
+    Show Scores?: 
+    = search_obj.check_box :show_scores
+    %table
+      %tr
+        %th= "Group By"
+        %th= "Result Columns"
+      %tr
+        %td= search_obj.select :grouping_columns, @search_object.potential_grouping_columns.map { |x| [x.humanize,x] }, {}, :multiple => true
+        %td= search_obj.select :result_columns, @search_object.potential_result_columns.map { |x| [x.humanize,x] }, {}, :multiple => true
+  %br
+  = f.submit 'search'
+  %br
+
+%div
+  = render :partial => 'lines'

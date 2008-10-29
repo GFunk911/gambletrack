@@ -1,0 +1,29 @@
+%table
+  %tr
+    %th= order_by_link({:game => {:sport => :abbr}}, :text => 'Sport')
+    %th= order_by_link({:game => :event_dt}, :text => 'Date')
+    %th= 'Bet Type'
+    %th= 'Game'
+    %th= 'Team'
+    %th= 'Spread'
+    %th= 'Wagered'
+    %th= "Profit"
+  - @games.each do |line|
+    %tr
+      %td= line.game.sport.abbr
+      %td= line.game.event_dt.pretty_dt
+      %td= line.bet_type
+      %td= line.game.link
+      %td= line.team_obj.short_name
+      %td= line.spread
+      %td= line.wagered_amount.to_i
+      %td= line.win_amount.to_i
+      %td= line.team_id
+      
+Per page: 
+= per_page_select 
+
+- if @search.page_count > 1 
+  Page: 
+  = page_select 
+
