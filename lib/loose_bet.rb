@@ -13,6 +13,9 @@ class LooseBet
     @win_amount = win_amount
     @note = note
   end
+  def wagered_amount
+    win_amount.abs
+  end
 end
 
 def loose_bet(*args)
