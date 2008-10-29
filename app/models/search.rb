@@ -1,10 +1,6 @@
 class Search < ActiveRecord::Base
   serialize :search_params
-  attr_accessor :do_save, :grouping_columns, :result_columns
-  def initialize(*args)
-    10.times { puts args.inspect }
-    super(*args)
-  end
+  attr_accessor :do_save, :grouping_columns, :result_columns, :show_scores
   fattr(:search_object) do
     Game.new_search(search_params)
   end

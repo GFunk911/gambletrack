@@ -84,7 +84,7 @@ class GameController < ApplicationController
     
     #@search.event_dt_lt = @search.event_dt_gt + 1.days
     @games, @games_count = @search.all, @search.count
-    @divs = get_espn_divs
+    @divs = (@search_object.show_scores.to_i == 1) ? get_espn_divs : []
     #@divs = ESPNScores.new.game_divs.select { |x| @games.include?(x.game) }
     #render :partial => 'game/index'
   end
