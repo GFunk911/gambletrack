@@ -147,6 +147,7 @@ class Line < ActiveRecord::Base
      (home_favored_factor * spread).to_closest_spread
   end
   def wager
+    return nil unless game.correct_spread
     Gambling::Wager.new(home_favored,game.correct_spread*-1,ha,odds,game)
   end
   def wagers
