@@ -157,6 +157,8 @@ class BetTypeLineSet < LineSet
     get_base_key(l)
   end
   def spread_str
-    lines.select { |x| x.has_bet? }.map { |x| x.spread }.uniq.join("/")
+    ls = lines.select { |x| x.has_bet? }
+    ls = [lines.select { |x| x.spread }.first].select { |x| x } if ls.empty?
+    ls.map { |x| x.spread ? Spread.new(x.spread) : x.spread }.uniq.join("/")
   end
 end
