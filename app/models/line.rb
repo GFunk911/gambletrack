@@ -184,8 +184,11 @@ class Line < ActiveRecord::Base
     return 0.01 if game.sport.abbr == 'MLB'
     0.02
   end
+  def win_result_factor
+    1*odds*(1-commision)
+  end
   def result_factor
-    h = {:unplayed => 0, :push => 0, :win => 1*odds*(1-commision), :loss => -1}
+    h = {:unplayed => 0, :push => 0, :win => win_result_factor, :loss => -1}
     h[result]
   end
   def possible_teams

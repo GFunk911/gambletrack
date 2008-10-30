@@ -17,6 +17,11 @@ class LineController < ApplicationController
     mod = str.gsub(/today/i,"").strip
     (effective_today + mod.to_i.days).tap_to_s('parse_date')
   end
+  def convert_to_percent(x)
+    return x unless x
+    return x unless x.to_f > 0.999
+    x.to_f / 100.0
+  end
   def modified_params(ps=params[:search])
     res = Marshal.load(Marshal.dump(ps))
     
@@ -28,6 +33,9 @@ class LineController < ApplicationController
         res[:conditions][:game][:event_dt_lt] = res[:conditions][:game][:event_dt_lt] + (0.999).days.to_f
         #params[:search][:conditions][:event_dt_lt] = Time.parsedate(params[:search][:conditions]['event_dt_gt']) + 1.days
       end
+      
+      res[:conditions][:cached_bet_percent_lt] = convert_to_percent(res[:conditions][:cached_bet_percent_lt])
+      res[:conditions][:cached_bet_percent_gt] = convert_to_percent(res[:conditions][:cached_bet_percent_gt])
       res.delete('search')
     end
     puts "Res: " + res.inspect

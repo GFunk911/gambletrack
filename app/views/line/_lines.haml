@@ -8,6 +8,7 @@
     %th= 'Spread'
     %th= 'Wagered'
     %th= "Profit"
+    %th= "Public%"
   - @games.each do |line|
     %tr
       %td= line.game.sport.abbr
@@ -18,6 +19,7 @@
       %td= line.spread_str
       %td= line.wagered_amount.to_i
       %td= line.win_amount.to_i
+      %td= line.cached_bet_percent.andand.to_perc
   %tr
     %td
     %td

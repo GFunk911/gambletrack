@@ -198,6 +198,15 @@ class Game < ActiveRecord::Base
     sets.map { |x| x.line_set_memberships }.flatten.each { |x| x.destroy }
     sets.each { |x| x.destroy }
   end
+  def score_changed?
+    home_score_changed? or away_score_changed?
+  end
+  def set_bet_cache!
+    if score_changed?
+      bets.each { |x| x.setup_cache!; x.save! }
+    end
+  end
+  after_save { |x| x.set_bet_cache! }
 end
 
 class FlexMigration < ActiveRecord::Migration
