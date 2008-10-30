@@ -73,9 +73,9 @@ class LineSet < ActiveRecord::Base
     klass.get_key(self)
   end
   def setup_cache!
-    self.cached_wagered_amount = lines.map { |x| x.wagered_amount }.sum
-    self.cached_desired_amount = lines.map { |x| x.desired_amount }.sum
-    self.cached_win_amount = lines.map { |x| x.win_amount }.sum
+    self.cached_wagered_amount = lines.map { |x| x.wagered_amount||0 }.sum
+    self.cached_desired_amount = lines.map { |x| x.desired_amount||0 }.sum
+    self.cached_win_amount = lines.map { |x| x.win_amount||0 }.sum
     save!
   end
   def wagered_amount
