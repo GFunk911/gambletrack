@@ -18,6 +18,15 @@
       %td= line.spread_str
       %td= line.wagered_amount.to_i
       %td= line.win_amount.to_i
+  %tr
+    %td
+    %td
+    %td
+    %td
+    %td
+    %td
+    %th= @games.map(&:wagered_amount).sum.to_i
+    %th= @games.map(&:win_amount).sum.to_i
       
 Per page: 
 = per_page_select 
