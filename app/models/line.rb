@@ -71,6 +71,9 @@ module LineResult
   def push?
     result == :push
   end
+  def unplayed?
+    result == :unplayed
+  end
 end
 
 class Line < ActiveRecord::Base

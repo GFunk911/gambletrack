@@ -10,12 +10,12 @@
       = game.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
       %br
     Has bet of at least: 
-    = line_sets.text_field :cached_wagered_amount_gt
+    = line_sets.text_field :cached_wagered_amount_gt, :size => 4
     %br
     Between
-    = line_sets.text_field :cached_bet_percent_gt, :size => 4
+    = line_sets.text_field :cached_bet_percent_gt, :size => 3
     = "% and "
-    = line_sets.text_field :cached_bet_percent_lt, :size => 4
+    = line_sets.text_field :cached_bet_percent_lt, :size => 3
     = "% of the action"
     %br
     Save?
@@ -38,3 +38,4 @@
 
 %div
   = render :partial => 'lines'
+  = render :partial => 'game/game_summary', :locals => {:lines => @search_object.grouped_lines, :root => nil}

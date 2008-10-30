@@ -76,11 +76,13 @@ class GameController < ApplicationController
         @search = Game.new_search(modified_params(@search_object.search_params))
     elsif params[:search]
       @search_object = Search.new(params[:search]['search'])
+      @search_object.search_class_name = 'Game'
       @search_object.search_params = modified_params
       @search_object.save! if @search_object.do_save
       @search = Game.new_search(modified_params)
     else
       @search_object = Search.new
+      @search_object.search_class_name = 'Game'
       @search = Game.new_search
     end
 

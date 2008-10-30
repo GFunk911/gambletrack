@@ -15,6 +15,8 @@ class LineSet < ActiveRecord::Base
   belongs_to :game
   belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'
   set_inheritance_column :line_set_type
+  Line
+  include LineResult
   before_save do |x|
     x.bet_type ||= x.calc_bet_type if x.calc_bet_type
   end
@@ -104,8 +106,36 @@ class LineSet < ActiveRecord::Base
     other.save!
   end
   after_save { |x| x.setup_other_line_set! if x.team_id == x.game.home_team_id }
-    
+  def event_date
+    game.event_date
+  end
+  def <=>(x)
+    game <=> x.game
+  end
+  def result
+    lines.first.andand.result
+  end
+  class << self
+    fattr(:public_groups) do
+      a = [0.0,0.2,0.4,0.6,0.8,1.0]
+      (0..4).map { |i| PublicGroup.new(a[i],a[i+1],true) }
+    end
+  end
+  def bet_percent?
+    cached_bet_percent and cached_bet_percent > 0.0 and cached_bet_percent < 1.0
+  end
+  def public_group
+    return nil unless bet_percent? 
+    klass.public_groups.find { |r| r === cached_bet_percent }
+  end
 end
+
+class PublicGroup < Range
+  def to_s
+    "#{self.begin.to_perc}-#{self.end.to_perc}"
+  end
+end
+  
 
 # game,team,bet_type are implied
 class BookLineSet < LineSet

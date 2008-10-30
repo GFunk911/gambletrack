@@ -52,6 +52,8 @@ class LineController < ApplicationController
     #end
     LineSet
     10.times { puts params.inspect }
+    #File.append("#{RAILS_ROOT}/debug.log",params.inspect+"\n")
+    #File.append("#{RAILS_ROOT}/debug.log",params[:search]['per_page'].inspect+"\n")
     if params[:search_id]
       @search_object = Search.find(params[:search_id])
       @search = BetTypeLineSet.new_search(modified_params(@search_object.search_params))
@@ -60,12 +62,15 @@ class LineController < ApplicationController
         @search = BetTypeLineSet.new_search(modified_params(@search_object.search_params))
     elsif params[:search]
       @search_object = Search.new(params[:search]['search'])
+      @search_object.search_class_name = 'BetTypeLineSet'
       @search_object.search_params = modified_params
       @search_object.save! if @search_object.do_save
       @search = BetTypeLineSet.new_search(modified_params)
     else
       @search_object = Search.new
+      @search_object.search_class_name = 'BetTypeLineSet'
       @search = BetTypeLineSet.new_search
+      #@search.per_page = 100
     end
 
     
