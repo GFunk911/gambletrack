@@ -86,4 +86,7 @@ class BetTypeLineSet < LineSet
   def self.get_key(l)
     get_base_key(l)
   end
+  def spread_str
+    lines.map { |x| x.spread }.uniq.join("/")
+  end
 end
