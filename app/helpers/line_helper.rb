@@ -5,4 +5,9 @@ module LineHelper
     $bet_type_track = l.bet_type
     res
   end
+  def game_status(line)
+    d = @divs.find { |e| e.game == line.game }
+    #File.append("#{RAILS_ROOT}/debug.log",d.inspect + "\n" + @divs.size.to_s)
+    d.andand.to_s_status
+  end
 end

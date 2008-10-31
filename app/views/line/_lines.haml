@@ -10,6 +10,7 @@
     %th= 'Wagered'
     %th= "Profit"
     %th= "Public%"
+    %th= 'Status'
   - @games.each do |line|
     %tr
       %td= line.game.sport.abbr
@@ -22,6 +23,7 @@
       %td= line.wagered_amount.to_i
       %td= line.win_amount.to_i
       %td= line.cached_bet_percent.andand.to_perc
+      %td= game_status(line)
   %tr
     %td
     %td

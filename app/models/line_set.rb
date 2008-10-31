@@ -11,6 +11,9 @@ class LineSet < ActiveRecord::Base
   has_many :line_set_memberships
   has_many :lines, :through => :line_set_memberships
   belongs_to :site
+  def sport
+    game.sport
+  end
   #has_many :bets, :through => :lines
   belongs_to :game
   belongs_to :team_obj, :class_name => 'Team', :foreign_key => 'team_id'

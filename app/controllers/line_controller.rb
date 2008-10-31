@@ -52,7 +52,7 @@ class LineController < ApplicationController
     #end
     LineSet
     10.times { puts params.inspect }
-    #File.append("#{RAILS_ROOT}/debug.log",params.inspect+"\n")
+    File.append("#{RAILS_ROOT}/debug.log",params.inspect+"\n")
     #File.append("#{RAILS_ROOT}/debug.log",params[:search]['per_page'].inspect+"\n")
     if params[:search_id]
       @search_object = Search.find(params[:search_id])
@@ -76,9 +76,18 @@ class LineController < ApplicationController
     
     #@search.event_dt_lt = @search.event_dt_gt + 1.days
     @games, @games_count = @search.all, @search.count
-    @divs = []
-    #@divs = (@search_object.show_scores.to_i == 1) ? get_espn_divs : []
+    @divs = (@search_object.show_scores.to_i == 1) ? get_espn_games : []
     #@divs = ESPNScores.new.game_divs.select { |x| @games.include?(x.game) }
     #render :partial => 'game/index'
+  end
+  def get_espn_games_2
+    @espn_hash = Hash.new { |h,k| h[k] = ESPNScores.new(k) }
+    @games.map do |g|
+      abbr = g.sport.abbr.gsub(/cfb/i,"ncf")
+      @espn_hash[abbr].game_divs.find { |d| d.game == g }
+    end.select { |x| x }
+  end
+  def get_espn_games
+    %w(NBA NHL).map { |x| ESPNScores.new(x).game_divs }.flatten
   end
 end

@@ -4,6 +4,7 @@ class MainController < ApplicationController
   def index
   end
   def show
+    LineSet
     raise "can't show" unless %w(load_matchbook load_bets test exp load_scores load_consensus).include?(params[:id])
     if params[:id] == 'load_matchbook'
       LinesDataload.new.load_all!
