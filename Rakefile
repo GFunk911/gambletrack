@@ -32,6 +32,10 @@ namespace :dataload do
       LinesDataload.new.load_matchbook_sport!(s)
     end
   end
+  rails_task :mb_lines_sport do
+    s = ENV['sport']
+    LinesDataload.new.load_matchbook_games_and_lines!(s)
+  end
   rails_task :mb_college_games do
     LinesDataload.new.load_matchbook_games!('CF')
   end
@@ -62,10 +66,19 @@ namespace :dataload do
   end
 end
 
+rails_task :create_cbb_teams do
+  res = []
+  Matchbook.new('CB').lines.each do |x|
+    res << [x.home_long,"",x.home_team_hash,"CBB"].join(",")
+    res << [x.away_long,"",x.away_team_hash,"CBB"].join(",")  
+  end
+  File.create("#{RAILS_ROOT}/public/cbb_teams.csv",res.join("\n"))
+end
+
 rails_task :mb_teams do
   #Matchbook.new('CF').lines.each { |x| puts "#{x.away_long}@#{x.home_long} #{x.away_team}@#{x.home_team}" }
-  sport = Sport.find_by_abbr('CFB')
-  Matchbook.new('CF').lines.map { |x| [x.home_team_hash,x.away_team_hash] }.flatten.each do |t|
+  sport = Sport.find_by_abbr('CBB')
+  Matchbook.new('CB').lines.map { |x| [x.home_team_hash,x.away_team_hash] }.flatten.each do |t|
     puts "no team #{t}" unless sport.find_team(t)
   end
 end
@@ -130,6 +143,10 @@ rails_task :alt_names do
     t = Team.find_by_city(s)
     t.names.new(:city => m).save!
   end
+end
+
+rails_task :load_bets do
+  LinesDataload.new.load_matchbook_bets!
 end
 
 rails_task :alt_names_2 do

@@ -88,6 +88,6 @@ class LineController < ApplicationController
     end.select { |x| x }
   end
   def get_espn_games
-    %w(NBA NHL).map { |x| ESPNScores.new(x).game_divs }.flatten
+    %w(NBA NHL NCF).map { |x| ESPNScores.new(x).game_divs }.flatten
   end
 end
