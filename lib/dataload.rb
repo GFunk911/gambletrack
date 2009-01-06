@@ -9,11 +9,10 @@ class Dataload
   
   def load_teams!
     lines = File.open("#{RAILS_ROOT}/public/teams.csv") { |f| f.to_a }
-    if lines.size == Team.all.size
-      puts "Already #{lines.size} teams, not running team load"
-    else
-      lines.each { |ln| Team.load_csv!(ln) }
-    end
+    lines.each { |ln| Team.load_csv!(ln) }
+    
+    lines = File.open("#{RAILS_ROOT}/public/cbb_teams.csv") { |f| f.to_a }
+    lines.each { |ln| Team.load_csv!(ln) }
     
     lines = File.open("#{RAILS_ROOT}/public/team_names.csv") { |f| f.to_a }
     if lines.size == TeamName.all.size
