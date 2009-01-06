@@ -79,6 +79,7 @@ class BetUpdater
     end
     puts "making bet for #{h.inspect}"
     existing_line.wagered_amount = h[:wagered_amount].to_f
+    existing_line.outstanding_amount = h[:outstanding_amount].to_f if h[:outstanding_amount]
     existing_line.save!
   end
 end
@@ -86,7 +87,7 @@ end
 class GameCreator
   include GLCreator
   fattr(:new_game) do
-    sport.games.new(:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id, :event_dt => event_dt).tap { |x| x.save! }
+    sport.games.new(:period_id => period.id, :home_team_id => home_team.id, :away_team_id => away_team.id, :event_dt => event_dt, :matchbook_event_id => h[:matchbook_event_id]).tap { |x| x.save! }
   end
   fattr(:desc) { "#{away_team}@#{home_team} #{pretty_dt}" }
   def run!
