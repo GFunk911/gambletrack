@@ -131,6 +131,9 @@ class LineSet < ActiveRecord::Base
     return nil unless bet_percent? 
     klass.public_groups.find { |r| r === cached_bet_percent }
   end
+  def correct_spread_str
+    nil
+  end
 end
 
 class PublicGroup < Range
@@ -162,6 +165,15 @@ class BetTypeLineSet < LineSet
   def spread_str
     ls = lines.select { |x| x.has_bet? }
     ls = [lines.select { |x| x.spread }.first].select { |x| x } if ls.empty?
-    ls.map { |x| x.spread ? Spread.new(x.spread) : x.spread }.uniq.join("/")
+    ls.map { |x| x.spread }.uniq.map { |x| x ? Spread.new(x) : x }.uniq.join("/")
+  end
+  def correct_spread_str
+    res =  lines.first.correct_spread
+    res ? Spread.new(res*-1.0) : res
+  end
+  def correct_spread_str2
+    return nil unless lines.first.bet_type == 'SpreadLine'
+    res = lines.first.game.correct_spread
+    res ? Spread.new(res*-1) : res
   end
 end

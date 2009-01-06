@@ -17,6 +17,8 @@ class LinesDataload
       LineCreator.new(h).run!
       BetUpdater.new(h).run!
     end
+  rescue => exp
+    puts exp.message
   end
   def load_all!
     %w(PF CF HK BB BK).each do |s|

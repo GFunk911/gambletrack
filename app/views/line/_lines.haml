@@ -6,6 +6,7 @@
     %th= 'Game'
     %th= 'Team'
     %th= 'Spread'
+    %th= "Correct Spread"
     %th= 'Result'
     %th= 'Wagered'
     %th= "Profit"
@@ -19,6 +20,7 @@
       %td= line.game.link
       %td= line.team_obj.short_name
       %td= line.spread_str
+      %td= line.correct_spread_str
       %td= line.result
       %td= line.wagered_amount.to_i
       %td= line.win_amount.to_i

@@ -216,6 +216,7 @@ class Line < ActiveRecord::Base
     res
   end
   def setup_line_set(assoc_name)
+    LineSet
     send(assoc_name).tap { |x| return x if x }
     set_class = klass.reflections[assoc_name].klass
     h = set_class.get_key(self)
@@ -273,6 +274,9 @@ class Line < ActiveRecord::Base
   def <=>(x)
     game <=> x.game
   end
+  def correct_spread
+    nil
+  end
 end
 
 class TeamLine < Line
@@ -288,6 +292,12 @@ class TeamLine < Line
 end
 
 class SpreadLine < TeamLine
+  def correct_spread
+    res = game.correct_spread
+    return res unless res
+    res *= -1.0 unless team_id == game.home_team_id
+    res
+  end
 end
 
 class MoneyLine < TeamLine

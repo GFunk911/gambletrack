@@ -16,6 +16,11 @@ def rails_task(*args,&b)
   end
 end
 
+rails_task :nba_ratings do
+  DataloadTask
+  DataloadTasks.instance.get(:load_ratings,'Load NBA Sagarin').run!
+end
+
 namespace :dataload do
   rails_task :mb_lines do
     LinesDataload.new.load_matchbook!
@@ -217,6 +222,10 @@ end
 
 rails_task :copy_scores_local do
   SIScores.new.copy_to_local!
+end
+
+rails_task :fix_games do
+  Game.since(1.days.ago).has_wager.map { |x| x.line_sets }.flatten.each { |x| x.setup_cache!; x.save! }
 end
 
 task :update do

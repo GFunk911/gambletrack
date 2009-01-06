@@ -31,6 +31,10 @@ module LineHelper
   end
   def game_status(line)
     game_status_text(line)
+  rescue => exp
+#    puts exp.message
+ #   puts exp.backtrace.join("\n")
+    return 'Error'
   end
     
 end

@@ -4,7 +4,9 @@ class Spread
     @fb = fb ? fb.to_closest_spread : fb
   end
   def to_s
-    if fb > 0
+    if fb.to_f == 0.0
+      "0"
+    elsif fb > 0
       "-#{fb}"
     else
       "+#{fb*-1}"

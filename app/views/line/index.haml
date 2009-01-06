@@ -9,6 +9,9 @@
       Sport:
       = game.select :sport_id, [['All',nil]] + Sport.all.map { |x| [x.name,x.id] }
       %br
+    Bet Type: 
+    = line_sets.select :bet_type, [['All',nil]] + %w(SpreadLine MoneyLine OverUnderLine)
+    %br
     Has bet of at least: 
     = line_sets.text_field :cached_wagered_amount_gt, :size => 4
     %br

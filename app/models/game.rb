@@ -119,8 +119,15 @@ class Game < ActiveRecord::Base
   def <=>(x)
     event_dt <=> x.event_dt
   end
+  def rating_period
+    if (sport.abbr == 'NBA')
+      sport.periods.find_by_name('Oct 29')
+    else
+      period
+    end
+  end
   def team_rating_obj(team_id)
-    period.ratings.find_by_team_id(team_id)
+    rating_period.ratings.find_by_team_id(team_id)
   end
   def inner_correct_spread
     a = team_rating_obj(away_team_obj)
