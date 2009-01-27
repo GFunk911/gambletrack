@@ -27,10 +27,14 @@ class LinesDataload
   rescue => exp
     puts exp.message
   end
-  def load_all!
+  def load_all_old!
     %w(PF CF HK BB BK CB).each do |s|
       load_matchbook_games_and_lines!(s)
     end
+  end
+  def load_all!
+    load_teams!
+    load_matchbook_games!
   end
   def delete_cache!
     f = "#{RAILS_ROOT}/tmp/cache/views/75.101.152.201.1999/tree/show/1.cache"
