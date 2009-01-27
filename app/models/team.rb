@@ -9,7 +9,9 @@ class Team < ActiveRecord::Base
   end
   validates_uniqueness_of :abbr, :allow_nil => true, :scope => :sport_id
   def to_s
-    abbr.blank? ? city : abbr
+    #abbr.blank? ? city : abbr
+    [abbr,city,team_name].each { |x| return x unless x.blank? }
+    "UNKNOWN"
   end
   def self.load_csv!(ln)
     res = {}
@@ -40,7 +42,7 @@ class Team < ActiveRecord::Base
     [city,team_name,abbr,sport.abbr].join(",")
   end
   def short_name
-    abbr ? abbr : city
+    to_s
   end
   class << self
     fattr(:ou_teams) do

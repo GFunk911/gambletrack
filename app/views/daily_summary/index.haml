@@ -1,0 +1,7 @@
+%table
+  %tr
+    - ['Time','Away','Home','Current Spread (Home)','Open Spread (Home)','Contrarian Team','Contrarian %'].each do |h|
+      %th= h
+  - @games.each do |g|
+    %tr
+      = render :partial => 'index_row', :locals => {:game => g}

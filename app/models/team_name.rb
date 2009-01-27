@@ -7,7 +7,14 @@ class TeamName < ActiveRecord::Base
   def gen_search_string
     "|" + [city,team_name,abbr,full_name].map { |x| (x||'').strip }.join("|").downcase + "|"
   end
-  named_scope :matching, lambda { |t| {:conditions => ["search_string like ?","%|#{t.to_s.downcase}|%"]} }
+  named_scope :matching, (lambda do |t| 
+    tmod = t
+    if t
+      tmod = t.gsub(/State/,'St')
+      tmod = 'Elon' if t == 'Elon College'
+    end
+    {:conditions => ["search_string like ? or search_string like ?","%|#{t.to_s.downcase}|%","%|#{tmod.to_s.downcase}|%"]} 
+  end)
   def self.load_csv!(ln)
     res = {}
     fields = ln.split(",").map { |x| x.strip }
