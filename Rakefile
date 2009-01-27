@@ -180,6 +180,30 @@ rails_task :cf_periods do
   end
 end
   
+  
+rails_task :teams_and_games do
+  LinesDataload.new.load_teams!
+  LinesDataload.new.load_matchbook_games!
+end
+
+namespace :consensus do
+  rails_task :load do
+    ConsensusLoad.new.load!
+  end
+end
+
+rails_task :market_line do
+  Matchbook.new('CB').market_line_hashes.each do |h|
+    begin
+      GameCreator.new(h).run!
+      LineCreator.new(h).run!
+    rescue => exp
+    end
+
+    #LineCreator.new(h).run!
+  end
+end
+  
 rails_task :bettest do
   base = {:home_team => 'GB', :away_team => 'IND', :team => 'Over', :event_dt => Time.local(2008,10,19,13,0,0), :site => 'Matchbook', :sport => 'NFL', :bet_type => 'overunder'}
   
