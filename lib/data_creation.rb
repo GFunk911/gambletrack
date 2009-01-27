@@ -9,6 +9,7 @@ module GLCreator
   end
   def team(t)
     t = $1.strip if t and t =~ /^(.*)\(.*\)/ and h[:sport] == 'MLB'
+    return nil unless t
     sport.find_team(t)#.tap { |x| raise "no team found for #{t}" unless x and t }
   end
   fattr_nn(:home_team) { team(h[:home_team]) }
@@ -96,15 +97,17 @@ class GameCreator
   end
 end
 
+  
+#    site_id spread game_id team_id bet_type
 class LineCreator
   include GLCreator
   include LineUpdate
 
-
   fattr(:effective_dt) { h[:effective_dt] || Time.now }
-  fattr(:new_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type, :effective_dt => effective_dt).tap { |x| x.save! }
+  fattr(:new_unsaved_line) do 
+    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type, :effective_dt => effective_dt, :matchbook_market_id => h[:market_id], :matchbook_runner_id => h[:runner_id])
   end
+  fattr(:new_line) { new_unsaved_line.tap { |x| x.save! } }
   fattr(:desc) do
     "#{away_team}@#{home_team} #{selected_team} #{bet_type} #{spread} #{odds} #{pretty_dt}"
   end
@@ -115,6 +118,13 @@ class LineCreator
   end
 end
 
+class LineSetCreator < LineCreator
+  def run!
+    line = new_unsaved_line
+    line.setup_line_set(BookLineSet)
+  end
+end
+
 class ConsensusCreator
   attr_accessor :h
   def initialize(h)
@@ -122,8 +132,29 @@ class ConsensusCreator
   end
   fattr(:line) { Line.find_or_create_from_hash(h) }
   def run!
+    LineSet
+    puts h.inspect
     line.add_consensus(h)
   rescue => exp
     puts "no game " + exp.message
+  end
+end
+
+class TeamCreator
+  attr_accessor :h
+  def initialize(h)
+    @h = h
+  end
+  fattr_nn(:sport) do
+    Sport.find_by_abbr(h[:sport])
+  end
+  def existing_team
+    sport.find_team(h[:team])
+  end
+  def new_team
+    sport.teams.create(:team_name => h[:team]).tap { |x| x.save! }
+  end
+  def run!
+    existing_team || new_team
   end
 end

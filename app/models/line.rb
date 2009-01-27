@@ -216,6 +216,7 @@ class Line < ActiveRecord::Base
     res
   end
   def setup_line_set(assoc_name)
+    LineSet
     send(assoc_name).tap { |x| return x if x }
     set_class = klass.reflections[assoc_name].klass
     h = set_class.get_key(self)
@@ -272,6 +273,9 @@ class Line < ActiveRecord::Base
   end
   def <=>(x)
     game <=> x.game
+  end
+  def bet_requests
+    Matchbook.new('CB').bet_requests(game.matchbook_event_id,matchbook_market_id).select { |x| x.runner_id.to_s == matchbook_runner_id.to_s }
   end
 end
 

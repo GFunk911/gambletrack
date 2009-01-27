@@ -4,6 +4,10 @@ class Game < ActiveRecord::Base
   include BetSummary
 
   has_many :lines, :order => ["bet_type,team_id,created_at desc"], :attributes => true, :discard_if => lambda { |x| x.odds.blank? }, :include => [:team_obj,:bets]
+ # has_many :consensus, :through => :lines
+  def consensus
+    lines.map { |x| x.consensus }.flatten
+  end
   has_many :line_sets, :attributes => true, :discard_if => lambda { |x| x.odds.blank? }
   has_many :bets, :through => :lines
   belongs_to :home_team_obj, :class_name => 'Team', :foreign_key => 'home_team_id'
