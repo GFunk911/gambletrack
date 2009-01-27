@@ -16,6 +16,10 @@ def rails_task(*args,&b)
   end
 end
 
+rails_task :none do
+  puts 4
+end
+
 rails_task :nba_ratings do
   DataloadTask
   DataloadTasks.instance.get(:load_ratings,'Load NBA Sagarin').run!
