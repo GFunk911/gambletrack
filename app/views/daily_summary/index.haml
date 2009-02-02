@@ -1,9 +1,11 @@
-= link_to_remote 'Update All', :url => {:action => 'market_status_all', :id => 'na'}
+The spread is for the contrarian team.  
+%br
+If there is no contrarian team, it's for the home team.
 %br
 %br
 %table
   %tr
-    - ['Time','Away','Home','Current Spread (Home)','Open Spread (Home)','Contrarian Team','Contrarian %','','Market Status'].each do |h|
+    - ['Time','Away','Home','Current Spread','Open Spread','Contrarian Team','Contrarian %','','Market Status'].each do |h|
       %th= h
   - @games.each do |g|
     %tr
