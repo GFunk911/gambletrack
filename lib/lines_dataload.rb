@@ -18,6 +18,12 @@ class LinesDataload
     end
     delete_cache!
   end
+  def load_matchbook_lines!
+    Matchbook.new('CB').market_line_hashes.reject { |h| h[:event_name] =~ /mvp/i or h[:event_name] =~ /salami/i or h[:sport].nil? }.each do |h|
+      puts h.inspect
+      Line.find_or_create_from_hash(h)
+    end
+  end
   def load_matchbook_bets!
     Matchbook.new('HK').combined_offers.map { |x| x.line_hash }.each do |h|
       GameCreator.new(h).run!

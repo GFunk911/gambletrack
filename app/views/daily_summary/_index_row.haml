@@ -1,7 +1,12 @@
-%td= game.time
+%td{:width => 80}= game.time
 %td= game.away_team
 %td= game.home_team
 %td= game.current_spread
 %td= game.open_spread
 %td= game.anti_public_team
 %td= game.anti_public_percent
+%td= link_to_remote('Update', market_status_hash(game)) if game.anti_public_team
+%td{:id => "market_status_#{game.id}", :width => 450}
+- if game.anti_public_team
+  %script
+    = remote_function market_status_hash(game)

@@ -277,8 +277,9 @@ class Line < ActiveRecord::Base
   def correct_spread
     nil
   end
-  def bet_requests
-    Matchbook.new('CB').bet_requests(game.matchbook_event_id,matchbook_market_id).select { |x| x.runner_id.to_s == matchbook_runner_id.to_s }
+  def bet_requests(mb=nil)
+    mb ||= Matchbook.new('CB')
+    mb.bet_requests(game.matchbook_event_id,matchbook_market_id).select { |x| x.runner_id.to_s == matchbook_runner_id.to_s }
   end
 end
 

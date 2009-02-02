@@ -134,6 +134,12 @@ class LineSet < ActiveRecord::Base
   def correct_spread_str
     nil
   end
+  def bet_requests(mb=nil)
+    lines.first.bet_requests(mb)
+  end
+  def market_summary_str(mb=nil)
+    "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_str }.join(", ")
+  end
 end
 
 class PublicGroup < Range
@@ -142,6 +148,10 @@ class PublicGroup < Range
   end
 end
   
+# For Matchbook
+# BookLineSet - Game, Team, BetType, Spread
+# SpreadLineSet - Game, Team, BetType, Spread
+# BetTypeLineSet - Game, Team, BetType
 
 # game,team,bet_type are implied
 class BookLineSet < LineSet

@@ -39,10 +39,27 @@ class GameSummary
     res = (cons.bet_percent < 0.5) ? cons.bet_percent : (1.0 - cons.bet_percent)
     res.to_perc
   end
+  def id
+    game.id
+  end
 end
 
 class DailySummaryController < ApplicationController
   def index
-    @games = Game.on_day(Time.now).sort_by { |x| x.event_dt }.map { |x| GameSummary.new(x) }
+    @games = games
+  end
+  def market_status
+    @team = Team.find(params[:team])
+    @game = Game.find(params[:id])
+  end
+  def market_status_all
+    #@games = games
+    puts 'abc'
+    puts 'xyz'
+  end
+  
+  private
+  def games
+    Game.on_day(Time.now).sort_by { |x| x.event_dt }.map { |x| GameSummary.new(x) }
   end
 end

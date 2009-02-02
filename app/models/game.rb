@@ -218,6 +218,18 @@ class Game < ActiveRecord::Base
     end
   end
   after_save { |x| x.set_bet_cache! }
+  def mb_spread_line_sets(t)
+    line_sets.select do |set| 
+      l = set.lines.first
+      set.is_a?(SpreadLineSet) and l.site.name.downcase == 'matchbook' and l.team_obj == t 
+    end.sort_by { |set| set.lines.first.spread }
+  end
+  def market_summary_str(t,mb=nil)
+    mb = Matchbook.new('CB')
+    mb_spread_line_sets(t).map do |set|
+      set.market_summary_str(mb)
+    end.join("\n")
+  end
 end
 
 class FlexMigration < ActiveRecord::Migration

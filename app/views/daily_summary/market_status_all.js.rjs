@@ -1,0 +1,4 @@
+update_page do |page|
+  page.jquery_insert_html :after, "testdiv839",:partial => 'foo'
+  page.jquery_insert_html :after, "testdiv839","STUFF!!!!!"
+end
