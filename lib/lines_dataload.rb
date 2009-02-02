@@ -3,12 +3,10 @@
     
 
 class LinesDataload
-  def load_matchbook_games_and_lines!(sport)
+  def load_matchbook_games_and_lines!
     Line
-    Matchbook.new(sport).each_line_hash do |h|
-      GameCreator.new(h).run! #unless sport.to_s == 'PF'
-      Line.find_or_create_from_hash(h)
-    end
+    load_matchbook_games!
+    load_matchbook_lines!
     delete_cache!
   end
   def load_matchbook_games!
@@ -19,8 +17,7 @@ class LinesDataload
     delete_cache!
   end
   def load_matchbook_lines!
-    Matchbook.new('CB').market_line_hashes.reject { |h| h[:event_name] =~ /mvp/i or h[:event_name] =~ /salami/i or h[:sport].nil? }.each do |h|
-      puts h.inspect
+    Matchbook.new('CB').market_line_hashes.reject { |h| h[:event_name] =~ /mvp/i or h[:event_name] =~ /salami/i or h[:event_name] =~ /all.?star/i or h[:sport].nil? }.each do |h|
       Line.find_or_create_from_hash(h)
     end
   end
@@ -40,7 +37,7 @@ class LinesDataload
   end
   def load_all!
     load_teams!
-    load_matchbook_games!
+    load_matchbook_games_and_lines!
   end
   def delete_cache!
     f = "#{RAILS_ROOT}/tmp/cache/views/75.101.152.201.1999/tree/show/1.cache"
