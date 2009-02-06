@@ -283,6 +283,18 @@ class Line < ActiveRecord::Base
   end
 end
 
+module MakeBets
+  def make_bet(ops)
+    ops[:odds] = ops[:odds].to_s[1..-1] if ops[:odds].to_s =~ /^\+/
+    ops[:market_id] = matchbook_market_id
+    ops[:runner_id] = matchbook_runner_id
+    ops[:runner_name] = matchbook_runner_name
+    mb = ops[:mb] || Matchbook.new('CB')
+    mb.make_offer(ops)
+  end
+end
+Line.send(:include,MakeBets)
+
 class TeamLine < Line
   def pretty_spread
     spread ? spread * -1 : spread

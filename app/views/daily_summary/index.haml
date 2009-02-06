@@ -10,3 +10,11 @@ If there is no contrarian team, it's for the home team.
   - @games.each do |g|
     %tr
       = render :partial => 'index_row', :locals => {:game => g}
+
+- os = offers
+- if os.is_a?(Array)
+  - os.each do |offer|
+    = offer.to_s
+    %br
+- else
+  = os

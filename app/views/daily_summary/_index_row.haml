@@ -10,3 +10,10 @@
 - if game.anti_public_team
   %script
     = remote_function market_status_hash(game)
+%td
+  - remote_form_for(:make_bet, MakeBet.new(:game_id => game.id), :url => {:controller => 'make_bets', :action => 'create'}, :html => {:method => :post}) do |f|
+    = f.text_field :spread, :size => 4
+    = f.text_field :odds, :size => 4
+    = f.text_field :amount, :size => 4
+    = f.hidden_field :game_id
+    = f.submit 'Bet'

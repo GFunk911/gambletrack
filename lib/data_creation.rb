@@ -104,8 +104,14 @@ class LineCreator
   include LineUpdate
 
   fattr(:effective_dt) { h[:effective_dt] || Time.now }
+  fattr(:line_hash) do
+    res = {:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type}
+    res.merge!(:effective_dt => effective_dt)
+    res.merge!(:matchbook_market_id => h[:market_id], :matchbook_runner_id => h[:runner_id], :matchbook_runner_name => h[:runner_name])
+    res
+  end
   fattr(:new_unsaved_line) do 
-    game.lines.new(:team_id => selected_team.id, :return_from_dollar => odds.rfd, :spread => spread, :site => site, :bet_type => bet_type, :effective_dt => effective_dt, :matchbook_market_id => h[:market_id], :matchbook_runner_id => h[:runner_id])
+    game.lines.new(line_hash)
   end
   fattr(:new_line) { new_unsaved_line.tap { |x| x.save! } }
   fattr(:desc) do

@@ -1,0 +1,2 @@
+module MakeBetsHelper
+end
