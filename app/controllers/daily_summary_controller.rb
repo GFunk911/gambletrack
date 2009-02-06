@@ -5,11 +5,11 @@ class DailySummaryController < ApplicationController
   def market_status
     @team = Team.find(params[:team])
     @game = Game.find(params[:id])
-    render :text => @game.market_summary_str(@team).gsub(/\n/,"<br>\n"), :layout => false
+    render :partial => 'market_status', :layout => false, :locals => {:game => @game, :team => @team}
   end
 
   private
   def games
-    Game.on_day(Time.now).sort_by { |x| x.event_dt }[0..0].map { |x| GameSummary.new(x) }
+    Game.on_day(Time.now).sort_by { |x| x.event_dt }.map { |x| GameSummary.new(x) }
   end
 end

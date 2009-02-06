@@ -140,6 +140,9 @@ class LineSet < ActiveRecord::Base
   def market_summary_str(mb=nil)
     "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_str }.join(", ")
   end
+  def market_summary_link_str(mb=nil)
+    "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_link_str(self) }.join(", ")
+  end
 end
 
 class PublicGroup < Range

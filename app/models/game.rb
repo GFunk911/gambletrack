@@ -225,9 +225,15 @@ class Game < ActiveRecord::Base
     end.sort_by { |set| set.lines.first.spread }
   end
   def market_summary_str(t,mb=nil)
-    mb = Matchbook.new('CB')
+    mb ||= Matchbook.new('CB')
     mb_spread_line_sets(t).map do |set|
       set.market_summary_str(mb)
+    end.join("\n")
+  end
+  def market_summary_link_str(t,mb=nil)
+    mb ||= Matchbook.new('CB')
+    mb_spread_line_sets(t).map do |set|
+      set.market_summary_link_str(mb)
     end.join("\n")
   end
 end
