@@ -1,0 +1,6 @@
+= javascript_include_tag 'updatebetform.js'
+= javascript_include_tag 'market_status.js'
+%ul{:title => "Games", :selected => "true"}
+  - @games.each do |g|
+    %li{:style => "font-color:#{total_score_color(g)};color:#{total_score_color(g)}"}
+      %font{:color => total_score_color(g)}= render :partial => 'index_row', :locals => {:game => g}
