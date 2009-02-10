@@ -48,4 +48,9 @@ class LinesDataload
       TeamCreator.new(h).run!
     end
   end
+  def load_predictions!
+    PredictionLoad.line_hashes.each do |h|
+      LineCreator.new(h).run!
+    end
+  end
 end

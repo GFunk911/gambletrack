@@ -17,6 +17,9 @@ class MainController < ApplicationController
     elsif params[:id] == 'load_consensus'
       ConsensusLoad.new.load!
       flash[:notice] = "Loaded Consensus"
+    elsif params[:id] == 'load_predictions'
+      LinesDataload.new.load_predictions!
+      flash[:notice] = "Loaded Predictions"
     elsif params[:id] == 'exp'
       expire_fragment(:controller => 'main', :action => 'show', :id => 2)
       puts "Expired Fragment"

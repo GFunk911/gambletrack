@@ -12,8 +12,12 @@ class Sport < ActiveRecord::Base
     if Team.over_under?(t)
       Team.find_by_city(t)
     else
-      ts = names.matching(t).map { |x| x.team }.uniq
-      ts.tap { |x| raise "found #{x.size} matching teams for #{t}.  #{x.inspect}" if x.size > 1; return nil if x.empty? }.first
+      [t,t.gsub(/\./,""),"#{t} U",t.gsub(/Northern/,'No'),t.gsub(/SW Missouri St./,'Missouri St')].uniq.each do |team|
+        ts = names.matching(team).map { |x| x.team }.uniq
+        raise "found #{ts.size} matching teams for #{team}.  #{ts.inspect}" if ts.size > 1;
+        return ts.first if ts.size == 1
+      end
+      return nil
     end
   end
   def current_period

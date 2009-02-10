@@ -12,6 +12,7 @@ class TeamName < ActiveRecord::Base
     if t
       tmod = t.gsub(/State/,'St')
       tmod = 'Elon' if t == 'Elon College'
+      tmod = tmod.gsub(/-/," ")
     end
     {:conditions => ["search_string like ? or search_string like ?","%|#{t.to_s.downcase}|%","%|#{tmod.to_s.downcase}|%"]} 
   end)
