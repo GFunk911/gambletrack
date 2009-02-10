@@ -33,6 +33,19 @@ class GameSummary
   def time
     event_dt.strftime("%I:%M %p")
   end
+  fattr(:predicted_spread) do
+    line = lines.find(:first, :conditions => ["site_id = ?",Site.find_by_name('Prediction').id])
+    line ? line.spread * (contrarian_home? ? -1 : 1) : nil
+  end
+  def margin
+    current_spread - predicted_spread
+  rescue
+    nil
+  end
+  def contrarian_home?
+    return true unless anti_public_team
+    anti_public_team == home_team_obj
+  end
   fattr(:cons) do
     consensus.to_a[-1]
   end
@@ -54,5 +67,34 @@ class GameSummary
   end
   def id
     game.id
+  end
+  def prediction_score
+    if margin
+      res = (margin*0.7+2)*1.5
+      [[res,1].max,7.5].min
+    else
+      nil
+    end
+  end
+  def contrarian_score
+    if anti_public_percent
+      res = (0.5 - anti_public_percent)*25.0
+      [[res,1].max,10].min
+    else
+      nil
+    end
+  end
+  fattr(:total_score) do
+    if prediction_score and contrarian_score
+      (prediction_score * contrarian_score * 1.33).to_i
+    else
+      nil
+    end
+  end
+  def bracket
+    return nil unless total_score
+    return 1 if total_score >= 60
+    return 2 if total_score >= 30
+    3
   end
 end

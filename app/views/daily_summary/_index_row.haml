@@ -3,13 +3,16 @@
 %td= game.home_team
 %td= game.current_spread
 %td= game.open_spread
+%td= game.predicted_spread
+%td= game.margin
+%td{:style => "color:#{total_score_color(game)}"}= game.total_score
 %td= game.anti_public_team
 %td= game.anti_public_percent
 %td= link_to_remote('Update', market_status_hash(game)) if game.anti_public_team
 %td{:id => "market_status_#{game.id}", :width => 450}
 - if game.anti_public_team
   %script
-    = remote_function market_status_hash(game)
+    - remote_function market_status_hash(game)
 %td
   - remote_form_for(:make_bet, MakeBet.new(:game_id => game.id), :url => {:controller => 'make_bets', :action => 'create'}, :html => {:method => :post, :onsubmit => "clearBetForm(#{game.id})" }) do |f|
     = f.text_field :spread, :size => 4, :id => "bet_form_#{game.id}_spread"
@@ -17,3 +20,6 @@
     = f.text_field :amount, :size => 4, :id => "bet_form_#{game.id}_amount"
     = f.hidden_field :game_id
     = f.submit 'Bet'
+- if game.anti_public_team
+  %script{:type => 'text/javascript'}
+    = "$(document).ready(function() { updateMarketStatus(#{game.id},#{game.anti_public_team.id}) })"

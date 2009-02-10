@@ -1,4 +1,5 @@
 = javascript_include_tag 'updatebetform.js'
+= javascript_include_tag 'market_status.js'
 The spread is for the contrarian team.  
 %br
 If there is no contrarian team, it's for the home team.
@@ -6,7 +7,7 @@ If there is no contrarian team, it's for the home team.
 %br
 %table
   %tr
-    - ['Time','Away','Home','Current Spread','Open Spread','Contrarian Team','Contrarian %','','Market Status'].each do |h|
+    - ['Time','Away','Home','Current Spread','Open Spread','Prediction Diff','Total Score','Contrarian Team','Contrarian %','','Market Status'].each do |h|
       %th= h
   - @games.each do |g|
     %tr
