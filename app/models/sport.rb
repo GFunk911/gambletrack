@@ -8,11 +8,14 @@ class Sport < ActiveRecord::Base
   include BetSummary
   include LineSummary
   include WagerModule
+  def possible_team_names(t)
+    [t,t.gsub(/\./,""),"#{t} U",t.gsub(/ U$/,""),t.gsub(/Northern/,'No'),t.gsub(/SW Missouri St./,'Missouri St')].uniq
+  end
   def find_team(t)
     if Team.over_under?(t)
       Team.find_by_city(t)
     else
-      [t,t.gsub(/\./,""),"#{t} U",t.gsub(/ U$/,""),t.gsub(/Northern/,'No'),t.gsub(/SW Missouri St./,'Missouri St')].uniq.each do |team|
+      possible_team_names(t).each do |team|
         ts = names.matching(team).map { |x| x.team }.uniq
         raise "found #{ts.size} matching teams for #{team}.  #{ts.inspect}" if ts.size > 1;
         return ts.first if ts.size == 1
