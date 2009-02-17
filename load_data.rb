@@ -16,6 +16,7 @@ loop do
     load_page("http://75.101.152.201:1999/main/load_matchbook")
     load_page("http://75.101.152.201:1999/main/load_bets")
     load_page("http://75.101.152.201:1999/main/load_consensus")
+    load_page("http://75.101.152.201:1999/main/load_predictions")
     puts `rake copy_scores_local`
 #    load_page("http://75.101.152.201:1999/main/load_scores")
     puts `rake scores`
