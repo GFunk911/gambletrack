@@ -22,7 +22,7 @@ class GameSummary
     Site.find_by_name('Pinnacle')
   end
   fattr(:pinny_lines) do
-    lines.select { |l| l.site_id == pinny.id }.sort_by { |x| x.created_at }
+    lines.select { |l| l.site_id == pinny.id and l.is_a?(SpreadLine) }.sort_by { |x| x.created_at }
   end
   def current_spread
     spread_for_contrarian(pinny_lines.to_a[-1])
@@ -47,7 +47,7 @@ class GameSummary
     anti_public_team == home_team_obj
   end
   fattr(:cons) do
-    consensus.to_a[-1]
+    consensus.to_a.select { |x| (0.01..0.99).include?(x.bet_percent) }[-1]
   end
   fattr(:line_sets) do
     game.mb_spread_line_sets(anti_public_team)
