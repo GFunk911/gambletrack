@@ -10,6 +10,7 @@ end
 class LineSet < ActiveRecord::Base
   has_many :line_set_memberships
   has_many :lines, :through => :line_set_memberships
+  has_many :bets, :through => :lines
   belongs_to :site
   def sport
     game.sport
@@ -141,7 +142,11 @@ class LineSet < ActiveRecord::Base
     "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_str }.join(", ")
   end
   def market_summary_link_str(mb=nil)
-    "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_link_str(self) }.join(", ")
+    str = "#{lines.first.team} #{spread.to_closest_spread}: " + bet_requests(mb).map { |x| x.summary_link_str(self) }.join(", ")
+    #bet = bets.find(:first, :conditions => ["wagered_amount > 0 or outstanding_amount > 0"])
+    bs = bets.select { |x| x.wagered_amount > 0 or x.outstanding_amount > 0 }
+    str += ", " + bs.map { |x| x.short_to_s }.join(", ") unless bs.empty?
+    str
   end
 end
 

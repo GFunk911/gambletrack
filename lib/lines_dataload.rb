@@ -22,7 +22,7 @@ class LinesDataload
     end
   end
   def load_matchbook_bets!
-    Matchbook.new('HK').combined_offers.map { |x| x.line_hash }.each do |h|
+    Matchbook.new('HK').real_offers.map { |x| x.line_hash }.each do |h|
       GameCreator.new(h).run!
       LineCreator.new(h).run!
       BetUpdater.new(h).run!

@@ -24,6 +24,9 @@ class Bet < ActiveRecord::Base
   def if_win_amount
     cached_if_win_amount
   end
+  def unmatched_amount
+    outstanding_amount - wagered_amount
+  end
   %w(desired_amount outstanding_amount wagered_amount).each do |m|
     define_method("#{m}=") do |amt|
       amt = (amt.strip[0..-2].to_f * BetSummary.unit_size) if amt.to_s.strip[-1..-1] == 'u'
@@ -48,4 +51,11 @@ class Bet < ActiveRecord::Base
     self.cached_if_win_amount = calc_if_win_amount
   end
   before_save { |x| x.setup_cache! if x.wagered_amount_changed? }
+  def short_to_s
+    res = []
+    res << line.odds
+    res << "M: $#{wagered_amount}" if wagered_amount > 0.1
+    res << "U: $#{unmatched_amount}" if unmatched_amount > 0.1
+    res.join(" ")
+  end
 end

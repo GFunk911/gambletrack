@@ -3,7 +3,8 @@
 = "#{game.open_spread} => #{game.current_spread} "
 = "#{game.anti_public_team} #{game.anti_public_percent} "
 = "Margin: #{game.margin}, Score: #{game.total_score} "
-- remote_form_for(:make_bet, MakeBet.new(:game_id => game.id), :url => {:controller => 'make_bets', :action => 'create'}, :html => {:method => :post, :onsubmit => "clearBetForm(#{game.id})" }) do |f|
+= link_to_remote('Update', market_status_hash(game)) if game.anti_public_team
+- remote_form_for(:make_bet, MakeBet.new(:game_id => game.id), :url => {:controller => 'make_bets', :action => 'create'}, :html => {:method => :post, :onsubmitf => "clearBetForm(#{game.id})" }) do |f|
   %table{:style => "float:top"}
     %tr
       %td= f.text_field :spread, :size => 5, :id => "bet_form_#{game.id}_spread"
