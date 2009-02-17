@@ -6,9 +6,9 @@
 - remote_form_for(:make_bet, MakeBet.new(:game_id => game.id), :url => {:controller => 'make_bets', :action => 'create'}, :html => {:method => :post, :onsubmit => "clearBetForm(#{game.id})" }) do |f|
   %table{:style => "float:top"}
     %tr
-      %td= f.text_field :spread, :size => 2, :id => "bet_form_#{game.id}_spread"
-      %td= f.text_field :odds, :size => 2, :id => "bet_form_#{game.id}_odds"
-      %td= f.text_field :amount, :size => 2, :id => "bet_form_#{game.id}_amount"
+      %td= f.text_field :spread, :size => 3, :id => "bet_form_#{game.id}_spread"
+      %td= f.text_field :odds, :size => 4, :id => "bet_form_#{game.id}_odds"
+      %td= f.text_field :amount, :size => 4, :id => "bet_form_#{game.id}_amount"
       = f.hidden_field :game_id
       %td= f.submit 'Bet'
 %span{:id => "market_status_#{game.id}"}
