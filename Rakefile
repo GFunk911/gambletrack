@@ -288,7 +288,11 @@ task :run_migration do
   puts `rake db:migrate --trace`
 end
 
-task :refresh => [:update,:run_migration, :restart]
+task :print_load_data_status do
+  puts `ruby load_data_control.rb status`
+end
+
+task :refresh => [:update,:run_migration, :restart, :print_load_data_status]
 
 task :logdump do
   `tail --lines=1000 log/production.log > public/production.log`
