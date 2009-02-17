@@ -26,6 +26,8 @@ module GLCreator
       res.select { |x| (x.event_dt - event_dt).abs < 2.days }.sort_by { |x| (x.event_dt - event_dt).abs }.first
     rescue => exp
       puts "could not find existing game for #{h.inspect}"
+      puts "CURRENT GAMES"
+      sport.games.on_day(event_dt).each { |x| puts x.desc }
       raise exp
     end
   end
