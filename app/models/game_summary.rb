@@ -97,4 +97,7 @@ class GameSummary
     return 2 if total_score >= 30
     3
   end
+  def <=>(g)
+    [bracket||4,event_dt] <=> [g.bracket||4,g.event_dt]
+  end
 end

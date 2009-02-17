@@ -10,6 +10,6 @@ class DailySummaryController < ApplicationController
 
   private
   def games
-    Game.on_day(Time.now).map { |x| GameSummary.new(x) }.sort_by { |x| [x.bracket||4,x.event_dt] }
+    Game.on_day(Time.now).map { |x| GameSummary.new(x) }.sort
   end
 end
