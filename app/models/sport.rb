@@ -9,7 +9,7 @@ class Sport < ActiveRecord::Base
   include LineSummary
   include WagerModule
   def possible_team_names(t)
-    [t,t.gsub(/\./,""),"#{t} U",t.gsub(/ U$/,""),t.gsub(/Northern/,'No'),t.gsub(/SW Missouri St./,'Missouri St')].uniq
+    [t,t.gsub(/\./,""),"#{t} U",t.gsub(/ U$/,""),t.gsub(/Northern/,'No'),t.gsub(/SW Missouri St./,'Missouri St'),t.gsub(/st\./,'State'),t.gsub(/state/i,'St')].uniq
   end
   def find_team(t)
     if Team.over_under?(t)
