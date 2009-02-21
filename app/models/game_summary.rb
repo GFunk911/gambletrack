@@ -98,6 +98,6 @@ class GameSummary
     3
   end
   def <=>(g)
-    [bracket||4,event_dt] <=> [g.bracket||4,g.event_dt]
+    [event_dt,total_score||0] <=> [g.event_dt,g.total_score||0]
   end
 end
